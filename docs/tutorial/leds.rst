@@ -41,8 +41,9 @@ Daha sonra biz, sonsuz döngü yaradırıq. Kod bütün LED-lərdən dövr edər
 
 Burda n hal-hazırkı LED-i qeydə alır və hər dövrdə növbəti n-ə keçir(% işarəsi modullu bölmə əməliyyatıdır, bununla n 0 ilə 4 arasında qalır). Daha sonra da növbəti n-ə(LED-ə) keçirik və işıqları dəyişirik.Bu kodu işlətsəniz, görərsiniz ki, LED işıqlar növbə ilə yanıb sönür. 
 
-
-One problem you might find is that if you stop the script and then start it again that the LEDs are stuck on from the previous run, ruining our carefully choreographed disco. We can fix this by turning all the LEDs off when we initialise the script and then using a try/finally block. When you press CTRL-C, Micro Python generates a VCPInterrupt exception. Exceptions normally mean something has gone wrong and you can use a try: command to "catch" an exception. In this case it is just the user interrupting the script, so we don't need to catch the error but just tell Micro Python what to do when we exit. The finally block does this, and we use it to make sure all the LEDs are off. The full code is::
+Bu kodla bağlı problem ondadır ki, biz scripti sonlandırıb yenidən işlətsək, LED-lər ilişəcək və bizim çox maraqlı diskomuzu pozacaq. Bunu aradan qaldırmaq üçün, hər dəfə script çalışmağa başladıqda, LED-ləri söndürəcik və ən sonda da try/finally blokdan istifadə edəcik. CTRL+C-ni sıxdıqda Micro Python VCPInterrupt exception qaytaracaq. Bir kodun Exception qaytarması, onun hər bir halda düzgün işləməməsinin göstəricisidir. Bu məqsədlə try:-dan istifadə edərək exception-ları catch edə bilərsiniz. İndiki halda, CTRL+C user tərəfindən kodun dayandırılmasıdır, bu səbəbdən hər hansl try-catch-ə ehtiyac yoxdur. Bunun əvəzinə scriptimizə işini dayandırdıqda nə etməli olduğunu deyəcik.
+Hər hansı interrupt zamanı kodumuz bütün LED-ləri söndürəcək.
+Kodun ən son halı aşağıdakıdır. ::
 
     leds = [pyb.LED(i) for i in range(1,5)]
     for l in leds: 
@@ -58,10 +59,10 @@ One problem you might find is that if you stop the script and then start it agai
         for l in leds:
             l.off()
 
-The Fourth Special LED
-----------------------
 
-The blue LED is special. As well as turning it on and off, you can control the intensity using the intensity() method. This takes a number between 0 and 255 that determines how bright it is. The following script makes the blue LED gradually brighter then turns it off again. ::
+4-cü LED xüsusidir
+----------------------
+Mavi LED xüsusidir. LED-i söndürüb yandırmaqdan əlavə, onun instensivliyini intensity() funksiyası ilə idarə edə bilərsiniz. 0-dan 255-ə qədər rəqəmləri qəbul edir və bununla da parlaqlığı müəyyən edir. Aşağıdakı kod mavi LED-i tədricən parlaqlaşdırır və ən sonda da söndürür. ::
 
     led = pyb.LED(4)
     intensity = 0
@@ -70,4 +71,4 @@ The blue LED is special. As well as turning it on and off, you can control the i
         led.intensity(intensity)
         pyb.delay(20)
 
-You can call intensity() on the other LEDs but they can only be off or on. 0 sets them off and any other number up to 255 turns them on.
+Digər LED-lərdə də intensity() metodunu istifadə edə bilərsiniz. Lakin unutmayın ki digər LED-lərdə 0 həmin LED-i söndürəcək, istənilən digər rəqəm isə onu yandıracaq.
