@@ -1,24 +1,23 @@
-Introduction to the pyboard
+Pyboard-a giriş
 ===========================
 
-To get the most out of your pyboard, there are a few basic things to
-understand about how it works.
+Pyboard-ı mükəmməl şəkildə başa düşmək və onunla işləməyi bacarmaq üçün,
+onun iş prinsipi ilə bağlı xırda lakin vacib məlumatları əldə etməkdə fayda var.
 
-Caring for your pyboard
+Pyboard-la diqqətli olaq
 -----------------------
 
-Because the pyboard does not have a housing it needs a bit of care:
+Pyboard-ın qoruyucu korpusu olmadığı üçün, onunla diqqətli davranmaq lazımdır:
 
-  - Be gentle when plugging/unplugging the USB cable.  Whilst the USB connector
-    is soldered through the board and is relatively strong, if it breaks off
-    it can be very difficult to fix.
-
-  - Static electricity can shock the components on the pyboard and destroy them.
-    If you experience a lot of static electricity in your area (eg dry and cold
-    climates), take extra care not to shock the pyboard.  If your pyboard came
-    in a black plastic box, then this box is the best way to store and carry the
-    pyboard as it is an anti-static box (it is made of a conductive plastic, with
-    conductive foam inside).
+  - USB kabeli pyboard-a taxanda və çıxardanda ehtiyatla davranın.
+    Baxmayaraq ki, USB konnektor board-a bərkidilib(lehimlənib), ehtiyatsızlıq ucbatından qırılsa, düzəldilməsi çox çətindir.
+    
+  - Statik elektrik cərəyanı pyboard-ın hissələrini şok edə bilər, hətta onları sıradan çıxara bilər.
+    Əgər sizin ərazidə uzun müddətli statik elektirk cərəyanı varsa (məsələn, quru və soyuq iqlim),
+    o zaman siz Pyboard-ınızı qorumaq üçün əlavə səylər göstərməlisiniz.
+    Əgər board-ınız qara plastik qutuda sizə təqdim olunubsa, o zaman pyboard-ı daşıyarkən və saxlayarkən bu qutudan istifadə edin
+    (Qutu ötürücülü plastikdən hazırlanmışdır və daxilində ötürücü köpük yerləşdirilmişdir)
+    
 
 As long as you take care of the hardware, you should be okay.  It's almost
 impossible to break the software on the pyboard, so feel free to play around
