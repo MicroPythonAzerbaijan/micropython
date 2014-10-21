@@ -71,13 +71,13 @@ directory or ``lib/`` directory) and then try::
     ...   pyb.delay(100)
     ...
 
-This will continuously print out the touch status of all electrodes.
-Try touching each one in turn.
+Bu ardıcıllıqla bütün elektrodların toxunma statusunu çap edəcəkdir.
+Növbə ilə hər birinə toxunmağa çalışın.
 
-Note that if you put the LCD skin in the Y-position, then you need to
-initialise the I2C bus using::
+Nəzərə alın ki, əgər LCD əlavəni Y vəziyyətində qoysanız
+I2C şinini aşağıdakı kimi inisiallaşdırmalısınız.::
 
     >>> m = mpr121.MPR121(pyb.I2C(2, pyb.I2C.MASTER))
 
-There is also a demo which uses the LCD and the touch sensors together,
-and can be found [here](/static/doc/examples/lcddemo.py).
+Həmçinin [burada](/static/doc/examples/lcddemo.py) LCD və toxunma sensorlarını
+birlikdə istifadə edən demo ilə tanış ola bilərsiniz.
