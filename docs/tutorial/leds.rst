@@ -23,8 +23,10 @@ Kodun birinci sətri, LED obyektini yaradır ki, biz onun adını led qoymuşuq.
 
 **Tapşırıq: pyboard-da birbaşa qoşulun, pyb.LED object-ini yaradın və LED-lərdən hər hansı birini on() metodu ilə yandırın.**
 
-A Disco on your pyboard
+
+Pyboard-da Disco keyfi
 -----------------------
+Bu ana qədər biz yalnız 1 LED-dən istifadə etmişik lakin, pyboard-da 4-ü var.
 
 So far we have only used a single LED but the pyboard has 4 available. Let's start by creating an object for each LED so we can control each of them. We do that by creating a list of LEDS with a list comprehension. ::
 
