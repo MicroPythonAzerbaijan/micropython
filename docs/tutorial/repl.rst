@@ -12,15 +12,14 @@ Windows
 USB device-dan istifadə etmək üçün, pyboard driver-i install etməlisiniz.
 Driver pyboard-ın USB flash drayvında yerləşir və onun adı ``pybcdc.inf``-dır.
 
+Driver-i qurmaq üçün, Device Manager-ə gedib, pyboard-ı həmin listdən tapmaq lazımdır.
+Pyboard olan yerdə warning işarəsi görəcəksiniz (çünki hələ işləmir),
+sağ klik edərək -> Properties -> Install Driver seçin.
+Daha sonra, manual olaraq driver-in olduğu yerə gedin və pyboard-ın USB drayvını seçin.
+Seçdikdən sonra, yazılmalıdır.  
+Drayveri qurduqdan sonra yenidən Device Manager-e gedib install olunmuş pyboard-u tapın
+və hansı COM port olduğunu müəyyən edin (məs. COM4).
 
-To install this driver you need to go to Device Manager
-for your computer, find the pyboard in the list of devices (it should have
-a warning sign next to it because it's not working yet), right click on
-the pyboard device, select Properties, then Install Driver.  You need to
-then select the option to find the driver manually (don't use Windows auto update),
-navigate to the pyboard's USB drive, and select that.  It should then install.
-After installing, go back to the Device Manager to find the installed pyboard,
-and see which COM port it is (eg COM4).
 
 You now need to run your terminal program.  You can use HyperTerminal if you
 have it installed, or download the free program PuTTY:
