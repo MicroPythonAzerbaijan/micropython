@@ -49,8 +49,8 @@ Xarici vasitə ilə qidalanma
 Pyboard xarici qida mənbəyi ilə(məs. batareya) işlədilə bilər.
 
 
-**Be sure to connect the positive lead of the power supply to VIN, and
-ground to GND.  There is no polarity protection on the pyboard so you
-must be careful when connecting anything to VIN.**
+**Müsbət başlığı VIN, yerlə birləşməni isə GND
+ birləşdirdiyinizdən əmin olun. Pyboard-da polyarlaşma qoruyucusu yoxdur, buna
+ görə də istənilən birləməni VIN vasitəsilə edərkən ehtiyatlı olmalısınız.**
 
-**The input voltage must be between 3.6V and 10V.**
+**Giriş gərginliyi 3.6V və 10V aralığında olmalıdır.**
