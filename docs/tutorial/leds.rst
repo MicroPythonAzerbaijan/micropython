@@ -15,14 +15,13 @@ Bu üsul çox gözəl olsa da, təbii ki, biz bu prosesi avtomatlaşdırmağa ç
         led.toggle()
         pyb.delay(1000)
 
-Faylı yaddaşa verdikdən sonra, pyboard-dakı qırmızı işıq 1 saniyəlik yanmalıdıq. Script-i run etmək üçün "soft reset" edin, yəni CTRL+D. Bundan sonra, pyboard restart olacaq ve siz görəcəksiniz ki, yaşıl işıq dayanmadan yanıb sönür. Təbriklər, dəhşətli robotlar düzəltmək yolunda ilk addımılarınızı artıq atdınız. Əgər yanan sönən işıqlardan bezdinizsə sadəcə terminalda CTRL+C edin.
+Faylı yaddaşa verdikdən sonra, pyboard-dakı qırmızı işıq 1 saniyəlik yanmalıdır. Script-i run etmək üçün "soft reset" edin, yəni CTRL+D. Bundan sonra, pyboard restart olacaq ve siz görəcəksiniz ki, yaşıl işıq dayanmadan yanıb sönür. Təbriklər, dəhşətli robotlar düzəltmək yolunda ilk addımılarınızı artıq atdınız. Əgər yanan sönən işıqlardan bezdinizsə sadəcə terminalda CTRL+C edin.
 Sözsüz ki maraqlıdır,axı bu kod parçası nə edir? Bunun üçün biraz terminalogiyaya baş vuraq. Python obyekt-yönümlü(OOP) proqramlaşdırma dilidir, Python-da demək olar ki hər şey *class*-dır və siz class-ın instance-ını yaratdıqda nəticədə əlinizdə *object* olur. Klaslarda həmçinin onların öz *metod*-ları olur. Metod(member function) *object* -i idarə etməyə həmçinin onunla işləməyə icazə verir.
+Kodun birinci sətri, LED obyektini yaradır ki, biz onun adını led qoymuşuq. LED Obyekt yaratdıqda, 1-dən 4-ə qədər parameter ötürə bilərik, əgər xatırlayırsınızsa bizim board-ın üzərində 4 LED gəlib və bu rəqəmlər həmin LED-lərə uyğundur. pyb.LED klasının 3 mühüm funksiyası(member function) var: on(), off() və toggle(). Bizim istifadə etdiyimiz digər funksiya pyb.delay() adından da görüldüyü kimi, verilmiş vaxt(millisaniyə) ərzində gözləməyi təmin etmək üçündür. LED obyektini yaratdıqdan sonra, verilmiş while True: sonsuz döngü yaradır və bu döngü daxilində, 1 saniyəlik aralıqlarla LED yanıb sönür.
 
-The first line of code creates an LED object which we have then called led. When we create the object, it takes a single parameter which must be between 1 and 4, corresponding to the 4 LEDs on the board. The pyb.LED class has three important member functions that we will use: on(), off() and toggle(). The other function that we use is pyb.delay() this simply waits for a given time in miliseconds. Once we have created the LED object, the statement while True: creates an infinite loop which toggles the led between on and off and waits for 1 second.
+**Tapşırıq: Fərqli bir LED üzərində daha uzun müddətli toggle olunmağı təmin edin.**
 
-**Exercise: Try changing the time between toggling the led and turning on a different LED.**
-
-**Exercise: Connect to the pyboard directly, create a pyb.LED object and turn it on using the on() method.**
+**Tapşırıq: pyboard-da birbaşa qoşulun, pyb.LED object-ini yaradın və LED-lərdən hər hansı birini on() metodu ilə yandırın.**
 
 A Disco on your pyboard
 -----------------------
