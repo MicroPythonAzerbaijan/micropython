@@ -57,7 +57,7 @@ Sınamaq üçün: ::
 və ``touch`` dəyişəni isə 4 touch düyməciklərdən gələn məlumatı özündə saxlayır(A, B, X, Y).
 
 
-There is a simple driver [here](/static/doc/examples/mpr121.py)
+Çox sadə driver artıq mövcuddur [here](/static/doc/examples/mpr121.py)
 which allows you to set the threshold and debounce parameters, and
 easily read the touch status and electrode voltage levels.  Copy
 this script to your pyboard (either flash or SD card, in the top
