@@ -1,5 +1,4 @@
 LCD və touch-sensor(rus dilində: сенсорный датчик)
-
 =============================
 
 LCD və touch-sensor-un birləşdirilməsi və istifadəsi
