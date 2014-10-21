@@ -1,13 +1,11 @@
-Getting a Micro Python REPL prompt
+Micro Python-nun REPL prompt-u ilə tanışlıq
 ==================================
+REPL = Read Evaluate Print Loop, pyboard daxilində olan interaktiv Micro Python prompt-dur.  
+REPL-dən istifadə etmək, kodları test etməyin ən asan yoludur. 
+``main.py``-a kod yazmaqdan əlavə REPL-dan istifadə edə bilərsiniz.
 
-REPL stands for Read Evaluate Print Loop, and is the name given to the
-interactive Micro Python prompt that you can access on the pyboard.  Using
-the REPL is by far the easiest way to test out your code and run commands.
-You can use the REPL in addition to writing scripts in ``main.py``.
-
-To use the REPL, you must connect to the serial USB device on the pyboard.
-How you do this depends on your operating system.
+REPL-dən istifadə üçün, pyboard-ı USB ilə PC-yə qoşmalısınız.
+Bunu necə edəcəyiniz isə, sizin əməliyyat sisteminizdən asılıdır.
 
 Windows
 -------
