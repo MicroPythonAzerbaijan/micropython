@@ -3,10 +3,10 @@
 Micro Python tutorial
 =====================
 
-This tutorial is intended to get you started with your pyboard.
-All you need is a pyboard and a micro-USB cable to connect it to
-your PC.  If it is your first time, it is recommended to follow
-the tutorial through in the order below.
+Bu dərslər pyboardla tez bir zamanda işləməyə başlamaq üçün nəzərdə tutulmuşdur.
+Ehtiyacınız olan sadəcə pyboard və micro-USB kabeldir.
+Pyboard-ı bu micro-USB kabel vasitəsilə, öz kompüterinizə qoşursunuz və dərhal test etməyə başlaya bilərsiniz.
+Əgər mikro kontrollerlərlə daha əvvəl işləməmisinizsə, onda biz aşağıdakı sıra ilə addım-addım irəliləməyinizi məsləhət görürük.
 
 .. toctree::
    :maxdepth: 1
