@@ -1,6 +1,6 @@
 .. _tutorial-index:
 
-Micro Python tutorial
+Micro Python dərsi
 =====================
 
 Bu dərslər pyboardla tez bir zamanda işləməyə başlamaq üçün nəzərdə tutulmuşdur.
@@ -23,7 +23,7 @@ Pyboard-ı bu micro-USB kabel vasitəsilə, öz kompüterinizə qoşursunuz və 
    timer.rst
    assembler.rst
 
-Tutorials requiring extra components
+Aşağıdakı dərslər, bəzi əlavə komponentlər tələb edir.
 ------------------------------------
 
 .. toctree::
