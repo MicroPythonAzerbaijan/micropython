@@ -20,9 +20,8 @@ Seçdikdən sonra, yazılmalıdır.
 Drayveri qurduqdan sonra yenidən Device Manager-e gedib install olunmuş pyboard-u tapın
 və hansı COM port olduğunu müəyyən edin (məs. COM4).
 
-
-You now need to run your terminal program.  You can use HyperTerminal if you
-have it installed, or download the free program PuTTY:
+İndi siz terminal proqramınızdan istifadə etməlisiniz.
+HyperTerminal buna nümunə ola bilər. Pulsuz olaraq isə PuTTY-dən istifadə edə bilərsiniz:
 [`putty.exe`](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html).
 Using your serial program you must connect to the COM port that you found in the
 previous step.  With PuTTY, click on "Session" in the left-hand panel, then click
