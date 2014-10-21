@@ -28,7 +28,7 @@ Narahat olmayın bunu siz USB ilə edə bilərsiniz.
 
 
 
-Pyboard-ın sxemi(layout)
+Pyboard-ın quruluş sxemi(layout)
 ---------------------
 Mikro USB konnektor üst tərəfdən sağda yerləşir.
 Mikro SD kart slot isə üst tərəfdən solda yerləşir.
@@ -37,7 +37,7 @@ Mikro SD kart slot isə üst tərəfdən solda yerləşir.
 Pyboard-da 2 switch yerləşir: sağdakı resetləmək, soldakı isə "istifadəçi switch-idir"
 
 
-Qoşulma və Qidalanma
+Qoşulma və qidalanma
 ---------------------------
 
 Pyboard USB vasitəsilə kompüterə qoşulur və işə salınır(qidalanır).
@@ -46,7 +46,7 @@ Kabel PC-yə qoşulduqdan dərhal sonra, yaşıl LED yanıb sönməyə başlayac
 
 Xarici vasitə ilə qidalanma
 ------------------------------------
-Pyboard xarici qida mənbəyi ilə(məs. batareya) işlədilə bilər
+Pyboard xarici qida mənbəyi ilə(məs. batareya) işlədilə bilər.
 
 
 **Be sure to connect the positive lead of the power supply to VIN, and
