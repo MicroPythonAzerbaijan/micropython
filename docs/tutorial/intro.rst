@@ -2,7 +2,7 @@ Pyboard-a giriş
 ===========================
 
 Pyboard-ı mükəmməl şəkildə başa düşmək və onunla işləməyi bacarmaq üçün,
-onun iş prinsipi ilə bağlı xırda lakin vacib məlumatları əldə etməkdə fayda var.
+onun iş prinsipi ilə bağlı xırda lakin, vacib məlumatları əldə etməkdə fayda var.
 
 Pyboard-la diqqətli olaq
 -----------------------
@@ -19,32 +19,35 @@ Pyboard-ın qoruyucu korpusu olmadığı üçün, onunla diqqətli davranmaq laz
     (Qutu ötürücülü plastikdən hazırlanmışdır və daxilində ötürücü köpük yerləşdirilmişdir)
     
 
-As long as you take care of the hardware, you should be okay.  It's almost
-impossible to break the software on the pyboard, so feel free to play around
-with writing code as much as you like.  If the filesystem gets corrupt, see
-below on how to reset it.  In the worst case you might need to reflash the
-Micro Python software, but that can be done over USB.
+Fiziki şəkildə pyboard-la diqqətli olduğunuz halda, heç bir çətinliyiniz olmayacaq.
+Pyboard-da proqram təminatını qırmaq demək olar ki, mümkün deyil.
+Bu səbəbdən istədiyiniz qədər, rahat şəkildə kod yazıb sınaya bilərsiniz.
+Əgər filesystem zədələnərsə, aşağıda göstərilmiş üsullardan istifadə edib onu reset edə bilərsiniz.
+Ən pis halda siz Micro Python proqram təminatını reflash edəcəksiz.
+Narahat olmayın bunu siz USB ilə edə bilərsiniz.
 
-Layout of the pyboard
+
+
+Pyboard-ın sxemi(layout)
 ---------------------
+Mikro USB konnektor üst tərəfdən sağda yerləşir.
+Mikro SD kart slot isə üst tərəfdən solda yerləşir.
+4 LED işıqlar isə SD slot ilə  USB konnektorun arasında yerləşir.
+İşıqların rəngləri, aşağıdan yuxarıya qırmızı,yaşıl, narıncı və ən üstdə mavidir.
+Pyboard-da 2 switch yerləşir: sağdakı resetləmək, soldakı isə "istifadəçi switch-idir"
 
-The micro USB connector is on the top right, the micro SD card slot on
-the top left of the board.  There are 4 LEDs between the SD slot and
-USB connector.  The colours are: red on the bottom, then green, orange,
-and blue on the top.  There are 2 switches: the right one is the reset
-switch, the left is the user switch.
 
-Plugging in and powering on
+Qoşulma və Qidalanma
 ---------------------------
 
-The pyboard can be powered via USB.  Connect it to your PC via a micro USB
-cable.  There is only one way that the cable will fit.  Once connected,
-the green LED on the board should flash quickly.
+Pyboard USB vasitəsilə kompüterə qoşulur və işə salınır(qidalanır).
+Kabel PC-yə qoşulduqdan dərhal sonra, yaşıl LED yanıb sönməyə başlayacaq.
 
-Powering by an external power source
+
+Xarici vasitə ilə qidalanma
 ------------------------------------
+Pyboard xarici qida mənbəyi ilə(məs. batareya) işlədilə bilər
 
-The pyboard can be powered by a battery or other external power source.
 
 **Be sure to connect the positive lead of the power supply to VIN, and
 ground to GND.  There is no polarity protection on the pyboard so you
