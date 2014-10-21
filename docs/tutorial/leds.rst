@@ -1,24 +1,22 @@
-Turning on LEDs and basic Python concepts
+LED-ləri yandırmaq və ilkin Python anlayışları
 =========================================
 
-The easiest thing to do on the pyboard is to turn on the LEDs attached to the board. Connect the board, and log in as described in tutorial 1. We will start by turning and LED on in the interpreter, type the following ::
-
+Pyboard-da edə biləcəyiniz sadə işlərdən biri LED işıqları yandırmaq və söndürməkdir. Board-ı PC-yə qoşun, tutorial 1-də göstərildiyi kimi log in olun. Biz işıqları interpreter-dən yandırmağı göstərməklə başlayırıq: ::
     >>> myled = pyb.LED(1)
     >>> myled.on()
     >>> myled.off()
 
-These commands turn the LED on and off.
+Bu komandalar LED-i yandırıb söndürür.
 
-This is all very well but we would like this process to be automated. Open the file MAIN.PY on the pyboard in your favourite text editor. Write or paste the following lines into the file. If you are new to python, then make sure you get the indentation correct since this matters! ::
+Bu üsul çox gözəl olsa da, təbii ki, biz bu prosesi avtomatlaşdırmağa çalışmalıyıq. MAIN.PY faylını sevdiyiniz text editor-la açın. Fayl daxilinə aşağıdakı kod parçasını yazın. Əgər siz Python-da yenisinizsə boşluqlara (indentation) mütləq şəkildə fikir verin: ::
 
     led = pyb.LED(2)
     while True:
         led.toggle()
         pyb.delay(1000)
 
-When you save, the red light on the pyboard should turn on for about a second. To run the script, do a soft reset (CTRL-D). The pyboard will then restart and you should see a green light continuously flashing on and off. Success, the first step on your path to building an army of evil robots! When you are bored of the annoying flashing light then press CTRL-C at your terminal to stop it running.
- 
-So what does this code do? First we need some terminology. Python is an object-oriented language, almost everything in python is a *class* and when you create an instance of a class you get an *object*. Classes have *methods* associated to them. A method (also called a member function) is used to interact with or control the object.
+Faylı yaddaşa verdikdən sonra, pyboard-dakı qırmızı işıq 1 saniyəlik yanmalıdıq. Script-i run etmək üçün "soft reset" edin, yəni CTRL+D. Bundan sonra, pyboard restart olacaq ve siz görəcəksiniz ki, yaşıl işıq dayanmadan yanıb sönür. Təbriklər, dəhşətli robotlar düzəltmək yolunda ilk addımılarınızı artıq atdınız. Əgər yanan sönən işıqlardan bezdinizsə sadəcə terminalda CTRL+C edin.
+Sözsüz ki maraqlıdır,axı bu kod parçası nə edir? Bunun üçün biraz terminalogiyaya baş vuraq. Python obyekt-yönümlü(OOP) proqramlaşdırma dilidir, Python-da demək olar ki hər şey *class*-dır və siz class-ın instance-ını yaratdıqda nəticədə əlinizdə *object* olur. Klaslarda həmçinin onların öz *metod*-ları olur. Metod(member function) *object* -i idarə etməyə həmçinin onunla işləməyə icazə verir.
 
 The first line of code creates an LED object which we have then called led. When we create the object, it takes a single parameter which must be between 1 and 4, corresponding to the 4 LEDs on the board. The pyb.LED class has three important member functions that we will use: on(), off() and toggle(). The other function that we use is pyb.delay() this simply waits for a given time in miliseconds. Once we have created the LED object, the statement while True: creates an infinite loop which toggles the led between on and off and waits for 1 second.
 
