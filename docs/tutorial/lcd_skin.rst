@@ -24,13 +24,13 @@ LCD-nin istifadəsi
 
 To get started using the LCD, try the following at the Micro Python prompt.
 LCD ilə işə başlamaq üçün, Micro Python prompt-da aşağıdakını sınayın.
-Əmin olun ki, LCD pyboard-a məhz şəkildə göstərildiyi kimi qoşulmuşdur. ::
+Əmin olun ki, LCD pyboard-a məhz şəkildə göstərildiyi kimi qoşulmuşdur: ::
 
     >>> lcd = pyb.LCD('X')
     >>> lcd.light(True)
     >>> lcd.write('Hello uPy!\n')
 
-Aşağıdakı koddan istifadə etməklə sadə animasiya yarada bilərsiniz. ::
+Aşağıdakı koddan istifadə etməklə sadə animasiya yarada bilərsiniz: ::
 
     lcd = pyb.LCD('X')
     lcd.light(True)
@@ -43,19 +43,19 @@ Aşağıdakı koddan istifadə etməklə sadə animasiya yarada bilərsiniz. ::
 Touch sensor-un istifadəsi
 ----------------------
 
-To read the touch-sensor data you need to use the I2C bus. The
-MPR121 capacitive touch sensor has address 90.
+Touch-sensor məlumatları oxumaq üçün siz I2C bus-dan istifadə etməlisiniz.
+MPR121 kapasiteli(red. ~ Türkiyə türkçəsi) touch sensor-in adresi 90-dır.
 
-Sınamaq üçün ::
+Sınamaq üçün: ::
 
     >>> i2c = pyb.I2C(1, pyb.I2C.MASTER)
     >>> i2c.mem_write(4, 90, 0x5e)
     >>> touch = i2c.mem_read(1, 90, 0)[0]
 
-The first line above makes an I2C object, and the second line
-enables the 4 touch sensors.  The third line reads the touch
-status and the ``touch`` variable holds the state of the 4 touch
-buttons (A, B, X, Y).
+İlk sətr, I2C obyektini yaradır, ikinci sətr 4 touch sensoru aktivləşdirir,
+üçüncü sətr "touch status"-u oxuyur
+və ``touch`` dəyişəni isə 4 touch düyməciklərdən gələn məlumatı özündə saxlayır(A, B, X, Y).
+
 
 There is a simple driver [here](/static/doc/examples/mpr121.py)
 which allows you to set the threshold and debounce parameters, and
