@@ -1,4 +1,4 @@
-Micro Python-nun REPL prompt-u ilə tanışlıq
+Micro Python REPL prompt-la tanışlıq
 ==================================
 REPL = Read Evaluate Print Loop, pyboard daxilində olan interaktiv Micro Python prompt-dur.  
 REPL-dən istifadə etmək, kodları test etməyin ən asan yoludur. 
@@ -9,9 +9,9 @@ Bunu necə edəcəyiniz isə, sizin əməliyyat sisteminizdən asılıdır.
 
 Windows
 -------
+USB device-dan istifadə etmək üçün, pyboard driver-i install etməlisiniz.
+Driver pyboard-ın USB flash drayvında yerləşir və onun adı ``pybcdc.inf``-dır.
 
-You need to install the pyboard driver to use the serial USB device.
-The driver is on the pyboard's USB flash drive, and is called ``pybcdc.inf``.
 
 To install this driver you need to go to Device Manager
 for your computer, find the pyboard in the list of devices (it should have
