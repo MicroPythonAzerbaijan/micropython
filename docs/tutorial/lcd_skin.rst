@@ -43,7 +43,7 @@ Aşağıdakı koddan istifadə etməklə sadə animasiya yarada bilərsiniz: ::
 Touch sensor-un istifadəsi
 ----------------------
 
-Touch-sensor məlumatları oxumaq üçün siz I2C marşrutundan(BUS) istifadə etməlisiniz.
+Touch-sensor məlumatları oxumaq üçün siz I2C marşrutundan(şinindən) istifadə etməlisiniz.
 MPR121 kapasiteli(red. ~ Türkiyə türkçəsi) touch sensor-in adresi 90-dır.
 
 Sınamaq üçün: ::

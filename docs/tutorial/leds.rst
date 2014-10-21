@@ -26,14 +26,12 @@ Kodun birinci sətri, LED obyektini yaradır ki, biz onun adını led qoymuşuq.
 
 Pyboard-da Disco keyfi
 -----------------------
-Bu ana qədər biz yalnız 1 LED-dən istifadə etmişik lakin, pyboard-da 4-ü var.
-
-So far we have only used a single LED but the pyboard has 4 available. Let's start by creating an object for each LED so we can control each of them. We do that by creating a list of LEDS with a list comprehension. ::
+Bu ana qədər biz yalnız 1 LED-dən istifadə etmişik lakin, pyboard-da 4-ü var. Hər bir LED-i idarə etmək üçün müvafiq obyekt yaratmaq lazımdır.  Biz buna LED-lərin listini yaratmaqla nail oluruq. ::
 
     leds = [pyb.LED(i) for i in range(1,5)]
 
-If you call pyb.LED() with a number that isn't 1,2,3,4 you will get an error message.
-Next we will set up an infinite loop that cycles through each of the LEDs turning them on and off. ::
+Əgər siz pyb.LED()-i 1,2,3,4-dən başqa rəqəmlərdən başqa qiymətlərlə çağırsanız, o zaman error mesajı görmüş olarsınız.
+Daha sonra biz, sonsuz döngü yaradırıq. Kod bütün LED-lərdən dövr edərək onları yandırıb söndürür. ::
 
     n = 0
     while True:
@@ -41,7 +39,8 @@ Next we will set up an infinite loop that cycles through each of the LEDs turnin
       leds[n].toggle()
       pyb.delay(50)
 
-Here, n keeps track of the current LED and every time the loop is executed we cycle to the next n (the % sign is a modulus operator that keeps n between 0 and 4.) Then we access the nth LED and toggle it. If you run this you should see each of the LEDs turning on then all turning off again in sequence.
+Burda n hal-hazırkı LED-i qeydə alır və hər dövrdə növbəti n-ə keçir(% işarəsi modullu bölmə əməliyyatıdır, bununla n 0 ilə 4 arasında qalır). Daha sonra da növbəti n-ə(LED-ə) keçirik və işıqları dəyişirik.Bu kodu işlətsəniz, görərsiniz ki, LED işıqlar növbə ilə yanıb sönür. 
+
 
 One problem you might find is that if you stop the script and then start it again that the LEDs are stuck on from the previous run, ruining our carefully choreographed disco. We can fix this by turning all the LEDs off when we initialise the script and then using a try/finally block. When you press CTRL-C, Micro Python generates a VCPInterrupt exception. Exceptions normally mean something has gone wrong and you can use a try: command to "catch" an exception. In this case it is just the user interrupting the script, so we don't need to catch the error but just tell Micro Python what to do when we exit. The finally block does this, and we use it to make sure all the LEDs are off. The full code is::
 
