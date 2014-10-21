@@ -1,7 +1,8 @@
-The LCD and touch-sensor skin
+LCD və touch-sensor(rus dilində: сенсорный датчик)
+
 =============================
 
-Soldering and using the LCD and touch-sensor skin.
+LCD və touch-sensor-un birləşdirilməsi və istifadəsi
 
 .. image:: http://micropython.org/static/doc/skin-lcd-3.jpg
     :alt: pyboard with LCD skin
@@ -11,24 +12,26 @@ Soldering and using the LCD and touch-sensor skin.
     :alt: pyboard with LCD skin
     :width: 250px
 
-The following video shows how to solder the headers onto the LCD skin.
-At the end of the video, it shows you how to correctly connect the LCD skin to the pyboard.
+Aşağıdakı videoda LCD-yə başlıqların qoşulması göstərilmişdir.
+Videonun sonunda isə, LCD-nin pyboard-da necə düzgün şəkildə qoşulmalı olduğu göstərilmişdir.
 
 .. raw:: html
 
     <iframe style="margin-left:3em;" width="560" height="315" src="http://www.youtube.com/embed/PowCzdLYbFM?rel=0" frameborder="0" allowfullscreen></iframe>
 
-Using the LCD
+
+LCD-nin istifadəsi
 -------------
 
 To get started using the LCD, try the following at the Micro Python prompt.
-Make sure the LCD skin is attached to the pyboard as pictured at the top of this page. ::
+LCD ilə işə başlamaq üçün, Micro Python prompt-da aşağıdakını sınayın.
+Əmin olun ki, LCD pyboard-a məhz şəkildə göstərildiyi kimi qoşulmuşdur. ::
 
     >>> lcd = pyb.LCD('X')
     >>> lcd.light(True)
     >>> lcd.write('Hello uPy!\n')
 
-You can make a simple animation using the code::
+Aşağıdakı koddan istifadə etməklə sadə animasiya yarada bilərsiniz. ::
 
     lcd = pyb.LCD('X')
     lcd.light(True)
@@ -38,13 +41,13 @@ You can make a simple animation using the code::
         lcd.show()
         pyb.delay(25)
 
-Using the touch sensor
+Touch sensor-un istifadəsi
 ----------------------
 
-To read the touch-sensor data you need to use the I2C bus.  The
+To read the touch-sensor data you need to use the I2C bus. The
 MPR121 capacitive touch sensor has address 90.
 
-To get started, try::
+Sınamaq üçün ::
 
     >>> i2c = pyb.I2C(1, pyb.I2C.MASTER)
     >>> i2c.mem_write(4, 90, 0x5e)
