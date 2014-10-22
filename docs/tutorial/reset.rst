@@ -1,60 +1,54 @@
 Safe mode and factory reset
 ===========================
+Əgər sizin Pyboard-la nəsə yolunda deyilsə, həyəcanlanmayın.
+Səhv kodlaşdırmaq nəticəsinda pyboard-ı xarab etmək demək olar ki, mümkün deyil.
 
-If something goes wrong with your pyboard, don't panic!  It is almost
-impossible for you to break the pyboard by programming the wrong thing.
+İlk öncə safe mode-a keçməyi sınamalısınız: bu, müvəqqəti olaraq ``boot.py`` və ``main.py``
+fayllarının işlənməsini dayandırır və default USB ayarlarını sizə verir.
 
-The first thing to try is to enter safe mode: this temporarily skips
-execution of ``boot.py`` and ``main.py`` and gives default USB settings.
+Əgər sizin fayl sistemlə bağlı probleminiz varsa fabrika tənzimləmələrinə geri dönmək üçün,
+factory reset edə bilərsiniz. Factory reset faylsistemi onun ilk günkü orijinal vəziyyətinə geri qaytarır.
 
-If you have problems with the filesystem you can do a factory reset,
-which restores the filesystem to its original state.
 
 Safe mode
 ---------
 
-To enter safe mode, do the following steps:
+Safe mode-a keçmək üçün aşağıdakı addımları atın:
 
-1. Connect the pyboard to USB so it powers up.
-2. Hold down the USR switch.
-3. While still holding down USR, press and release the RST switch.
-4. The LEDs will then cycle green to orange to green+orange and back again.
-5. Keep holding down USR until *only the orange LED is lit*, and then let
-   go of the USR switch.
-6. The orange LED should flash quickly 4 times, and then turn off.  
-7. You are now in safe mode.
+1. Pyboard-ı USB ilə PC-yə qoşun
+2. USR switch-i basılı saxlayın.
+3. USR basılı ola-ola, RST switch-i basıb buraxın.
+4. LED daha sonra yaşıldan narıncıya keçəcək daha sonra da yaşıl+narıncı olacaq və əvvəlki vəziyyətinə qayıdacaq.
+5. USR-i basılı saxlamaqda davam edin *yalnız narıncı LED yanılı qalana kimi*, daha sonra da USR switch-i buraxın.
+6. Narıncı LED tez-tez 4 dəfə yanıb-sönəcək, daha sonra isə dayanacaq.
+7. Siz artıq Safe mode-dasınız.
 
-In safe mode, the ``boot.py`` and ``main.py`` files are not executed, and so
-the pyboard boots up with default settings.  This means you now have access
-to the filesystem (the USB drive should appear), and you can edit ``boot.py``
-and ``main.py`` to fix any problems.
+Safe Mode-da ``boot.py`` və ``main.py`` faylları çalışmır(run olmur), beləliklə də pyboard default ayarlarla qalxır.
+Bu o deməkdir ki, indi siz asan şəkildə ``boot.py`` və ``main.py`` fayllarını dəyişə bilərsiniz.
+Beləliklə də hər hansı səhvliklər varsa, onları düzəltmə şansını əldə etmiş olursunuz.
 
-Entering safe mode is temporary, and does not make any changes to the
-files on the pyboard.
+Safe Mode-a daxil olmaq müvəqqətidir, bu o deməkdir ki, bu ziyansız əməliyyatdır.
 
-Factory reset the filesystem
+Faylsistemi fabrika tənzimləmələrinə geri qaytarmaq (factory reset)
 ----------------------------
+Əgər pyboard-ın faylsistemi zədələnibsə (məs. eject/unmount etməyi unutmusunuzsa),
+və yaxud ``boot.py`` və ya ``main.py`` fayllarında hər hansı kod var ki, onu dayandıra bilmirsiniz,
+o zaman siz faylsistemi reset edə bilərsiniz.
 
-If you pyboard's filesystem gets corrupted (for example, you forgot to
-eject/unmount it), or you have some code in ``boot.py`` or ``main.py`` which
-you can't escape from, then you can reset the filesystem.
+Faylsistemi resetləsəniz, daxili puboard yaddaşında olan (SD kart buna daxil deyil),
+bütün fayllar silinəcək və ``boot.py``, ``main.py``, ``README.txt``
+və ``pybcdc.inf`` faylları özlərinin orijinal vəzziyyətlərinə qayıdacaq.
 
-Resetting the filesystem deletes all files on the internal pyboard storage
-(not the SD card), and restores the files ``boot.py``, ``main.py``, ``README.txt``
-and ``pybcdc.inf`` back to their original state.
+Factory reset etmək, Safe Mode-a keçmək kimidir, sadəcə USR-i yaşıl+narıncı olanda buraxmaq lazımdır:
 
-To do a factory reset of the filesystem you follow a similar procedure as
-you did to enter safe mode, but release USR on green+orange:
-
-1. Connect the pyboard to USB so it powers up.
-2. Hold down the USR switch.
-3. While still holding down USR, press and release the RST switch.
-4. The LEDs will then cycle green to orange to green+orange and back again.
-5. Keep holding down USR until *both the green and orange LEDs are lit*, and
-   then let go of the USR switch.
-6. The green and orange LEDs should flash quickly 4 times.
-7. The red LED will turn on (so red, green and orange are now on).
-8. The pyboard is now resetting the filesystem (this takes a few seconds).
-9. The LEDs all turn off.
-10. You now have a reset filesystem, and are in safe mode.
-11. Press and release the RST switch to boot normally.
+1. Pyboard-ı USB ilə PC-yə qoşun.
+2. USR switch-i basılı saxlayın.
+3. USR basılı ola-ola, RST switch-i basıb buraxın.
+4. LED daha sonra yaşıldan narıncıya keçəcək daha sonra da yaşıl+narıncı olacaq və əvvəlki vəziyyətinə qayıdacaq.
+5. USR-i basılı saxlamaqda davam edin *yaşıl və narıncı LED yanılı qalana kimi*, daha sonra da USR switch-i buraxın.
+6. Yaşıl və narıncı LED-lər 4 dəfə yanıb sönəcək.
+7. Qırmızı LED yanacaq (beləliklə indi yaşıl, narıncı və qırmızı işıqlar yanır).
+8. İndi pyboard faylsistemi reset edir(bu bir neçə saniyə çəkə bilər).
+9. Bütün LED-lər indi sönülüdür.
+10. Bəli artıq siz fayl sistemi resetlədiniz və hal-hazırda Safe Mode-da çalışırsınız.
+11. Normal şəkildə boot olmaq üçün,RST switch-i basıb buraxın.
