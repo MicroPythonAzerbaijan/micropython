@@ -23,55 +23,50 @@ və hansı COM port olduğunu müəyyən edin (məs. COM4).
 İndi siz terminal proqramınızdan istifadə etməlisiniz.
 HyperTerminal buna nümunə ola bilər. Pulsuz olaraq isə PuTTY-dən istifadə edə bilərsiniz:
 [`putty.exe`](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html).
-Using your serial program you must connect to the COM port that you found in the
-previous step.  With PuTTY, click on "Session" in the left-hand panel, then click
-the "Serial" radio button on the right, then enter you COM port (eg COM4) in the
-"Serial Line" box.  Finally, click the "Open" button.
+Serial proqramınızdan istifadə etməklə, müəyyən etdiyiniz COM port-a qoşulmalısınız.
+PuTTY ilə, sol paneldə "Session"-a klikləyin, daha sonra, "Serial" radio düymıəsinə basın,
+daha sonra da COM portun "Serial Line"-da qeyd edin və ən sonda "Open" düyməsini basın.
 
 Mac OS X
 --------
 
-Open a terminal and run::
+Terminalı acın və aşağıdakını işlədin::
 
     screen /dev/tty.usbmodem*
     
-When you are finishend and want to exit screen, type CTRL-A CTRL-\\.
+İşiniz bitdikdə, çıxmaq istəsəniz, CTRL+A CTRL+\\ -nı sıxın.
 
 Linux
 -----
 
-Open a terminal and run::
+Terminalı acın və aşağıdakını işlədin::
 
     screen /dev/ttyACM0
     
-You can also try ``picocom`` or ``minicom`` instead of screen.  You may have to
-use ``/dev/ttyACM1`` or a higher number for ``ttyACM``.  And, you may need to give
-yourself the correct permissions to access this devices (eg group ``uucp`` or ``dialout``,
-or use sudo).
+Siz həmçinin, screen əvəzinə ``picocom`` və ya ``minicom``-dan istifadə edə bilərsiniz.
+Siz ``/dev/ttyACM1``-dan  və yaxud daha yüksək rəqəmli ``ttyACM``-dən istifadə etməlisiniz.
+Həmçinin siz bu device-lardan istifadə etmək üçün müvafiq icazəniz olmalıdır (məs, ``uucp`` və ya ``dialout`` qrupu və ya sudo).
 
-Using the REPL prompt
+
+REPL prompt-dan istifadə
 ---------------------
-
-Now let's try running some Micro Python code directly on the pyboard.
-
-With your serial program open (PuTTY, screen, picocom, etc) you may see a blank
-screen with a flashing cursor.  Press Enter and you should be presented with a
-Micro Python prompt, i.e. ``>>>``.  Let's make sure it is working with the obligatory test::
+İndi isə birbaşa pyboard-da Micro Python kod yazmağı sınayaq.
+Serial proqramınızı açın (PuTTY, screen, picocom və.s).
+Boş screen, həmçinin yanıb sönən cursor görəcəksiniz.
+Enter-i basın və siz, Micro Python prompt görəcəksiniz, başqa sözlə ``>>>``.
+Düzgün İşlədiyini yoxlamaq üçün sadə kod yazaq: ::
 
     >>> print("hello pyboard!")
     hello pyboard!
+    
+``print("hello pyboard!")`` yazdıqdan sonra ENTER-i basdıqda ``hello pyboard!`` mesajını görmüş oluruq.
 
-In the above, you should not type in the ``>>>`` characters.  They are there to
-indicate that you should type the text after it at the prompt.  In the end, once
-you have entered the text ``print("hello pyboard!")`` and pressed Enter, the output
-on your screen should look like it does above.
+Əgər siz Python bilirsinizsə, o zaman sadə komandaları test edə bilərsiniz.
 
-If you already know some python you can now try some basic commands here. 
+Əgər aşağıdakı kodlardan hər hansı biri işləməsə siz hard və ya soft reset edib yenidən sınaya bilərsiniz;
+Aşağıya diqqət edək.
 
-If any of this is not working you can try either a hard reset or a soft reset;
-see below.
-
-Go ahead and try typing in some other commands.  For example::
+Bir neçə əlavə komandaları test edək. Misal üçün: ::
 
     >>> pyb.LED(1).on()
     >>> pyb.LED(2).on()
@@ -82,11 +77,12 @@ Go ahead and try typing in some other commands.  For example::
     >>> 20 * 'py'
     'pypypypypypypypypypypypypypypypypypypypy'
 
-Resetting the board
+Board-ın resetlənməsi
 -------------------
 
-If something goes wrong, you can reset the board in two ways. The first is to press CTRL-D
-at the Micro Python prompt, which performs a soft reset.  You will see a message something like ::
+Əgər nəsə düz getməsə, siz board-ınızı 2 yolla reset edə bilərsiniz.
+Birinci üsul CTRL+D-dir. Bu həmçinin soft reset adlanır.
+CTRL+D-dən sonra aşağıdakına bənzər mesaj görəcəksiniz ::
 
     >>> 
     PYB: sync filesystems
@@ -95,9 +91,8 @@ at the Micro Python prompt, which performs a soft reset.  You will see a message
     Type "help()" for more information.
     >>>
 
-If that isn't working you can perform a hard reset (turn-it-off-and-on-again) by pressing the RST
-switch (the small black button closest to the micro-USB socket on the board). This will end your
-session, disconnecting whatever program (PuTTY, screen, etc) that you used to connect to the pyboard.
+Əgər bu üsul kömək etməsə hard reset-dən istifadə edə bilərsiniz (Söndürüb-yenidən-yandırmaq).
+Bunun üçün RST switch-i basmaq lazımdır(micro-USB soketə ən yaxın olan xırda qara düymə).
+Hard reset sizin sessiyanızı sonlandıracaq, hal-hazırda aktiv olan bütün proqramlardan çıxacaq(PuTTY, screen, etc).
 
-If you are going to do a hard-reset, it's recommended to first close your serial program and eject/unmount
-the pyboard drive.
+Hard reset etməzdən əvvəl, serial proqramlarınızdan çıxmağınız məsləhətdir daha sonra pyboard drive-i çıxarıb yenidən taxa bilərsiniz.
