@@ -1,20 +1,19 @@
-Running your first script
+İlk scriptimizi işlədək
 =========================
 
-Let's jump right in and get a Python script running on the pyboard.  After
-all, that's what it's all about!
+Gəlin biliklərimizi daha da dərinləşdirək və Python script-i pyboard-da calışdıraq.
+Bunu etdikdən sonra görəcəksiniz ki, bəli bütün əsas iş elə bundan ibarətdir.
 
-Connecting your pyboard
+Pyboar-da qoşulmaq
 -----------------------
 
-Connect your pyboard to your PC (Windows, Mac or Linux) with a micro USB cable.
-There is only one way that the cable will connect, so you can't get it wrong.
+Pyboard-ı USB kabel vasitəsilə PC-yə qoşaq(Windows, Mac və Linux).
+Bunun yalnız bir üsulu var, ona görə də səhv etmə ehtimalınız yoxdur.
 
 <img src="/static/doc/pyboard-usb-micro.jpg" alt="pyboard with USB micro cable" style="width:200px; border:1px solid black; display:inline-block;"/>
 
-When the pyboard is connected to your PC it will power on and enter the start up
-process (the boot process).  The green LED should light up for half a second or
-less, and when it turns off it means the boot process has completed.
+Pyboard PC-yə qoşulduqdan sonra boot olacaq. Yarım saniyə və ya daha az bir müddətə yaşıl LED yanacaq.
+Yaşıl işıq söndükdən sonra, bilin ki boot proses artıq sonlanıb.
 
 Opening the pyboard USB drive
 -----------------------------
