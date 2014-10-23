@@ -1,9 +1,8 @@
 The Switch, callbacks and interrupts
 ====================================
 
-The pyboard has 2 small switches, labelled USR and RST.  The RST switch
-is a hard-reset switch, and if you press it then it restarts the pyboard
-from scratch, equivalent to turning the power off then back on.
+Pyboard-ın 2 kiçik switch-i var, USR və RST.
+RST switch hard-reset üçündür, bunu bassanız o pyboardı restart edəcək və yenidən başladacaq.
 
 The USR switch is for general use, and is controlled via a Switch object.
 To make a switch object do::
