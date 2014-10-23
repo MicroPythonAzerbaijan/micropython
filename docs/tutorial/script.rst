@@ -15,90 +15,90 @@ Bunun yalnız bir üsulu var, ona görə də səhv etmə ehtimalınız yoxdur.
 Pyboard PC-yə qoşulduqdan sonra boot olacaq. Yarım saniyə və ya daha az bir müddətə yaşıl LED yanacaq.
 Yaşıl işıq söndükdən sonra, bilin ki boot proses artıq sonlanıb.
 
-Opening the pyboard USB drive
+Pyboard USB drayvla işləmək
 -----------------------------
 
-Your PC should now recognise the pyboard.  It depends on the type of PC you
-have as to what happens next:
+Pyboard PC-yə qoşulan kimi, sizin PC onu dərhal tanımalıdır.
+Təbii ki, bu sizin əmliyyat sisteminizdən asılıdır. ::
 
-  - **Windows**: Your pyboard will appear as a removable USB flash drive.
-    Windows may automatically pop-up a window, or you may need to go there
-    using Explorer.
+  - **Windows**: Sizin Pyboard USB flash drive kimi görsənəcək.
+    Windows avtomatik olaraq pəncərə açacaq və siz ora Explorer-lə gedə bilərsiniz.
 
-    Windows will also see that the pyboard has a serial device, and it will
-    try to automatically configure this device.  If it does, cancel the process.
-    We will get the serial device working in the next tutorial.
+    Windows həmçinin görəcək ki, pyboard-ın serial device-ı var və dərhal onu tənzimləməyə çalışacaq.
+    Əgər bu baş verərsə, bu prosesi dayandırın.
+    Biz serial device-la işləməyi növbəti dərsdə göstərəcik.
 
-  - **Mac**: Your pyboard will appear on the desktop as a removable disc.
-    It will probably be called "NONAME".  Click on it to open the pyboard folder.
+  - **Mac**: Pyboard desktop-da removable disk kimi görsənəcək.
+    Çox böyük ehtimal onun adı "NONAME" olacaq. Onun üzərinə tıklayın və qovluğu açın.
 
-  - **Linux**: Your pyboard will appear as a removable medium.  On Ubuntu
-    it will mount automatically and pop-up a window with the pyboard folder.
-    On other Linux distributions, the pyboard may be mounted automatically,
-    or you may need to do it manually.  At a terminal command line, type ``lsblk``
-    to see a list of connected drives, and then ``mount /dev/sdb1`` (replace ``sdb1``
-    with the appropriate device).  You may need to be root to do this.
+  - **Linux**: Pyboard removable medium kimi görsənəcək.
+    Ubuntu-da avtomatik olaraq, pyboard qovluğu pop-up kimi açılacaq.
+    Digər Linux distributivlərində, pyboard avtomatik olaraq mount ola bilər.
+    Əgər avtomatik olaraq mount olmursa, o zaman bunu əllə etməli olacaqsınız.
+    Terminalda, ``lsblk`` yazıb qoşulmuş drayverlərin siyahısını görə bilərsiniz.
+    Daha sonra ``mount /dev/sdb1`` yazmaqla (``sdb1`` -ni müvafiq devays adı ilə dəyişin)
+    Bunları edə bilmək üçün root olmaq tələb oluna bilər.
 
-Okay, so you should now have the pyboard connected as a USB flash drive, and
-a window (or command line) should be showing the files on the pyboard drive.
+İndi Pyboard PC-yə USB flash drive kimi qoşulub və siz artıq pyboard-ın faylları olan qovluğu görürsünüz.
 
-The drive you are looking at is known as ``/flash`` by the pyboard, and should contain
-the following 4 files:
+Sizin hal-hazırda olduğunuz drayv ``/flash``-dir.
+Daxilində 4 fayl olmalıdır:
 
-  - [``boot.py``](/static/doc/fresh-pyboard/boot.py) -- this script is executed when the pyboard boots up.  It sets
-    up various configuration options for the pyboard.
 
-  - [``main.py``](/static/doc/fresh-pyboard/main.py) -- this is the main script that will contain your Python program.
-    It is executed after ``boot.py``.
+  - [``boot.py``](/static/doc/fresh-pyboard/boot.py) -- Bu script pyboard boot olanda çalışır.
+    Script müxtəlif konfiqurasiya opsiyalarını tətbiq edir.
 
-  - [``README.txt``](/static/doc/fresh-pyboard/README.txt) -- this contains some very basic information about getting
-    started with the pyboard.
+  - [``main.py``](/static/doc/fresh-pyboard/main.py) -- Bu sizin Python kodlarınızı özündə saxlayan əsas scriptdir.
+    Bu script ``boot.py`` -dan sonra çalışır.
 
-  - [``pybcdc.inf``](/static/doc/fresh-pyboard/pybcdc.inf) -- this is a Windows driver file to configure the serial USB
-    device.  More about this in the next tutorial.
+  - [``README.txt``](/static/doc/fresh-pyboard/README.txt) -- Adından da göründüyü kimi, işə başlamanız üçün lazım olan,
+    ilkin məlumatları bu faylda tapa bilərsiniz.
+    
+  - [``pybcdc.inf``](/static/doc/fresh-pyboard/pybcdc.inf) -- Bu fayl isə Windows drayverdir.
+    Daha ətraflı bu barədə növbəti dərsdə danışacıq.
 
-Editing ``main.py``
+
+``main.py`` -da dəyişikliklər.
 -------------------
 
-Now we are going to write our Python program, so open the ``main.py``
-file in a text editor.  On Windows you can use notepad, or any other editor.
-On Mac and Linux, use your favourite text editor.  With the file open you will
-see it contains 1 line::
+İndi biz Python proqram yazmağa çalışacıq. ``main.py`` faylını text editorla açın.
+Windows-da notepad və ya digər editoru istifadə edə bilərsiniz.
+Mac və Linux -da isə sevimli editorunuzdan istifadə edə bilərsiniz.
+Faylı açdıqda cəmi 1 sətr kod olduğunu görəcəksiniz: ::
 
     # main.py -- put your code here!
 
-This line starts with a # character, which means that it is a *comment*.  Such
-lines will not do anything, and are there for you to write notes about your
-program.
+Bu sətr #-lə başlayır, Python-da bu *comment*-dir.
+Əgər sizin proqramlaşdırma təcrübəniz varsa, artıq bilirsiniz ki,
+*comment* heç bir şey etmir, bu kodda əlavə məlumatların qeyd olunması üçün istifadə olunur.
 
-Let's add 2 lines to this ``main.py`` file, to make it look like this::
+Gəlin bu ``main.py`` faylına aşağıdakı 2 sətri əlavə edək: ::
 
     # main.py -- put your code here!
     import pyb
     pyb.LED(4).on()
 
-The first line we wrote says that we want to use the ``pyb`` module.
-This module contains all the functions and classes to control the features
-of the pyboard.
+2-ci sətr ``pyb`` modulundan istifadə etmək istədiyimiz göstərir.
+Yəni bu modulu biz import edirik.
+Bu modul, pyboard-ın bütün imkanlarını özündə saxlayan class və funksiyaları özündə saxlayır.
 
-The second line that we wrote turns the blue LED on: it first gets the ``LED``
-class from the ``pyb`` module, creates LED number 4 (the blue LED), and then
-turns it on.
+3-cü sətrdə isə, biz 4-cü LED-i (mavi işıq) on() funskiyası ilə yandırırıq.
+``LED`` class-ını ``pyb`` modulundan götürüb, parametr olaraq ona 4 ötürüb,
+daha sonra da onu yandırır(on())
+
 
 Resetting the pyboard
 ---------------------
 
-To run this little script, you need to first save and close the ``main.py`` file,
-and then eject (or unmount) the pyboard USB drive.  Do this like you would a
-normal USB flash drive.
+Bu sadə scripti işlətmək üçün, ``main.py`` faylını yaddaşa verin və bağlayın.
+Daha sonra USB-ni eject(unmount, çıxarmaq) edin.
+Adi usb flash-də etdiyiniz kimi.
 
-When the drive is safely ejected/unmounted you can get to the fun part:
-press the RST switch on the pyboard to reset and run your script. The RST
-switch is the small black button just below the USB connector on the board,
-on the right edge.
+Drayv təhlükəsiz şəkildə, eject(unmount, çıxarmaq) olunduqdan sonra:
+Reset etmək və scripti run etmək üçün,RST switch-i basın.
+RST switch USB konnektorun altında,sağ kənarda olan kiçik qara düyməcikdir.
 
-When you press RST the green LED will flash quickly, and then the blue
-LED should turn on and stay on.
+RST switch-i basdıqdan sonra yaşıl LED tez-tez yanıb sönməyə başlayacaq.
+Daha sonra da mavi LED yanacaq (kodumuzda qeyd etdiyimiz kimi)
 
-Congratulations!  You have written and run your very first Micro Python
-program!
+Təbriklər! Siz öz ilk Micro Python proqramınızı yazdınız!
