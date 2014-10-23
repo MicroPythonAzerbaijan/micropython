@@ -87,7 +87,7 @@ Bu modul, pyboard-ın bütün imkanlarını özündə saxlayan class və funksiy
 daha sonra da onu yandırır(on())
 
 
-Resetting the pyboard
+Pyboard-ı resetləmək
 ---------------------
 
 Bu sadə scripti işlətmək üçün, ``main.py`` faylını yaddaşa verin və bağlayın.
