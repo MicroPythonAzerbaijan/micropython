@@ -72,15 +72,15 @@ o zaman callback-dən bu əməliyyatları yerinə yetirən digər koda flag(yol,
 Technical details of interrupts
 -------------------------------
 Switch callback-in işləmə prinsiplərinə nəzər yetirək.
- 
-When you register a function with ``sw.callback()``, the switch
-sets up an external interrupt trigger (falling edge) on the pin that the
-switch is connected to.  This means that the microcontroller will listen
-on the pin for any changes, and the following will occur:
+``sw.callback()`` -i çağırdıqda, switch qoşulduğu pin-də,
+xarici interrupt trigger-i yaradır.
+Bu o deməkdir ki, mikro kontroller hər hansı baş vermiş dəyişiklik üçün,
+pin-i izləyir və aşağıdakılar baş verir :
 
-1. When the switch is pressed a change occurs on the pin (the pin goes
-   from low to high), and the microcontroller registers this change.
-2. The microcontroller finishes executing the current machine instruction,
+1. Switch düyməsi sıxıldıqda, pin-də dəyişiklik baş verir(pin aşağıdan yuxarı doğru gedir)
+və mikro kontroller bu dəyişikliyi qeyd edir.
+2.
+The microcontroller finishes executing the current machine instruction,
    stops execution, and saves its current state (pushes the registers on
    the stack).  This has the effect of pausing any code, for example your
    running Python script.
