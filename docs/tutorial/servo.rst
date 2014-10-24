@@ -1,111 +1,5 @@
-
-
-Note that for some angles, the returned angle is not exactly the same as
-the angle you set, due to rounding errors in setting the pulse width.
-
-You can pass a second parameter to the ``angle`` method, which specifies how
-long to take (in milliseconds) to reach the desired angle.  For example, to
-take 1 second (1000 milliseconds) to go from the current position to 50 degrees,
-use ::
-
-     >>> servo1.angle(50, 1000)
-
-This command will return straight away and the servo will continue to move
-to the desired angle, and stop when it gets there.  You can use this feature
-as a speed control, or to synchronise 2 or more servo motors.  If we have
-another servo motor (``servo2 = pyb.Servo(2)``) then we can do ::
-
-    >>> servo1.angle(-45, 2000); servo2.angle(60, 2000)
-
-This will move the servos together, making them both take 2 seconds to
-reach their final angles.
-
-Note: the semicolon between the 2 expressions above is used so that they
-are executed one after the other when you press enter at the REPL prompt.
-In a script you don't need to do this, you can just write them one line
-after the other.
-
-Continuous rotation servos
---------------------------
-
-So far we have been using standard servos that move to a specific angle
-and stay at that angle.  These servo motors are useful to create joints
-of a robot, or things like pan-tilt mechanisms.  Internally, the motor
-has a variable resistor (potentiometer) which measures the current angle
-and applies power to the motor proportional to how far it is from the
-desired angle.  The desired angle is set by the width of a high-pulse on
-the servo signal wire.  A pulse width of 1500 microsecond corresponds
-to the centre position (0 degrees).  The pulses are sent at 50 Hz, ie
-50 pulses per second.
-
-You can also get **continuous rotation** servo motors which turn
-continuously clockwise or counterclockwise.  The direction and speed of
-rotation is set by the pulse width on the signal wire.  A pulse width
-of 1500 microseconds corresponds to a stopped motor.  A pulse width
-smaller or larger than this means rotate one way or the other, at a
-given speed.
-
-On the pyboard, the servo object for a continuous rotation motor is
-the same as before.  In fact, using ``angle`` you can set the speed.  But
-to make it easier to understand what is intended, there is another method
-called ``speed`` which sets the speed::
-
-    >>> servo1.speed(30)
-
-``speed`` has the same functionality as ``angle``: you can get the speed,
-set it, and set it with a time to reach the final speed. ::
-
-    >>> servo1.speed()
-    30
-    >>> servo1.speed(-20)
-    >>> servo1.speed(0, 2000)
-
-The final command above will set the motor to stop, but take 2 seconds
-to do it.  This is essentially a control over the acceleration of the
-continuous servo.
-
-A servo speed of 100 (or -100) is considered maximum speed, but actually
-you can go a bit faster than that, depending on the particular motor.
-
-The only difference between the ``angle`` and ``speed`` methods (apart from
-the name) is the way the input numbers (angle or speed) are converted to
-a pulse width.
-
-Calibration
------------
-
-The conversion from angle or speed to pulse width is done by the servo
-object using its calibration values.  To get the current calibration,
-use ::
-
-    >>> servo1.calibration()
-    (640, 2420, 1500, 2470, 2200)
-
-There are 5 numbers here, which have meaning:
-
-1. Minimum pulse width; the smallest pulse width that the servo accepts.
-2. Maximum pulse width; the largest pulse width that the servo accepts.
-3. Centre pulse width; the pulse width that puts the servo at 0 degrees
-   or 0 speed.
-4. The pulse width corresponding to 90 degrees.  This sets the conversion
-   in the method ``angle`` of angle to pulse width.
-5. The pulse width corresponding to a speed of 100.  This sets the conversion
-   in the method ``speed`` of speed to pulse width.
-
-You can recalibrate the servo (change its default values) by using::
-
-    >>> servo1.calibration(700, 2400, 1510, 2500, 2000)
-
-Of course, you would change the above values to suit your particular
-servo motor.
-
-
-
-###################################################################################################
-
-
-
 Həvəskar servo (avto) motorların idarə edilməsi
+=========================
 
 Həvəskar servo motorlarla əlaqənin yaradılması üçün çipdə (mikrosxemdə) 4 əlaqə çıxışı var.
 (nümunə: [Wikipedia](http://en.wikipedia.org/wiki/Servo_%28radio_control%29))
@@ -146,7 +40,7 @@ Parametrlər daxil edilmədən ``angle`` metoduna müraciət etsəniz aşağıda
 
 
 Note that for some angles, the returned angle is not exactly the same as the angle you set,
-due to rounding errors in setting the pulse width. (Tərcümə olunması mümkün olmayan hissə)
+due to rounding errors in setting the pulse width (Длительность импулса). (Tərcümə olunması mümkün olmayan hissə)
 
 Bundan əlavə siz ``angel`` metoduna ikinci parameer daxil edə bilərsiniz.
 Bu parametr müəyyən dərəcəyə nə qədər vaxtda çatmasını müəyyənləşdirir(millisaniyə)
@@ -209,14 +103,20 @@ Bu əsasən motorun sürət dəyişməsindəki istənilməyən halları tənziml
 Servo motorlorun maksimum sürəti 100-dür ( -100 ).
 Ancaq, xüsusi motorlarla adətən daha sürətli hərəkət etmək olur. 
 
-The only difference between the ``angle`` and ``speed`` methods (apart from
-the name) is the way the input numbers (angle or speed) are converted to
-a pulse width. (Tərcüməyə ehtiyac duyulmayan yer)
+``angle`` və ``speed`` metodları arasındakı fərq (adlarından başqa),
+əmrlər yazılarkən daxil edilən rəqəmlərdir.
+Həmin rəqəmlər müxtəlif şəkildə impuls müddəti (pulse width,Длительность импулса)-a konvertasiya olunur.
 
 Tənzimləmələr
-Əmrlərin ``angle`` və ya ``speed`` metodundan impuls müstəvisinə keçməsi tənzimləmə dəyərləri ilə reallaşır. Belə ki, cari tənzimləmələr üçün aşağıdakı dəyərlərdən istifadə edə bilərsiniz:
->>> servo1.calibration()
-(640, 2420, 1500, 2470, 2200)
+-----------
+
+Əmrlərin ``angle`` və ya ``speed`` metodundan impuls müstəvisinə keçməsi
+tənzimləmə dəyərləri ilə reallaşır.
+Belə ki, cari tənzimləmələr üçün aşağıdakı dəyərlərdən istifadə edə bilərsiniz: ::
+
+    >>> servo1.calibration()
+    (640, 2420, 1500, 2470, 2200)
+    
 Bu beş ədəd aşağıdakı mənalara gəlir: 
 
 1. Minimum impuls: Servo motorun qəbul etdiyi ən kiçik impulsdur
@@ -224,6 +124,10 @@ Bu beş ədəd aşağıdakı mənalara gəlir:
 3. Mərkəz impulse: Servo motoru üçün bu siqnal 0 dərəcə və ya 0 sürət mənasına gəlir
 4. Bu impuls angle metodunda 90 dərəcə mənasında işlədilir
 5. Bu impuls speed metodunda 100 sürət anlamında işlədilir 
-Siz servo matorunu aşağıdakı dəyərlərdən istifadə edərək yenidən tənzimləməyə bilərsiz:
->>> servo1.calibration(700, 2400, 1510, 2500, 2000)
-Təbii ki, yuxarıda göstərilmiş ölçülərə uyğun tənzimləmələri, dəyişiklikləri servo motorunuz buna uyğundursa edə bilərsiniz. 
+
+Siz servo matorunu aşağıdakı dəyərlərdən istifadə edərək yenidən tənzimləməyə bilərsiz: ::
+    
+    >>> servo1.calibration(700, 2400, 1510, 2500, 2000)
+    
+Təbii ki, yuxarıda göstərilmiş ölçülərə uyğun tənzimləmələri,
+dəyişiklikləri servo motorunuz buna uyğundursa edə bilərsiniz. 
