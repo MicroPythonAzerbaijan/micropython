@@ -26,7 +26,7 @@ Switch callbacks
 Switch çox sadə bir obyekt olsa da, onun advance bir xüsusiyyəti var:
 ``sw.callback()`` funksiyası.
 Callback funksiyası Switch basılanda nə etməli olduğunu təyin edir və interruptdan istifadə edir.
-İnterrupt-ən iş prinsipini başa düşməzdən əvvəl, ən yaxşısı budur ki kiçik kodla test edək.
+İnterrupt-ın iş prinsipini başa düşməzdən əvvəl, ən yaxşısı budur ki, kiçik kodla test edək.
 Aşağıdakı kodu prompt-dan işlədin ::
 
     >>> sw.callback(lambda:print('press!'))
@@ -37,42 +37,43 @@ Bunu dərhal sınayın. USR switch basın və PC-də ekrana ``press!`` sözünü
 Note that this print will interrupt anything you are typing, and
 is an example of an interrupt routine running asynchronously.
 
-As another example try::
+Başqa bir misalla sınayaq ::
+
 
     >>> sw.callback(lambda:pyb.LED(1).toggle())
 
-This will toggle the red LED each time the switch is pressed.  And it will
-even work while other code is running.
+Yuxarıdakı kod parçası, qırmızı işığı switch basılanda yandırır
+və bu proses hətta digər kodlarla bərabər işləyəcək(digər kodların funksionallığına fikir vermədən)
 
-To disable the switch callback, pass ``None`` to the callback function::
+Switch callback-i deaktiv etmək üçün, callback funksiyasına ``None`` parametrini ötürmək lazımdır. ::
 
     >>> sw.callback(None)
 
-You can pass any function (that takes zero arguments) to the switch callback.
-Above we used the ``lambda`` feature of Python to create an anonymous function
-on the fly.  But we could equally do::
+Switch callback-ə arqumentsiz istənilən funksiyanı parametr kimi ötürmək olar.
+Yuxarıda biz, Python-nın xüsusiyyətlərindən biri olan ``lambda``-dan istifadə etdik.
+Bu xüsusiyyət, anonim funksiya yaradır. 
+Eyni nəticəyə aşağıdakı kodla da gəlmək olar ::
 
     >>> def f():
     ...   pyb.LED(1).toggle()
     ...
     >>> sw.callback(f)
 
-This creates a function called ``f`` and assigns it to the switch callback.
-You can do things this way when your function is more complicated than a
-``lambda`` will allow.
+Bu kod parçası, ``f`` funksiyası yaradır və switch callback-ə mənimsədir.
+Bu cür üsul mürəkkəb funskiyalar üçün daha əlverişlidir.
 
-Note that your callback functions must not allocate any memory (for example
-they cannot create a tuple or list).  Callback functions should be relatively
-simple.  If you need to make a list, make it beforehand and store it in a
-global variable (or make it local and close over it).  If you need to do
-a long, complicated calculation, then use the callback to set a flag which
-some other code then responds to.
+Unutmayın ki, sizin callback funksiyalarınız memory(yaddaş) ayırmamalıdır(məs. tuple və list olmamalıdır).
+Callback funksiyalarınız mümkün qədər sadə olmalıdır.
+Əgər sizə list lazımdırsa, onu əvvəlcədən global dəyişən kimi yaradın(ya da lokal dəyişən kimi-funksiya daxilində)
+Əgər siz, uzun və mürəkkəb hesablamalar aparmalısınızsa,
+o zaman callback-dən bu əməliyyatları yerinə yetirən digər koda flag(yol, istinad) yaratmaq üçün istifadə edin. 
+
 
 Technical details of interrupts
 -------------------------------
-
-Let's step through the details of what is happening with the switch
-callback.  When you register a function with ``sw.callback()``, the switch
+Switch callback-in işləmə prinsiplərinə nəzər yetirək.
+ 
+When you register a function with ``sw.callback()``, the switch
 sets up an external interrupt trigger (falling edge) on the pin that the
 switch is connected to.  This means that the microcontroller will listen
 on the pin for any changes, and the following will occur:

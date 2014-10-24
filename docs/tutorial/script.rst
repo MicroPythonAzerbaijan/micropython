@@ -4,7 +4,7 @@
 Gəlin biliklərimizi daha da dərinləşdirək və Python script-i pyboard-da calışdıraq.
 Bunu etdikdən sonra görəcəksiniz ki, bəli bütün əsas iş elə bundan ibarətdir.
 
-Pyboar-da qoşulmaq
+Pyboard-da qoşulmaq
 -----------------------
 
 Pyboard-ı USB kabel vasitəsilə PC-yə qoşaq(Windows, Mac və Linux).
