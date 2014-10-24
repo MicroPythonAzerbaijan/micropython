@@ -2,38 +2,39 @@ The Switch, callbacks and interrupts
 ====================================
 
 Pyboard-ın 2 kiçik switch-i var, USR və RST.
-RST switch hard-reset üçündür, bunu bassanız o pyboardı restart edəcək və yenidən başladacaq.
+RST switch hard-reset üçündür, bunu bassanız o pyboard-ı restart edəcək və yenidən başladacaq.
 
-The USR switch is for general use, and is controlled via a Switch object.
-To make a switch object do::
+USR switch ümumi istifadə üçündür və Switch obyekti ilə idarə olunur.
+Switch obyekti yaratmaq üçün ::
 
     >>> sw = pyb.Switch()
 
-Remember that you may need to type ``import pyb`` if you get an error that
-the name ``pyb`` does not exist.
+Yadda saxlamaq lazımdır ki, ``import pyb`` qeyd etmək lazımdır.
+Əks halda, error görə bilərsiniz.
 
-With the switch object you can get its status::
+Switch obyekti ilə onun statusunu götürə bilərsiniz ::
 
     >>> sw()
     False
 
-This will print ``False`` if the switch is not held, or ``True`` if it is held.
-Try holding the USR switch down while running the above command.
+Əgər Switch basılı deyilsə bu ``False`` qaytaracaq, əgər basılıdırsa ``True``.
+Özünüz sınayıb baxa bilərsiniz.
 
 Switch callbacks
 ----------------
 
-The switch is a very simple object, but it does have one advanced feature:
-the ``sw.callback()`` function.  The callback function sets up something to
-run when the switch is pressed, and uses an interrupt.  It's probably best
-to start with an example before understanding how interrupts work.  Try
-running the following at the prompt::
+Switch çox sadə bir obyekt olsa da, onun advance bir xüsusiyyəti var:
+``sw.callback()`` funksiyası.
+Callback funksiyası Switch basılanda nə etməli olduğunu təyin edir və interruptdan istifadə edir.
+İnterrupt-ən iş prinsipini başa düşməzdən əvvəl, ən yaxşısı budur ki kiçik kodla test edək.
+Aşağıdakı kodu prompt-dan işlədin ::
 
     >>> sw.callback(lambda:print('press!'))
 
-This tells the switch to print ``press!`` each time the switch is pressed
-down.  Go ahead and try it: press the USR switch and watch the output on
-your PC.  Note that this print will interrupt anything you are typing, and
+Hər dəfə switch basıldıqda ``press!`` sözü ekrana veriləcək.
+Bunu dərhal sınayın. USR switch basın və PC-də ekrana ``press!`` sözünün şəklinin gəlib gəlmədiyinə baxın.
+
+Note that this print will interrupt anything you are typing, and
 is an example of an interrupt routine running asynchronously.
 
 As another example try::
