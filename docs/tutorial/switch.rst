@@ -78,25 +78,27 @@ Bu o deməkdir ki, mikro kontroller hər hansı baş vermiş dəyişiklik üçü
 pin-i izləyir və aşağıdakılar baş verir :
 
 1. Switch düyməsi sıxıldıqda, pin-də dəyişiklik baş verir(pin aşağıdan yuxarı doğru gedir)
-və mikro kontroller bu dəyişikliyi qeyd edir.
-2.
-The microcontroller finishes executing the current machine instruction,
-   stops execution, and saves its current state (pushes the registers on
-   the stack).  This has the effect of pausing any code, for example your
-   running Python script.
-3. The microcontroller starts executing the special interrupt handler
+    və mikro kontroller bu dəyişikliyi qeyd edir.
+2. Mikro controller, hal-hazırkı maşın göstərişinin (machine instruction) çalışmasını başa vurur,
+    onu dayandırır, onun indiki halını (current state) yadda saxlayır (pushes the registers on the stack).
+    Bu sizin Python scriptinizi pause etməkdə kömək ola bilər.
+3. -
+The microcontroller starts executing the special interrupt handler
    associated with the switch's external trigger.  This interrupt handler
    get the function that you registered with ``sw.callback()`` and executes
    it.
-4. Your callback function is executed until it finishes, returning control
-   to the switch interrupt handler.
-5. The switch interrupt handler returns, and the microcontroller is
+4. Sizin callback funksiyanız bitənə qədər çalışır, ən sonda kontrolu,
+    switch interrupt handler-ə qaytarır.
+
+5. -
+The switch interrupt handler returns, and the microcontroller is
    notified that the interrupt has been dealt with.
-6. The microcontroller restores the state that it saved in step 2.
-7. Execution continues of the code that was running at the beginning.  Apart
+6. Mikro kontroller 2-ci addımda yadda saxladığı vəziyyəti geri qaytarır(bərpa edir).
+
+7. -
+Execution continues of the code that was running at the beginning.  Apart
    from the pause, this code does not notice that it was interrupted.
 
-The above sequence of events gets a bit more complicated when multiple
-interrupts occur at the same time.  In that case, the interrupt with the
-highest priority goes first, then the others in order of their priority.
-The switch interrupt is set at the lowest priority.
+Yuxarıdakı ardıcıllıq, eyni anda bir neçə interrupt baş verdiyi halda daha da mürəkkəbləşir.
+Belə olan halda, yüksək prioriteti olan interrupt birinci gəlir, daha sonra digərləri eyni qayda ilə davam edir.
+Switch interrupt-a ən aşağı prioritet verilib.
