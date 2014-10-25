@@ -1,14 +1,11 @@
-Making the pyboard act as a USB mouse
+Pyboard-ı USB mouse kimi istifadə etmək
 =====================================
 
-The pyboard is a USB device, and can configured to act as a mouse instead
-of the default USB flash drive.
+Pyboard USB devays olduğu üçün, onu həmçinin mouse kimi istifadə edə bilərsiniz.
+Buna nail olmaq üçün, USB tənzimləmələri ``boot.py`` faylından dəyişmək lazımdır.
+Əgər hələ də, ``boot.py`` faylı ilə işləməməsinizsə o zaman fayl aşağıdakı kimidir ::
 
-To do this we must first edit the ``boot.py`` file to change the USB
-configuration.  If you have not yet touched your ``boot.py`` file then it
-will look something like this::
-
-    # boot.py -- run on boot-up
+    # boot.py -- boot-up zamanı çalışır
     # can run arbitrary Python, but best to keep it minimal
 
     import pyb
@@ -16,25 +13,23 @@ will look something like this::
     #pyb.usb_mode('CDC+MSC') # act as a serial and a storage device
     #pyb.usb_mode('CDC+HID') # act as a serial device and a mouse
 
-To enable the mouse mode, uncomment the last line of the file, to
-make it look like::
+Mouse mode-u aktivləşdirmək üçün, ən sonuncu sətrdəki comment-i silin. ::
 
     pyb.usb_mode('CDC+HID') # act as a serial device and a mouse
 
-If you already changed your ``boot.py`` file, then the minimum code it
-needs to work is::
+Əgər ``boot.py`` faylını nə vaxtsa dəyişmisinizsə, o zaman minimum kod,
+aşağıdakı kimi olacaq ::
 
     import pyb
     pyb.usb_mode('CDC+HID')
 
-This tells the pyboard to configure itself as a CDC (serial) and HID
-(human interface device, in our case a mouse) USB device when it boots
-up.
+Bu kod, pyboard boot-up olanda özünü CDC (serial) və HID
+(human interface device, bizim halda mouse) kimi tənzimləyir.
 
-Eject/unmount the pyboard drive and reset it using the RST switch.
-Your PC should now detect the pyboard as a mouse!
+Pyboard Eject/unmount edin və daha sonra da RST switch ilə reset edin.
+İndi sizin PC-niz pyboard-ı mouse kimi görəcək! 
 
-Sending mouse events by hand
+Mouse event-lərin əllə ötürülməsi
 ----------------------------
 
 To get the py-mouse to do anything we need to send mouse events to the PC.
