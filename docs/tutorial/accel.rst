@@ -1,27 +1,20 @@
-The accelerometer
+Akselerometr
 =================
 
-Here you will learn how to read the accelerometer and signal using LEDs states like tilt left and tilt right.
+Burada akselerometri oxumağı, sağa və sola meyl kimi vəziyyətləri LED- ilə işarə verməyi öyrənəcəksiniz.
 
-Using the accelerometer
+Akselerometrin istifadəsi
 -----------------------
 
-The pyboard has an accelerometer (a tiny mass on a tiny spring) that can be used
-to detect the angle of the board and motion. There is a different sensor for
-each of the x, y, z directions. To get the value of the accelerometer, create a
-pyb.Accel() object and then call the x() method. ::
+Pyboard-da löhvənin və hərəkətin bucağını təyin etmək üçün istifadə oluna bilən akselerometer () vardır. x, y, z oxlarının hər biri üçün müxtəlif sensorlar vardır. Akselerometrin qiymətini əldə etmək üçün pyb.Accel() obyektini yaradın və x() metodunu çağırın ::
 
     >>> accel = pyb.Accel()
     >>> accel.x()
     7
 
-This returns a signed integer with a value between around -30 and 30. Note that
-the measurement is very noisy, this means that even if you keep the board
-perfectly still there will be some variation in the number that you measure.
-Because of this, you shouldn't use the exact value of the x() method but see if
-it is in a certain range.
+Bu -30 və 30 arasında işarəli tam ədə qaytarır. Nəzərə alın ki, ölçmə çox küylüdür, bu deməkdir ki, hətta löhvəni qüsursuz sakit vəziyyətdə tutsanız belə ölçülən ədəddə müəyyən dəyişikliklər olacaqdır.Buna görə x() metodunun dəqiq qiymətini deyil, müəyyən aralıqda olub olmadığını yoxlamalısınız.
 
-We will start by using the accelerometer to turn on a light if it is not flat. ::
+Biz akselerometerdən istifadəni löhvə düz olmadığı halda işığın yandırılmasından başlayacağıq. ::
 
     accel = pyb.Accel()
     light = pyb.LED(3)
@@ -36,22 +29,15 @@ We will start by using the accelerometer to turn on a light if it is not flat. :
 
         pyb.delay(100)
 
-We create Accel and LED objects, then get the value of the x direction of the
-accelerometer. If the magnitude of x is bigger than a certain value ``SENSITIVITY``,
-then the LED turns on, otherwise it turns off. The loop has a small ``pyb.delay()``
-otherwise the LED flashes annoyingly when the value of x is close to
-``SENSITIVITY``. Try running this on the pyboard and tilt the board left and right
-to make the LED turn on and off.
+Biz Accel və LED-in obyektlərini yaradırıq, sonra akselerometrin x oxunun qiymətini əldə edirik. Əgər x-ın qiyməti ``SENSITIVITY`` müəyyən qiymətindən böyükdürsə onda LED-i yandırırıq, əks halda söndürürük.Dövrdə kiçik ``pyb.delay()`` vardır, əks halda x-ın qiyməti ``SENSITIVITY``-ə yaxınlaşan kimi LED sürətlə yanıb sönərək təngə gətirir. Bunu pyboard-da icra etməyə və LED-i yandırıb söndürmək üçün löhvəni sağa və sola meyl etdirməyə çalışın.
 
-**Exercise: Change the above script so that the blue LED gets brighter the more
-you tilt the pyboard.  HINT: You will need to rescale the values, intensity goes
-from 0-255.**
+**Tapşırıq: Yuxarıdakı proqramı elə dəyişin ki löhvəni daha çox meyl etdirdikcə LED-in işıqlanması artsın.
+İPUCU: Qiymətləri miqyaslama ehtiyacınız olacaq, intensivlik 0-255 arasında dəyişir.**
 
-Making a spirit level
+Tarazın hazırlanması
 ---------------------
 
-The example above is only sensitive to the angle in the x direction but if we
-use the ``y()`` value and more LEDs we can turn the pyboard into a spirit level. ::
+Yuxarıdakı misal yalnız x oxu üzrə bucağa həssasdır. Əgər biz ``y()``-in qiymətindən və daha çox LED-dən istifadə etsək pyboard-u taraza çevirə bilərik. ::
 
     xlights = (pyb.LED(2), pyb.LED(3))
     ylights = (pyb.LED(1), pyb.LED(4))
@@ -84,9 +70,9 @@ use the ``y()`` value and more LEDs we can turn the pyboard into a spirit level.
 
         pyb.delay(100)
 
-We start by creating a tuple of LED objects for the x and y directions. Tuples
-are immutable objects in python which means they can't be modified once they are
-created. We then proceed as before but turn on a different LED for positive and
-negative x values. We then do the same for the y direction. This isn't
-particularly sophisticated but it does the job. Run this on your pyboard and you
-should see different LEDs turning on depending on how you tilt the board.
+Biz x və y oxları üzrə LED obyektlərinin yığımını yaratmaqla başlayırıq. Python-da
+yığımlar dəyişilməz obyektlərdir, yəni, onlar yaradıldıqdan sonra dəyişilə bilməzlər.
+Biz əvvəlki kimi davam edirik lakin, x-ın qiymətlərinin müsbət və mənfi qiymətlərində
+müxtəlif LED-ləri yandırırıq. Sonra eyni şeyi y oxu üçün də edirik. Bu xüsusi çətin şey deyil
+lakin işləyir. Bunu öz pyboard-da icra etməyə çalışın və siz lövhənin meylindən asılı
+olaraq müxətlif LED-lərin yandığını görməlisiniz.
