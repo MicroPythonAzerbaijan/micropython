@@ -32,17 +32,17 @@ Pyboard Eject/unmount edin və daha sonra da RST switch ilə reset edin.
 Mouse event-lərin əllə ötürülməsi
 ----------------------------
 
-To get the py-mouse to do anything we need to send mouse events to the PC.
-We will first do this manually using the REPL prompt.  Connect to your
-pyboard using your serial program and type the following::
+py-mouse-un nəsə etməsini təmin etmək üçün, biz PC-yə mouse event-lərini göndərməliyik.
+Biz bunu ilk öncə, əllə REPL prompt-dan edəcik.
+Pyboard-ınıza serial proqramla qoşulun və aşağıdakını yazın ::
 
     >>> pyb.hid((0, 10, 0, 0))
 
-Your mouse should move 10 pixels to the right!  In the command above you
-are sending 4 pieces of information: button status, x, y and scroll.  The
-number 10 is telling the PC that the mouse moved 10 pixels in the x direction.
+Sizin mouse-unuz 10 pixel sağa hərəkət etməlidir!
+Yuxarıdakı komandada siz 4 növ məlumatı göndərirsiniz: düymənin statusunu, x, y, scroll.
+Göndərdiyiniz 10 rəqəmi x oxu boyunca(yəni sağa) 10 pixel hərəkət etməli olduğunu göstərir. 
 
-Let's make the mouse oscillate left and right::
+Gəlin mouse-ı sağa sola hərəkət etdirək ( oscillate = yellənmək) ::
 
     >>> import math
     >>> def osc(n, d):
@@ -52,44 +52,42 @@ Let's make the mouse oscillate left and right::
     ...
     >>> osc(100, 50)
 
-The first argument to the function ``osc`` is the number of mouse events to send,
-and the second argument is the delay (in milliseconds) between events.  Try
-playing around with different numbers.
+``osc`` funksiyasına göndərdiyimiz n - mouse event-lərinin sayıdır.
+d isə event-lər arasındakı vaxt aralığıdır (gecikməsidir).
+Müxtəlif rəqəmlərlə test edib baxa bilərsiniz.
 
-**Excercise: make the mouse go around in a circle.**
+**Tapşırıq: mouse-u dairə cızmağa məcbur edin.**
 
-Making a mouse with the accelerometer
+Akselerometrlə işləyən mouse
 -------------------------------------
 
-Now lets make the mouse move based on the angle of the pyboard, using the
-accelerometer.  The following code can be typed directly at the REPL prompt,
-or put in the ``main.py`` file.  Here, we'll put in in ``main.py`` because to do
-that we will learn how to go into safe mode.
+İndi isə, daha maraqlı bir şey edək.
+Akselerometrin köməyi ilə, Pyboard-ın özünün tərpənmə bucağı ilə hərəkət edən mouse düzəldək.
+Aşağıdakı kodu biz bir başa REPL-ə, həmçinin ``main.py``-a yaza bilərik.
+İndiki halda biz kodu ``main.py``-a yazacıq, həmçinin safe mode-a necə keçəcəyimizi öyrənəcik.
 
-At the moment the pyboard is acting as a serial USB device and an HID (a mouse).
-So you cannot access the filesystem to edit your ``main.py`` file.
+İndiki halda pyboard serial USB device və HİD (mouse) kimi fəaliyyət göstərir.
+Bu səbəbdən faylsistemə keçib ``main.py``-ı edit edə bilmirik.
 
-You also can't edit your ``boot.py`` to get out of HID-mode and back to normal
-mode with a USB drive...
+Siz həmçinin ``boot.py`` faylını da edit edə bilmirik ki, HID-mode-dan çıxıb normal moda keçə bilək...
 
-To get around this we need to go into *safe mode*.  This was described in
-the [safe mode tutorial](tut-reset), but we repeat the instructions here:
+Bu hala çarə kimi, biz *safe mode*-a keçməliyik.
+Bu daha əvvəlki dərsdə daha ətraflı göstərilmişdir
+[safe mode tutorial](tut-reset), lakin hər ehtimala qarşı burda da qeyd edirik:
 
-1. Hold down the USR switch.
-2. While still holding down USR, press and release the RST switch.
-3. The LEDs will then cycle green to orange to green+orange and back again.
-4. Keep holding down USR until *only the orange LED is lit*, and then let
-   go of the USR switch.
-5. The orange LED should flash quickly 4 times, and then turn off.  
-6. You are now in safe mode.
+1. USR switch-i basılı saxlayın.
+2. USR basılı ola-ola, RST switch-i basıb buraxın.
+3. LED daha sonra yaşıldan narıncıya keçəcək daha sonra da yaşıl+narıncı olacaq və əvvəlki vəziyyətinə qayıdacaq.
+4. USR-i basılı saxlamaqda davam edin *yalnız narıncı LED yanılı qalana kimi*, daha sonra da USR switch-i buraxın.
+5. Narıncı LED tez-tez 4 dəfə yanıb-sönəcək, daha sonra isə dayanacaq.
+6. Siz artıq Safe mode-dasınız.
 
-In safe mode, the ``boot.py`` and ``main.py`` files are not executed, and so
-the pyboard boots up with default settings.  This means you now have access
-to the filesystem (the USB drive should appear), and you can edit ``main.py``.
-(Leave ``boot.py`` as-is, because we still want to go back to HID-mode after
-we finish editting ``main.py``.)
+Safe mode-da ``boot.py`` və ``main.py`` faylları çalışdırılmır, beləliklə
+pyboard default settings-lərlər qalxır (boot-up).
+Bu o deməkdir ki, siz faylsistemə daxil ola bilərsiniz (USB drayv görsənəcək) və siz ``main.py`` faylını editləyə bilərsiniz.
+(``boot.py`` faylını olduğu kimi saxlayın, çünki biz ``main.py``-ı editlədikdən sonra yenidən HID-mode-a qayıdacıq)
 
-In ``main.py`` put the following code::
+``main.py``-a aşağıdakı kodu yazın ::
 
     import pyb
 
@@ -100,25 +98,27 @@ In ``main.py`` put the following code::
         pyb.hid((0, accel.x(), accel.y(), 0))
         pyb.delay(20)
 
-Save your file, eject/unmount your pyboard drive, and reset it using the RST
-switch.  It should now act as a mouse, and the angle of the board will move
-the mouse around.  Try it out, and see if you can make the mouse stand still!
+Faylı yaddaşa verin, pyboard drayvı eject/unmount edin və RST switch-lə reset-ləyin.
+İndi pyboard-ın hərəkət bucağına uyğun mouse da tərpənəcək.
 
-Press the USR switch to stop the mouse motion.
+Bunu sınayın və mouse-u sabit saxlamağa çalışın!
 
-You'll note that the y-axis is inverted.  That's easy to fix: just put a
-minus sign in front of the y-coordinate in the ``pyb.hid()`` line above.
+Mouse hərəkətini sonlandırmaq eçen USR switch-i sıxın.
 
-Restoring your pyboard to normal
+Hiss edəcəksiniz ki, y-oxu tərs olur (rusca: инвертируется).
+Bunu düzəltmək üçün,
+yuxarıdakı kodda ``pyb.hid()`` sətrindəki y koordinatının əvvəlinə minus yazmaq lazımdır (-).
+
+Pyboard-ı əvvəlki vəziyyətinə qaytarmaq
 --------------------------------
 
-If you leave your pyboard as-is, it'll behave as a mouse everytime you plug
-it in.  You probably want to change it back to normal.  To do this you need
-to first enter safe mode (see above), and then edit the ``boot.py`` file.
-In the ``boot.py`` file, comment out (put a # in front of) the line with the
-``CDC+HID`` setting, so it looks like::
+Əgər Pyboard-ınızı indiki halı ilə saxlasanız, o hər dəfə qoşulanda özünü mouse kimi aparacaq.
+Təbii ki, siz onu əvvəlki halına qaytarmaq istəyəcəksiniz.
+Bunu etmək üçün, siz ilk öncə ``safe mode``-a keçməlisiniz, daha sonra ``boot.py`` faylını dəyişməlisiniz.
+``boot.py`` faylında ``CDC+HID`` olan sətri kommentləyin. ::
 
     #pyb.usb_mode('CDC+HID') # act as a serial device and a mouse
 
-Save your file, eject/unmount the drive, and reset the pyboard.  It is now
-back to normal operating mode.
+Faylı yaddaşa verin, eject/unmount edin və resetləyin.
+İndi sizin pyboard öz əvvəlki vəziyyətindədir.
+
