@@ -1,37 +1,36 @@
-Inline assembler
+Sətiriçi assembler
 ================
 
-Here you will learn how to write inline assembler in Micro Python.
+Burada Micro Python-da sətriçi assembleri yazmağı öyrənəcəksiniz.
 
-**Note**: this is an advanced tutorial, intended for those who already
-know a bit about microcontrollers and assembly language.
+**Qeyd**: bu təkmil dərslikdir, mikrokontrollerlər və assembly dili haqqında 
+bir qədər biliyi olanlar üçün nəzərə tutulmuşdur.
 
-Micro Python includes an inline assembler.  It allows you to write
-assembly routines as a Python function, and you can call them as you would
-a normal Python function.
+Micro Python-da sətriçi assembler vardır. Bu sizə assembly instruksiyalarını
+Python funksiyası kimi yazmağa imkan verir və siz onları normal Python funksiyası
+kimi çağıra bilərsiniz.
 
-Returning a value
+Qiymət qaytarılması
 -----------------
 
-Inline assembler functions are denoted by a special function decorator.
-Let's start with the simplest example::
+Sətiriçi assembly funksiyaları xüsusi funksiya dekoratoru ilə təmin edilir.
+Ən sadə misaldan başlayaq::
 
     @micropython.asm_thumb
     def fun():
         movw(r0, 42)
 
-You can enter this in a script or at the REPL.  This function takes no
-arguments and returns the number 42.  ``r0`` is a register, and the value
-in this register when the function returns is the value that is returned.
-Micro Python always interprets the ``r0`` as an integer, and converts it to an
-integer object for the caller.
+Bunu skript içində və ya REPL-da daxil edə bilərsiniz. Bu funksiya heç bir
+arqument qəbul etmir və 42 ədədini qaytarır. ``r0`` registerdir və funksiyanın
+qaytardığı qiymət registerdəki qiymətdir. Micro Python həmişə ``r0``-ı tam ədəd
+kimi qəbul edir və onu çağıran üçün integer obyektinə çevirir.
 
-If you run ``print(fun())`` you will see it print out 42.
+Əgər siz ``print(fun())`` icra etsəniz 42 çap edildiyini görəcəksiniz.
 
-Accessing peripherals
+Periferiyaya müraciət
 ---------------------
 
-For something a bit more complicated, let's turn on an LED::
+Bir qədər daha mürəkkəb misal üçün, LED yandıraq::
 
     @micropython.asm_thumb
     def led_on():
@@ -39,50 +38,54 @@ For something a bit more complicated, let's turn on an LED::
         movw(r1, 1 << 13)
         strh(r1, [r0, stm.GPIO_BSRRL])
 
-This code uses a few new concepts:
+Bu kod bəzi yeni anıayışlar istifadə edir:
 
-  - ``stm`` is a module which provides a set of constants for easy
-    access to the registers of the pyboard's microcontroller.  Try
-    running ``import stm`` and then ``help(stm)`` at the REPL.  It will
-    give you a list of all the available constants.
+  - ``stm`` pyboard-un mikrokontrollerinin registerlərinə asan müraciət 
+    etmək üçün sabitlə yığımı ilə təmin edən moduldur. REPL-da ``import stm``
+    sonra isə ``help(stm)`` icra etməyə çalışın. Bu sizə bütün mümkün sabitlərin
+    siyahısını verəcəkdir.
 
-  - ``stm.GPIOA`` is the address in memory of the GPIOA peripheral.
-    On the pyboard, the red LED is on port A, pin PA13.
+  - ``stm.GPIOA`` GPIOA periferiyasının yaddaşdakı ünvanıdır.
+    Pyboard-da qırmızı LED A portunda, PA13 sancağındadır.
 
-  - ``movwt`` moves a 32-bit number into a register.  It is a convenience
-    function that turns into 2 thumb instructions: ``movw`` followed by ``movt``.
-    The ``movt`` also shifts the immediate value right by 16 bits.
+  - ``movwt`` 32 bitlik ədədi registerə daxil edir. Bu iki instruksiyaya - ``movw``
+    sonra ``movt`` - çevrilən uyğun funksiyadır. ``movt`` həmçinin alınan qiyməti
+    16 bit sağa sürüşdürür.
 
-  - ``strh`` stores a half-word (16 bits).  The instruction above stores
-    the lower 16-bits of ``r1`` into the memory location ``r0 + stm.GPIO_BSRRL``.
-    This has the effect of setting high all those pins on port A for which
-    the corresponding bit in ``r0`` is set.  In our example above, the 13th
-    bit in ``r0`` is set, so PA13 is pulled high.  This turns on the red LED.
+  - ``strh`` yarım-sözü (16 bit) saxlayır. Yuxarıdakı instruksiya ``r1``-in
+    aşağı 16 bitini ``r0 + stm.GPIO_BSRRL`` yaddaş ünvanında saxlayır. Nəticədə
+    ``r0`` bitlərinə uyğun şəkildə A portunun sancaqları yüksək rejimə keçirilir.
+    Yuxarıdakı nümunəmizdə ``r0``-ın 13-cü biti təyin edilib, beləliklə PA13 yüksək
+    rejimə keçirilib. Bu qırmızı LED-i yandırır.
 
-Accepting arguments
+Arqumentlərin qəbulu
 -------------------
 
 Inline assembler functions can accept up to 3 arguments.  If they are
 used, they must be named ``r0``, ``r1`` and ``r2`` to reflect the registers
 and the calling conventions.
 
-Here is a function that adds its arguments::
+Sətriçi assembler funksiyalar 3-ə qədər arqument qəbul edə bilərlər. Əgər
+onlar istifadə olunursa onda çağrılma konvensiyalarını və registerləri
+göstərmək üçün ``r0``, ``r1`` və ``r2`` kimi adlandırılmalıdırlar.
+
+Bu arqumentlərini əlavə edən funksiyadır::
 
     @micropython.asm_thumb
     def asm_add(r0, r1):
         add(r0, r0, r1)
 
-This performs the computation ``r0 = r0 + r1``.  Since the result is put
-in ``r0``, that is what is returned.  Try ``asm_add(1, 2)``, it should return
-3.
+Bu ``r0 = r0 + r1`` hesablamasını aparır. Nəticə ``r0``-ə verildiyindən qaytarılan
+qiymət də budur. ``asm_add(1, 2)`` yoxlayın, bu 3 qaytarmalıdır.
 
-Loops
+Dövrlər
 -----
 
-We can assign labels with ``label(my_label)``, and branch to them using
-``b(my_label)``, or a conditional branch like ``bgt(my_label)``.
+Sərlövhələri ``label(my_label)`` vasitəsilə təyin edə bilərik və ``b(my_label)``
+ilə ünvanlana və ya ``bgt(my_label)`` kimi şərti ünvanlana bilərik.
 
-The following example flashes the green LED.  It flashes it ``r0`` times. ::
+
+Növbəti nümunə yaşıl LED-i yandırıb söndürür, bunu ``r0`` dəfə edir. ::
 
     @micropython.asm_thumb
     def flash_led(r0):
