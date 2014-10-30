@@ -1,37 +1,36 @@
-General information about the pyboard
+Pyboard haqqında ümumi məlumat
 =====================================
 
-Local filesystem and SD card
+Lokal faylsistem və SD kart
 ----------------------------
 
-There is a small internal filesystem (a drive) on the pyboard, called ``/flash``,
-which is stored within the microcontroller's flash memory.  If a micro SD card
-is inserted into the slot, it is available as ``/sd``.
+Pyboard-da ``/flash`` adlanan daxili faylsistem var (drive).
+``/flash`` mikro kontrollerin flash yaddaşında saxlanılır.
+Əgər mikro SD kart slot-a daxil edilibsə bu ``/sd`` kimi görsənəcək.
 
-When the pyboard boots up, it needs to choose a filesystem to boot from.  If
-there is no SD card, then it uses the internal filesystem ``/flash`` as the boot
-filesystem, otherwise, it uses the SD card ``/sd``.
+Pyboard boot-up olduqda, hansı fayl sistemdən boot olacağını seçməlidir.
+Əgər SD kart yoxdursa, o zaman o, daxili faylsistem olan ``/flash``-i seçəcək,
+əks təqdirdə isə  SD kartı.
 
-(Note that on older versions of the board, ``/flash`` is called ``0:/`` and ``/sd``
-is called ``1:/``).
+(Qeyd edək ki, köhnə board versiyalarından, ``/flash``-in adı ``0:/`` və ``/sd``-nin adı ``1:/``-dir.)
 
-The boot filesystem is used for 2 things: it is the filesystem from which
-the ``boot.py`` and ``main.py`` files are searched for, and it is the filesystem
-which is made available on your PC over the USB cable.
+Boot faylsistemi 2 məqsəd üçün istifadə olunur: ``boot.py`` və ``main.py``
+faylları bu faylsistemdə axtarılır və bu faylsistem USB kabeli PC-yə qoşduqda görünən faylsistemdir.
 
-The filesystem will be available as a USB flash drive on your PC.  You can
-save files to the drive, and edit ``boot.py`` and ``main.py``.
+Faylsistem PC-də USB flash drayv kimi görsənəcək.
+Siz drayvda faylları saxlaya bilərsiniz, ``boot.py`` və ``main.py`` fayllarını
+dəyişə bilərsiniz.
 
-*Remember to eject (on Linux, unmount) the USB drive before you reset your
-pyboard.*
 
-Boot modes
+*Pyboard-ınızı reset-ləməzdən əvvəl onu eject etməyi unutmayın(Linux-da unmount).*
+
+Boot tipləri (boot modes)
 ----------
 
-If you power up normally, or press the reset button, the pyboard will boot
-into standard mode: the ``boot.py`` file will be executed first, then the
-USB will be configured, then ``main.py`` will run.
+Əgər normal şəkildə pyboard-ı power up etmisizsə, pyboard standart mode-la boot olacaq:
+ilk öncə ``boot.py`` çalışdırılacaq daha sonra USB tənzimlənəcək və ``main.py`` işləyəcək.
 
+Siz bu boot ardıcıllığını user switch-i (USR) basıb saxlamaqla dəyişə bilərsiniz. 
 You can override this boot sequence by holding down the user switch as
 the board is booting up.  Hold down user switch and press reset, and then
 as you continue to hold the user switch, the LEDs will count in binary.
