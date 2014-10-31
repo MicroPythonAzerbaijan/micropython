@@ -31,28 +31,27 @@ Boot tipləri (boot modes)
 ilk öncə ``boot.py`` çalışdırılacaq daha sonra USB tənzimlənəcək və ``main.py`` işləyəcək.
 
 Siz bu boot ardıcıllığını user switch-i (USR) basıb saxlamaqla dəyişə bilərsiniz. 
-You can override this boot sequence by holding down the user switch as
-the board is booting up.  Hold down user switch and press reset, and then
-as you continue to hold the user switch, the LEDs will count in binary.
-When the LEDs have reached the mode you want, let go of the user switch,
-the LEDs for the selected mode will flash quickly, and the board will boot.
+USR switch-i sıxıb saxlayın, LED binary-də (ikili say sistemində) saymağa başlayacaq.
+Nə vaxt ki, LED-lər siz istəyən mode-a gəlib çatır, o zaman USR switch-i buraxın.
+Daha sonra görəcəksiniz ki, müvafiq mode-un LED-i tez-tez yanıb sönəcək və board boot olacaq.
 
-The modes are:
+Mode-la aşağıdakılardır:
 
-1. Green LED only, *standard boot*: run ``boot.py`` then ``main.py``.
-2. Orange LED only, *safe boot*: don't run any scripts on boot-up.
-3. Green and orange LED together, *filesystem reset*: resets the flash
-   filesystem to its factory state, then boots in safe mode.
+1. Yalnız yaşıl LED, *standard boot*: ``boot.py`` daha sonra ``main.py`` çalışdırılacaq.
+2. Yalnız narıncı LED, *safe boot*: boot-up zamanı heç bir script-i işlətməyəcək.
+3. Yaşıl və narıncı LED birlikdə, *filesystem reset*: flash faylsistemi reset edir, fabrika tənzimləmələrinə geri qaytarır
+və safe mode-a boot edir.
 
-If your filesystem becomes corrupt, boot into mode 3 to fix it.
+Əgər sizin faylsisteminiz korrupt olubsa, bu halı düzəltmək üçün 3-cü mode-a boot olun.
 
-Errors: flashing LEDs
+Errorlar: yanıb sönən LED-lər
 ---------------------
 
-There are currently 2 kinds of errors that you might see:
+İndiki halda siz 2 növ error görə bilərsiniz:
 
-1. If the red and green LEDs flash alternatively, then a Python script
-    (eg ``main.py``) has an error.  Use the REPL to debug it.
-2. If all 4 LEDs cycle on and off slowly, then there was a hard fault.
-   This cannot be recovered from and you need to do a hard reset.
+1. Əgər qırmız və yaşıl LED-lər ardıcıl olaraq yanıb sönürsə, o zaman Python script-də problem var
+(məsələn, ``main.py``). REPL-dən istifadə edib kodunuzu debug edə bilərsiniz. 
+
+2. Əgər 4 LED-in hər biri yavaş-yavaş yanıb sönürsə deməli nə isə ciddi bir problem var.
+Bunu həll etmək üçün isə hard reset edin.
 
