@@ -24,6 +24,8 @@ USBDEV_DIR=usbdev
 FATFS_DIR=fatfs
 DFU=../tools/dfu.py
 # may need to prefix dfu-util with sudo
+USE_PYDFU ?= 0
+PYDFU = ../tools/pydfu.py
 DFU_UTIL ?= dfu-util
 DEVICE=0483:df11
 
@@ -40,7 +42,7 @@ INC += -I$(USBDEV_DIR)/core/inc -I$(USBDEV_DIR)/class/cdc_msc_hid/inc
 INC += -I$(FATFS_DIR)/src
 
 CFLAGS_CORTEX_M4 = -mthumb -mtune=cortex-m4 -mabi=aapcs-linux -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -fsingle-precision-constant -Wdouble-promotion
-CFLAGS = $(INC) -Wall -Werror -ansi -std=gnu99 -nostdlib $(CFLAGS_MOD) $(CFLAGS_CORTEX_M4) $(COPT)
+CFLAGS = $(INC) -Wall -Wpointer-arith -Werror -ansi -std=gnu99 -nostdlib $(CFLAGS_MOD) $(CFLAGS_CORTEX_M4) $(COPT)
 CFLAGS += -Iboards/$(BOARD)
 
 LDFLAGS = -nostdlib -T stm32f405.ld -Map=$(@:.elf=.map) --cref
@@ -66,6 +68,7 @@ SRC_LIB = $(addprefix lib/,\
 	libm/atanf.c \
 	libm/atan2f.c \
 	libm/fmodf.c \
+	libm/roundf.c \
 	)
 
 SRC_C = \
@@ -78,6 +81,7 @@ SRC_C = \
 	usbd_desc_cdc_msc.c \
 	usbd_cdc_interface.c \
 	usbd_msc_storage.c \
+	mphal.c \
 	irq.c \
 	pendsv.c \
 	systick.c  \
@@ -249,7 +253,11 @@ all: $(BUILD)/firmware.dfu $(BUILD)/firmware.hex
 
 deploy: $(BUILD)/firmware.dfu
 	$(ECHO) "Writing $< to the board"
+ifeq ($(USE_PYDFU),1)
+	$(Q)$(PYTHON) $(PYDFU) -u $<
+else
 	$(Q)$(DFU_UTIL) -a 0 -d $(DEVICE) -D $<
+endif
 
 $(BUILD)/firmware.dfu: $(BUILD)/firmware.elf
 	$(ECHO) "Create $@"

@@ -10,7 +10,7 @@ Pyboard-da qoşulmaq
 Pyboard-ı USB kabel vasitəsilə PC-yə qoşaq(Windows, Mac və Linux).
 Bunun yalnız bir üsulu var, ona görə də səhv etmə ehtimalınız yoxdur.
 
-<img src="/static/doc/pyboard-usb-micro.jpg" alt="pyboard with USB micro cable" style="width:200px; border:1px solid black; display:inline-block;"/>
+.. image:: img/pyboard_usb_micro.jpg
 
 Pyboard PC-yə qoşulduqdan sonra boot olacaq. Yarım saniyə və ya daha az bir müddətə yaşıl LED yanacaq.
 Yaşıl işıq söndükdən sonra, bilin ki boot proses artıq sonlanıb.
@@ -44,18 +44,17 @@ Təbii ki, bu sizin əmliyyat sisteminizdən asılıdır. ::
 Sizin hal-hazırda olduğunuz drayv ``/flash``-dir.
 Daxilində 4 fayl olmalıdır:
 
+  * `boot.py <http://micropython.org/resources/fresh-pyboard/boot.py>`_ -- Bu script pyboard boot olanda çalışır.
+    Script pyboard üçün müxtəlif konfiqurasiya opsiyalarını tətbiq edir.
 
-  - [``boot.py``](/static/doc/fresh-pyboard/boot.py) -- Bu script pyboard boot olanda çalışır.
-    Script müxtəlif konfiqurasiya opsiyalarını tətbiq edir.
-
-  - [``main.py``](/static/doc/fresh-pyboard/main.py) -- Bu sizin Python kodlarınızı özündə saxlayan əsas scriptdir.
+  * `main.py <http://micropython.org/resources/fresh-pyboard/main.py>`_ -- Bu sizin Python proqramınızı özündə saxlayan əsas scriptdir.
     Bu script ``boot.py`` -dan sonra çalışır.
 
-  - [``README.txt``](/static/doc/fresh-pyboard/README.txt) -- Adından da göründüyü kimi, işə başlamanız üçün lazım olan,
+  * `README.txt <http://micropython.org/resources/fresh-pyboard/README.txt>`_ -- Adından da göründüyü kimi, işə başlamanız üçün lazım olan,
     ilkin məlumatları bu faylda tapa bilərsiniz.
     
-  - [``pybcdc.inf``](/static/doc/fresh-pyboard/pybcdc.inf) -- Bu fayl isə Windows drayverdir.
-    Daha ətraflı bu barədə növbəti dərsdə danışacıq.
+  * `pybcdc.inf <http://micropython.org/resources/fresh-pyboard/pybcdc.inf>`_ -- Bu, ardıcıl USB qurğusunu tənzimləmək üçün Windows drayver faylıdır.
+    Bu barədə daha ətraflı növbəti dərsdə danışacağıq.
 
 
 ``main.py`` -da dəyişikliklər.

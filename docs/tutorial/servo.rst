@@ -7,7 +7,7 @@ Bu motorlarda 3 kabel var. 0 (yüksüz), faza və siqnal kabelləri.
 Bu kabelləri siz çipin üzərində sağ aşağı küncdən siqnal mərkəzinə (pin) qoşa bilərsiniz.
 X1, X2, X3 və X4 deyə 4 əlaqədar siqnal pin mövcuddur. 
 
-<img src="/static/doc/pyboard-servo.jpg" alt="pyboard with servo motors" style="width:250px; border:1px solid black; display:inline-block;"/>
+.. image:: img/pyboard_servo.jpg
 
 Şəkildə  avto motorları çipdə yerləşən əsas siqnal pininə birləşdirən iki keçirici (adaptor, perexodnik) görürsüz. 
 

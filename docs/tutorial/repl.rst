@@ -9,6 +9,7 @@ Bunu necə edəcəyiniz isə, sizin əməliyyat sisteminizdən asılıdır.
 
 Windows
 -------
+<<<<<<< HEAD
 USB device-dan istifadə etmək üçün, pyboard driver-i install etməlisiniz.
 Driver pyboard-ın USB flash drayvında yerləşir və onun adı ``pybcdc.inf``-dır.
 
@@ -26,6 +27,28 @@ HyperTerminal buna nümunə ola bilər. Pulsuz olaraq isə PuTTY-dən istifadə 
 Serial proqramınızdan istifadə etməklə, müəyyən etdiyiniz COM port-a qoşulmalısınız.
 PuTTY ilə, sol paneldə "Session"-a klikləyin, daha sonra, "Serial" radio düymıəsinə basın,
 daha sonra da COM portun "Serial Line"-da qeyd edin və ən sonda "Open" düyməsini basın.
+=======
+
+You need to install the pyboard driver to use the serial USB device.
+The driver is on the pyboard's USB flash drive, and is called ``pybcdc.inf``.
+
+To install this driver you need to go to Device Manager
+for your computer, find the pyboard in the list of devices (it should have
+a warning sign next to it because it's not working yet), right click on
+the pyboard device, select Properties, then Install Driver.  You need to
+then select the option to find the driver manually (don't use Windows auto update),
+navigate to the pyboard's USB drive, and select that.  It should then install.
+After installing, go back to the Device Manager to find the installed pyboard,
+and see which COM port it is (eg COM4).
+
+You now need to run your terminal program.  You can use HyperTerminal if you
+have it installed, or download the free program PuTTY:
+`putty.exe <http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html>`_.
+Using your serial program you must connect to the COM port that you found in the
+previous step.  With PuTTY, click on "Session" in the left-hand panel, then click
+the "Serial" radio button on the right, then enter you COM port (eg COM4) in the
+"Serial Line" box.  Finally, click the "Open" button.
+>>>>>>> bfb18a714ba03571575e2d715cbc409afeb94e54
 
 Mac OS X
 --------
@@ -34,7 +57,11 @@ Terminalı acın və aşağıdakını işlədin::
 
     screen /dev/tty.usbmodem*
     
+<<<<<<< HEAD
 İşiniz bitdikdə, çıxmaq istəsəniz, CTRL+A CTRL+\\ -nı sıxın.
+=======
+When you are finished and want to exit screen, type CTRL-A CTRL-\\.
+>>>>>>> bfb18a714ba03571575e2d715cbc409afeb94e54
 
 Linux
 -----

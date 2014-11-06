@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .. Micro Python documentation master file
 
 Micro Python dokumentasiya və linklər
@@ -8,11 +9,17 @@ Buradan siz Micro Python və pyboard haqqında dokumentasiyanı tapa bilərsiniz
 Software
 --------
 
-.. toctree::
-   :maxdepth: 2
+=======
+Micro Python documentation and references
+=========================================
 
+>>>>>>> bfb18a714ba03571575e2d715cbc409afeb94e54
+.. toctree::
+
+   quickref.rst
    general.rst
    tutorial/index.rst
+<<<<<<< HEAD
 
 .. 
 ..  - Reference for the [pyb module](module/pyb/ "pyb module").
@@ -33,6 +40,12 @@ Pyboardın komponentləri haqqında məlumat
 ..  - The accelerometer: [Freescale MMA7660](/static/doc/MMA7660FC.pdf) (800kiB PDF).
 ..  - The LDO voltage regulator: [Microchip MCP1802](/static/doc/MCP1802-22053C.pdf) (400kiB PDF).
 
+=======
+   library/index.rst
+   hardware/index.rst
+   license.rst
+   contents.rst
+>>>>>>> bfb18a714ba03571575e2d715cbc409afeb94e54
 
 Cədvəl və kataloqlar
 ==================
@@ -40,4 +53,3 @@ Cədvəl və kataloqlar
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

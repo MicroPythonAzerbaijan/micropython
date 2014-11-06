@@ -292,6 +292,7 @@ extern const mp_obj_type_t mp_type_int;
 extern const mp_obj_type_t mp_type_str;
 extern const mp_obj_type_t mp_type_bytes;
 extern const mp_obj_type_t mp_type_bytearray;
+extern const mp_obj_type_t mp_type_memoryview;
 extern const mp_obj_type_t mp_type_float;
 extern const mp_obj_type_t mp_type_complex;
 extern const mp_obj_type_t mp_type_tuple;
@@ -329,6 +330,7 @@ extern const mp_obj_type_t mp_type_GeneratorExit;
 extern const mp_obj_type_t mp_type_ImportError;
 extern const mp_obj_type_t mp_type_IndentationError;
 extern const mp_obj_type_t mp_type_IndexError;
+extern const mp_obj_type_t mp_type_KeyboardInterrupt;
 extern const mp_obj_type_t mp_type_KeyError;
 extern const mp_obj_type_t mp_type_LookupError;
 extern const mp_obj_type_t mp_type_MemoryError;
@@ -339,7 +341,6 @@ extern const mp_obj_type_t mp_type_OverflowError;
 extern const mp_obj_type_t mp_type_RuntimeError;
 extern const mp_obj_type_t mp_type_StopIteration;
 extern const mp_obj_type_t mp_type_SyntaxError;
-extern const mp_obj_type_t mp_type_SystemError;
 extern const mp_obj_type_t mp_type_SystemExit;
 extern const mp_obj_type_t mp_type_TypeError;
 extern const mp_obj_type_t mp_type_ValueError;
@@ -350,10 +351,12 @@ extern const mp_obj_type_t mp_type_ZeroDivisionError;
 #define mp_const_none ((mp_obj_t)&mp_const_none_obj)
 #define mp_const_false ((mp_obj_t)&mp_const_false_obj)
 #define mp_const_true ((mp_obj_t)&mp_const_true_obj)
+#define mp_const_empty_bytes ((mp_obj_t)&mp_const_empty_bytes_obj)
 #define mp_const_empty_tuple ((mp_obj_t)&mp_const_empty_tuple_obj)
 extern const struct _mp_obj_none_t mp_const_none_obj;
 extern const struct _mp_obj_bool_t mp_const_false_obj;
 extern const struct _mp_obj_bool_t mp_const_true_obj;
+extern const struct _mp_obj_str_t mp_const_empty_bytes_obj;
 extern const struct _mp_obj_tuple_t mp_const_empty_tuple_obj;
 extern const struct _mp_obj_ellipsis_t mp_const_ellipsis_obj;
 extern const struct _mp_obj_exception_t mp_const_MemoryError_obj;
@@ -381,7 +384,7 @@ mp_obj_t mp_obj_new_exception_arg1(const mp_obj_type_t *exc_type, mp_obj_t arg);
 mp_obj_t mp_obj_new_exception_args(const mp_obj_type_t *exc_type, mp_uint_t n_args, const mp_obj_t *args);
 mp_obj_t mp_obj_new_exception_msg(const mp_obj_type_t *exc_type, const char *msg);
 mp_obj_t mp_obj_new_exception_msg_varg(const mp_obj_type_t *exc_type, const char *fmt, ...); // counts args by number of % symbols in fmt, excluding %%; can only handle void* sizes (ie no float/double!)
-mp_obj_t mp_obj_new_fun_bc(mp_uint_t scope_flags, qstr *args, mp_uint_t n_pos_args, mp_uint_t n_kwonly_args, mp_obj_t def_args, mp_obj_t def_kw_args, const byte *code);
+mp_obj_t mp_obj_new_fun_bc(mp_uint_t scope_flags, mp_uint_t n_pos_args, mp_uint_t n_kwonly_args, mp_obj_t def_args, mp_obj_t def_kw_args, const byte *code);
 mp_obj_t mp_obj_new_fun_native(mp_uint_t n_args, void *fun_data);
 mp_obj_t mp_obj_new_fun_viper(mp_uint_t n_args, void *fun_data, mp_uint_t type_sig);
 mp_obj_t mp_obj_new_fun_asm(mp_uint_t n_args, void *fun_data);
@@ -527,7 +530,6 @@ void mp_obj_set_store(mp_obj_t self_in, mp_obj_t item);
 void mp_obj_slice_get(mp_obj_t self_in, mp_obj_t *start, mp_obj_t *stop, mp_obj_t *step);
 
 // array
-mp_uint_t mp_obj_array_len(mp_obj_t self_in);
 mp_obj_t mp_obj_new_bytearray_by_ref(mp_uint_t n, void *items);
 
 // functions
@@ -554,6 +556,8 @@ typedef struct _mp_obj_module_t {
     mp_obj_dict_t *globals;
 } mp_obj_module_t;
 mp_obj_dict_t *mp_obj_module_get_globals(mp_obj_t self_in);
+// check if given module object is a package
+bool mp_obj_is_package(mp_obj_t module);
 
 // staticmethod and classmethod types; defined here so we can make const versions
 // this structure is used for instances of both staticmethod and classmethod

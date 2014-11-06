@@ -32,6 +32,11 @@ void gc_lock(void);
 void gc_unlock(void);
 bool gc_is_locked(void);
 
+// This variable controls auto garbage collection.  If set to 0 then the
+// GC won't automatically run when gc_alloc can't find enough blocks.  But
+// you can still allocate/free memory and also explicitly call gc_collect.
+extern uint16_t gc_auto_collect_enabled;
+
 // A given port must implement gc_collect by using the other collect functions.
 void gc_collect(void);
 void gc_collect_start(void);
@@ -40,7 +45,7 @@ void gc_collect_end(void);
 
 void *gc_alloc(mp_uint_t n_bytes, bool has_finaliser);
 void gc_free(void *ptr);
-mp_uint_t gc_nbytes(void *ptr);
+mp_uint_t gc_nbytes(const void *ptr);
 void *gc_realloc(void *ptr, mp_uint_t n_bytes);
 
 typedef struct _gc_info_t {

@@ -62,6 +62,9 @@
 #define DEBUG_OP_printf(...) (void)0
 #endif
 
+// pending exception object (MP_OBJ_NULL if not pending)
+mp_obj_t mp_pending_exception;
+
 // locals and globals need to be pointers because they can be the same in outer module scope
 STATIC mp_obj_dict_t *dict_locals;
 STATIC mp_obj_dict_t *dict_globals;
@@ -78,6 +81,9 @@ const mp_obj_module_t mp_module___main__ = {
 void mp_init(void) {
     qstr_init();
     mp_stack_ctrl_init();
+
+    // no pending exceptions to start with
+    mp_pending_exception = MP_OBJ_NULL;
 
 #if MICROPY_ENABLE_EMERGENCY_EXCEPTION_BUF
     mp_init_emergency_exception_buf();
@@ -331,6 +337,11 @@ mp_obj_t mp_binary_op(mp_uint_t op, mp_obj_t lhs, mp_obj_t rhs) {
                         nlr_raise(mp_obj_new_exception_msg(&mp_type_ValueError, "negative shift count"));
                     } else {
                         // standard precision is enough for right-shift
+                        if (rhs_val >= BITS_PER_WORD) {
+                            // Shifting to big amounts is underfined behavior
+                            // in C and is CPU-dependent; propagate sign bit.
+                            rhs_val = BITS_PER_WORD - 1;
+                        }
                         lhs_val >>= rhs_val;
                     }
                     break;
@@ -475,8 +486,8 @@ mp_obj_t mp_binary_op(mp_uint_t op, mp_obj_t lhs, mp_obj_t rhs) {
         }
         if (type->getiter != NULL) {
             /* second attempt, walk the iterator */
-            mp_obj_t next = NULL;
             mp_obj_t iter = mp_getiter(rhs);
+            mp_obj_t next;
             while ((next = mp_iternext(iter)) != MP_OBJ_STOP_ITERATION) {
                 if (mp_obj_equal(next, lhs)) {
                     return mp_const_true;
@@ -1098,8 +1109,7 @@ import_error:
     }
 
     // See if it's a package, then can try FS import
-    mp_load_method_maybe(module, MP_QSTR___path__, dest);
-    if (dest[0] == MP_OBJ_NULL) {
+    if (!mp_obj_is_package(module)) {
         goto import_error;
     }
 
@@ -1188,6 +1198,13 @@ mp_obj_t mp_parse_compile_execute(mp_lexer_t *lex, mp_parse_input_kind_t parse_i
         mp_globals_set(old_globals);
         mp_locals_set(old_locals);
         nlr_raise(module_fun);
+    }
+
+    // for compile only
+    if (MICROPY_PY_BUILTINS_COMPILE && globals == NULL) {
+        mp_globals_set(old_globals);
+        mp_locals_set(old_locals);
+        return module_fun;
     }
 
     // complied successfully, execute it

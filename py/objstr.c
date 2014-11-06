@@ -42,7 +42,6 @@
 #include "objlist.h"
 
 STATIC mp_obj_t str_modulo_format(mp_obj_t pattern, mp_uint_t n_args, const mp_obj_t *args, mp_obj_t dict);
-const mp_obj_t mp_const_empty_bytes;
 
 mp_obj_t mp_obj_new_str_iterator(mp_obj_t str);
 STATIC mp_obj_t mp_obj_new_bytes_iterator(mp_obj_t str);
@@ -161,15 +160,18 @@ STATIC mp_obj_t str_make_new(mp_obj_t type_in, mp_uint_t n_args, mp_uint_t n_kw,
         case 3:
         {
             // TODO: validate 2nd/3rd args
-            if (!MP_OBJ_IS_TYPE(args[0], &mp_type_bytes)) {
-                nlr_raise(mp_obj_new_exception_msg(&mp_type_TypeError, "bytes expected"));
+            if (MP_OBJ_IS_TYPE(args[0], &mp_type_bytes)) {
+                GET_STR_DATA_LEN(args[0], str_data, str_len);
+                GET_STR_HASH(args[0], str_hash);
+                mp_obj_str_t *o = mp_obj_new_str_of_type(&mp_type_str, NULL, str_len);
+                o->data = str_data;
+                o->hash = str_hash;
+                return o;
+            } else {
+                mp_buffer_info_t bufinfo;
+                mp_get_buffer_raise(args[0], &bufinfo, MP_BUFFER_READ);
+                return mp_obj_new_str(bufinfo.buf, bufinfo.len, false);
             }
-            GET_STR_DATA_LEN(args[0], str_data, str_len);
-            GET_STR_HASH(args[0], str_hash);
-            mp_obj_str_t *o = mp_obj_new_str_of_type(&mp_type_str, NULL, str_len);
-            o->data = str_data;
-            o->hash = str_hash;
-            return o;
         }
 
         default:
@@ -216,7 +218,7 @@ STATIC mp_obj_t bytes_make_new(mp_obj_t type_in, mp_uint_t n_args, mp_uint_t n_k
     mp_int_t len;
     byte *data;
     vstr_t *vstr = NULL;
-    mp_obj_t o = NULL;
+    mp_obj_t o = MP_OBJ_NULL;
     // Try to create array of exact len if initializer len is known
     mp_obj_t len_in = mp_obj_len_maybe(args[0]);
     if (len_in == MP_OBJ_NULL) {
@@ -283,77 +285,99 @@ STATIC const byte *find_subbytes(const byte *haystack, mp_uint_t hlen, const byt
 // works because both those types use it as their binary_op method.  Revisit
 // MP_OBJ_IS_STR_OR_BYTES if this fact changes.
 mp_obj_t mp_obj_str_binary_op(mp_uint_t op, mp_obj_t lhs_in, mp_obj_t rhs_in) {
-    GET_STR_DATA_LEN(lhs_in, lhs_data, lhs_len);
+    // check for modulo
+    if (op == MP_BINARY_OP_MODULO) {
+        mp_obj_t *args;
+        mp_uint_t n_args;
+        mp_obj_t dict = MP_OBJ_NULL;
+        if (MP_OBJ_IS_TYPE(rhs_in, &mp_type_tuple)) {
+            // TODO: Support tuple subclasses?
+            mp_obj_tuple_get(rhs_in, &n_args, &args);
+        } else if (MP_OBJ_IS_TYPE(rhs_in, &mp_type_dict)) {
+            args = NULL;
+            n_args = 0;
+            dict = rhs_in;
+        } else {
+            args = &rhs_in;
+            n_args = 1;
+        }
+        return str_modulo_format(lhs_in, n_args, args, dict);
+    }
+
+    // from now on we need lhs type and data, so extract them
     mp_obj_type_t *lhs_type = mp_obj_get_type(lhs_in);
-    mp_obj_type_t *rhs_type = mp_obj_get_type(rhs_in);
+    GET_STR_DATA_LEN(lhs_in, lhs_data, lhs_len);
+
+    // check for multiply
+    if (op == MP_BINARY_OP_MULTIPLY) {
+        mp_int_t n;
+        if (!mp_obj_get_int_maybe(rhs_in, &n)) {
+            return MP_OBJ_NULL; // op not supported
+        }
+        if (n <= 0) {
+            if (lhs_type == &mp_type_str) {
+                return MP_OBJ_NEW_QSTR(MP_QSTR_); // empty str
+            } else {
+                return mp_const_empty_bytes;
+            }
+        }
+        byte *data;
+        mp_obj_t s = mp_obj_str_builder_start(lhs_type, lhs_len * n, &data);
+        mp_seq_multiply(lhs_data, sizeof(*lhs_data), lhs_len, n, data);
+        return mp_obj_str_builder_end(s);
+    }
+
+    // From now on all operations allow:
+    //    - str with str
+    //    - bytes with bytes
+    //    - bytes with bytearray
+    //    - bytes with array.array
+    // To do this efficiently we use the buffer protocol to extract the raw
+    // data for the rhs, but only if the lhs is a bytes object.
+    //
+    // NOTE: CPython does not allow comparison between bytes ard array.array
+    // (even if the array is of type 'b'), even though it allows addition of
+    // such types.  We are not compatible with this (we do allow comparison
+    // of bytes with anything that has the buffer protocol).  It would be
+    // easy to "fix" this with a bit of extra logic below, but it costs code
+    // size and execution time so we don't.
+
+    const byte *rhs_data;
+    mp_uint_t rhs_len;
+    if (lhs_type == mp_obj_get_type(rhs_in)) {
+        GET_STR_DATA_LEN(rhs_in, rhs_data_, rhs_len_);
+        rhs_data = rhs_data_;
+        rhs_len = rhs_len_;
+    } else if (lhs_type == &mp_type_bytes) {
+        mp_buffer_info_t bufinfo;
+        if (!mp_get_buffer(rhs_in, &bufinfo, MP_BUFFER_READ)) {
+            goto incompatible;
+        }
+        rhs_data = bufinfo.buf;
+        rhs_len = bufinfo.len;
+    } else {
+        // incompatible types
+    incompatible:
+        if (op == MP_BINARY_OP_EQUAL) {
+            return mp_const_false; // can check for equality against every type
+        }
+        return MP_OBJ_NULL; // op not supported
+    }
+
     switch (op) {
         case MP_BINARY_OP_ADD:
-        case MP_BINARY_OP_INPLACE_ADD:
-            if (lhs_type == rhs_type) {
-                // add 2 strings or bytes
-
-                GET_STR_DATA_LEN(rhs_in, rhs_data, rhs_len);
-                mp_uint_t alloc_len = lhs_len + rhs_len;
-
-                /* code for making qstr
-                byte *q_ptr;
-                byte *val = qstr_build_start(alloc_len, &q_ptr);
-                memcpy(val, lhs_data, lhs_len);
-                memcpy(val + lhs_len, rhs_data, rhs_len);
-                return MP_OBJ_NEW_QSTR(qstr_build_end(q_ptr));
-                */
-
-                // code for non-qstr
-                byte *data;
-                mp_obj_t s = mp_obj_str_builder_start(lhs_type, alloc_len, &data);
-                memcpy(data, lhs_data, lhs_len);
-                memcpy(data + lhs_len, rhs_data, rhs_len);
-                return mp_obj_str_builder_end(s);
-            }
-            break;
-
-        case MP_BINARY_OP_IN:
-            /* NOTE `a in b` is `b.__contains__(a)` */
-            if (lhs_type == rhs_type) {
-                GET_STR_DATA_LEN(rhs_in, rhs_data, rhs_len);
-                return MP_BOOL(find_subbytes(lhs_data, lhs_len, rhs_data, rhs_len, 1) != NULL);
-            }
-            break;
-
-        case MP_BINARY_OP_MULTIPLY: {
-            mp_int_t n;
-            if (!mp_obj_get_int_maybe(rhs_in, &n)) {
-                return MP_OBJ_NULL; // op not supported
-            }
-            if (n <= 0) {
-                if (lhs_type == &mp_type_str) {
-                    return MP_OBJ_NEW_QSTR(MP_QSTR_); // empty str
-                }
-                n = 0;
-            }
+        case MP_BINARY_OP_INPLACE_ADD: {
+            mp_uint_t alloc_len = lhs_len + rhs_len;
             byte *data;
-            mp_obj_t s = mp_obj_str_builder_start(lhs_type, lhs_len * n, &data);
-            mp_seq_multiply(lhs_data, sizeof(*lhs_data), lhs_len, n, data);
+            mp_obj_t s = mp_obj_str_builder_start(lhs_type, alloc_len, &data);
+            memcpy(data, lhs_data, lhs_len);
+            memcpy(data + lhs_len, rhs_data, rhs_len);
             return mp_obj_str_builder_end(s);
         }
 
-        case MP_BINARY_OP_MODULO: {
-            mp_obj_t *args;
-            mp_uint_t n_args;
-            mp_obj_t dict = MP_OBJ_NULL;
-            if (MP_OBJ_IS_TYPE(rhs_in, &mp_type_tuple)) {
-                // TODO: Support tuple subclasses?
-                mp_obj_tuple_get(rhs_in, &n_args, &args);
-            } else if (MP_OBJ_IS_TYPE(rhs_in, &mp_type_dict)) {
-                args = NULL;
-                n_args = 0;
-                dict = rhs_in;
-            } else {
-                args = &rhs_in;
-                n_args = 1;
-            }
-            return str_modulo_format(lhs_in, n_args, args, dict);
-        }
+        case MP_BINARY_OP_IN:
+            /* NOTE `a in b` is `b.__contains__(a)` */
+            return MP_BOOL(find_subbytes(lhs_data, lhs_len, rhs_data, rhs_len, 1) != NULL);
 
         //case MP_BINARY_OP_NOT_EQUAL: // This is never passed here
         case MP_BINARY_OP_EQUAL: // This will be passed only for bytes, str is dealt with in mp_obj_equal()
@@ -361,21 +385,7 @@ mp_obj_t mp_obj_str_binary_op(mp_uint_t op, mp_obj_t lhs_in, mp_obj_t rhs_in) {
         case MP_BINARY_OP_LESS_EQUAL:
         case MP_BINARY_OP_MORE:
         case MP_BINARY_OP_MORE_EQUAL:
-            if (lhs_type == rhs_type) {
-                GET_STR_DATA_LEN(rhs_in, rhs_data, rhs_len);
-                return MP_BOOL(mp_seq_cmp_bytes(op, lhs_data, lhs_len, rhs_data, rhs_len));
-            }
-            if (lhs_type == &mp_type_bytes) {
-                mp_buffer_info_t bufinfo;
-                if (!mp_get_buffer(rhs_in, &bufinfo, MP_BUFFER_READ)) {
-                    goto uncomparable;
-                }
-                return MP_BOOL(mp_seq_cmp_bytes(op, lhs_data, lhs_len, bufinfo.buf, bufinfo.len));
-            }
-uncomparable:
-            if (op == MP_BINARY_OP_EQUAL) {
-                return mp_const_false;
-            }
+            return MP_BOOL(mp_seq_cmp_bytes(op, lhs_data, lhs_len, rhs_data, rhs_len));
     }
 
     return MP_OBJ_NULL; // op not supported
@@ -611,8 +621,12 @@ STATIC mp_obj_t str_rsplit(mp_uint_t n_args, const mp_obj_t *args) {
 STATIC mp_obj_t str_finder(mp_uint_t n_args, const mp_obj_t *args, mp_int_t direction, bool is_index) {
     const mp_obj_type_t *self_type = mp_obj_get_type(args[0]);
     assert(2 <= n_args && n_args <= 4);
-    assert(MP_OBJ_IS_STR(args[0]));
-    assert(MP_OBJ_IS_STR(args[1]));
+    assert(MP_OBJ_IS_STR_OR_BYTES(args[0]));
+
+    // check argument type
+    if (!MP_OBJ_IS_STR(args[1])) {
+        bad_implicit_conversion(args[1]);
+    }
 
     GET_STR_DATA_LEN(args[0], haystack, haystack_len);
     GET_STR_DATA_LEN(args[1], needle, needle_len);
@@ -818,7 +832,7 @@ static mp_obj_t arg_as_int(mp_obj_t arg) {
 }
 
 mp_obj_t mp_obj_str_format(mp_uint_t n_args, const mp_obj_t *args) {
-    assert(MP_OBJ_IS_STR(args[0]));
+    assert(MP_OBJ_IS_STR_OR_BYTES(args[0]));
 
     GET_STR_DATA_LEN(args[0], str, len);
     int arg_i = 0;
@@ -1180,7 +1194,7 @@ mp_obj_t mp_obj_str_format(mp_uint_t n_args, const mp_obj_t *args) {
 }
 
 STATIC mp_obj_t str_modulo_format(mp_obj_t pattern, mp_uint_t n_args, const mp_obj_t *args, mp_obj_t dict) {
-    assert(MP_OBJ_IS_STR(pattern));
+    assert(MP_OBJ_IS_STR_OR_BYTES(pattern));
 
     GET_STR_DATA_LEN(pattern, str, len);
     const byte *start_str = str;
@@ -1368,7 +1382,7 @@ not_enough_args:
 }
 
 STATIC mp_obj_t str_replace(mp_uint_t n_args, const mp_obj_t *args) {
-    assert(MP_OBJ_IS_STR(args[0]));
+    assert(MP_OBJ_IS_STR_OR_BYTES(args[0]));
 
     mp_int_t max_rep = -1;
     if (n_args == 4) {
@@ -1472,8 +1486,12 @@ STATIC mp_obj_t str_replace(mp_uint_t n_args, const mp_obj_t *args) {
 STATIC mp_obj_t str_count(mp_uint_t n_args, const mp_obj_t *args) {
     const mp_obj_type_t *self_type = mp_obj_get_type(args[0]);
     assert(2 <= n_args && n_args <= 4);
-    assert(MP_OBJ_IS_STR(args[0]));
-    assert(MP_OBJ_IS_STR(args[1]));
+    assert(MP_OBJ_IS_STR_OR_BYTES(args[0]));
+
+    // check argument type
+    if (!MP_OBJ_IS_STR(args[1])) {
+        bad_implicit_conversion(args[1]);
+    }
 
     GET_STR_DATA_LEN(args[0], haystack, haystack_len);
     GET_STR_DATA_LEN(args[1], needle, needle_len);
@@ -1763,8 +1781,7 @@ const mp_obj_type_t mp_type_bytes = {
 };
 
 // the zero-length bytes
-STATIC const mp_obj_str_t empty_bytes_obj = {{&mp_type_bytes}, 0, 0, NULL};
-const mp_obj_t mp_const_empty_bytes = (mp_obj_t)&empty_bytes_obj;
+const mp_obj_str_t mp_const_empty_bytes_obj = {{&mp_type_bytes}, 0, 0, NULL};
 
 mp_obj_t mp_obj_str_builder_start(const mp_obj_type_t *type, mp_uint_t len, byte **data) {
     mp_obj_str_t *o = m_new_obj(mp_obj_str_t);
@@ -1863,7 +1880,7 @@ STATIC void arg_type_mixup() {
 
 mp_uint_t mp_obj_str_get_hash(mp_obj_t self_in) {
     // TODO: This has too big overhead for hash accessor
-    if (MP_OBJ_IS_STR(self_in) || MP_OBJ_IS_TYPE(self_in, &mp_type_bytes)) {
+    if (MP_OBJ_IS_STR_OR_BYTES(self_in)) {
         GET_STR_HASH(self_in, h);
         return h;
     } else {
@@ -1873,7 +1890,7 @@ mp_uint_t mp_obj_str_get_hash(mp_obj_t self_in) {
 
 mp_uint_t mp_obj_str_get_len(mp_obj_t self_in) {
     // TODO This has a double check for the type, one in obj.c and one here
-    if (MP_OBJ_IS_STR(self_in) || MP_OBJ_IS_TYPE(self_in, &mp_type_bytes)) {
+    if (MP_OBJ_IS_STR_OR_BYTES(self_in)) {
         GET_STR_LEN(self_in, l);
         return l;
     } else {
@@ -1897,7 +1914,7 @@ qstr mp_obj_str_get_qstr(mp_obj_t self_in) {
 // only use this function if you need the str data to be zero terminated
 // at the moment all strings are zero terminated to help with C ASCIIZ compatibility
 const char *mp_obj_str_get_str(mp_obj_t self_in) {
-    if (MP_OBJ_IS_STR(self_in)) {
+    if (MP_OBJ_IS_STR_OR_BYTES(self_in)) {
         GET_STR_DATA_LEN(self_in, s, l);
         (void)l; // len unused
         return (const char*)s;

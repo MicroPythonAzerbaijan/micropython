@@ -18,7 +18,7 @@ INC += -I$(PY_SRC)
 INC += -I$(BUILD)
 
 # compiler settings
-CWARN = -Wall -Werror
+CWARN = -Wall -Wpointer-arith -Werror
 CFLAGS = $(INC) $(CWARN) -ansi -std=gnu99 -DUNIX $(CFLAGS_MOD) $(COPT) $(CFLAGS_EXTRA)
 
 # Debugging/Optimization
@@ -129,3 +129,8 @@ install: micropython
 uninstall:
 	-rm $(BINDIR)/$(TARGET)
 	-rm $(BINDIR)/$(PIPTARGET)
+
+# build synthetically fast interpreter for benchmarking
+fast:
+	@echo Make sure to run make -B
+	$(MAKE) COPT="-O2 -DNDEBUG" CFLAGS_EXTRA='-DMP_CONFIGFILE="<mpconfigport_fast.h>"' BUILD=build-fast

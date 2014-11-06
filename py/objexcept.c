@@ -28,6 +28,7 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include "mpconfig.h"
 #include "nlr.h"
@@ -211,7 +212,7 @@ const mp_obj_type_t mp_type_ ## exc_name = { \
 // http://docs.python.org/3/library/exceptions.html
 MP_DEFINE_EXCEPTION_BASE(BaseException)
 MP_DEFINE_EXCEPTION(SystemExit, BaseException)
-//MP_DEFINE_EXCEPTION(KeyboardInterrupt, BaseException)
+MP_DEFINE_EXCEPTION(KeyboardInterrupt, BaseException)
 MP_DEFINE_EXCEPTION(GeneratorExit, BaseException)
 MP_DEFINE_EXCEPTION(Exception, BaseException)
   MP_DEFINE_EXCEPTION_BASE(Exception)
@@ -268,7 +269,7 @@ MP_DEFINE_EXCEPTION(Exception, BaseException)
       MP_DEFINE_EXCEPTION_BASE(IndentationError)
       MP_DEFINE_EXCEPTION(TabError, IndentationError)
       */
-  MP_DEFINE_EXCEPTION(SystemError, Exception)
+  //MP_DEFINE_EXCEPTION(SystemError, Exception)
   MP_DEFINE_EXCEPTION(TypeError, Exception)
   MP_DEFINE_EXCEPTION(ValueError, Exception)
     //TODO: Implement UnicodeErrors which take arguments

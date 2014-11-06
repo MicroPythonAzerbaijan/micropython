@@ -3,11 +3,11 @@ AMP audio örtüyü
 
 AMP audio örtüyünün qaynaq edilməsi və istifadəsi.
 
-.. image:: http://micropython.org/static/doc/skin-amp-1.jpg
+.. image:: img/skin_amp_1.jpg
     :alt: AMP skin
     :width: 250px
 
-.. image:: http://micropython.org/static/doc/skin-amp-3.jpg
+.. image:: img/skin_amp_2.jpg
     :alt: AMP skin
     :width: 250px
 
@@ -26,6 +26,7 @@ Gücləndiricinin səviyyəsi rəqəmsal potensiometer vasitəsi idarə edilir, 
 
 Səviyyəni təyin etmək üçün aşağıdakı funksiyanı yazın::
 
+    import pyb
     def volume(val):
         pyb.I2C(1, pyb.I2C.MASTER).mem_write(val, 46, 0)
 
@@ -49,12 +50,21 @@ Məsələn::
     dac = DAC(1)
     dac.write_timed(buf, 400 * len(buf), mode=DAC.CIRCULAR)
 
+<<<<<<< HEAD
 Siz həmçinin Python-un ``wave`` modulunun köməyi ilə WAV faylları da oxuda bilərsiniz.
 wave modulunu [buradan](/static/doc/examples/wave.py) əldə edə bilərsiniz, həmçinin
 [buradan](/static/doc/examples/chunk.py) əldə edə biləcəyiniz chunk moduluna ehiyacınız
 olacaqdır. Bunları pyboard-da (ya da fləş və ya SD kartda ən yüksək qovluğa) yerləşdirin.
 Oxutmaq üçün [belə](/static/doc/examples/test.wav) bir 8-bitlik WAV faylına ehtiyacınız
 olacaqdır. Sonra aşağıdakılar edə bilərsiniz.
+=======
+You can also play WAV files using the Python ``wave`` module.  You can get
+the wave module `here <http://micropython.org/resources/examples/wave.py>`_ and you will also need
+the chunk module available `here <http://micropython.org/resources/examples/chunk.py>`_.  Put these
+on your pyboard (either on the flash or the SD card in the top-level
+directory).  You will need an 8-bit WAV file to play, such as
+`this one <http://micropython.org/resources/examples/test.wav>`_.  Then you can do::
+>>>>>>> bfb18a714ba03571575e2d715cbc409afeb94e54
 
     >>> import wave
     >>> from pyb import DAC

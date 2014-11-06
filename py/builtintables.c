@@ -61,6 +61,9 @@ STATIC const mp_map_elem_t mp_builtin_object_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_int), (mp_obj_t)&mp_type_int },
     { MP_OBJ_NEW_QSTR(MP_QSTR_list), (mp_obj_t)&mp_type_list },
     { MP_OBJ_NEW_QSTR(MP_QSTR_map), (mp_obj_t)&mp_type_map },
+#if MICROPY_PY_BUILTINS_MEMORYVIEW
+    { MP_OBJ_NEW_QSTR(MP_QSTR_memoryview), (mp_obj_t)&mp_type_memoryview },
+#endif
     { MP_OBJ_NEW_QSTR(MP_QSTR_object), (mp_obj_t)&mp_type_object },
 #if MICROPY_PY_BUILTINS_PROPERTY
     { MP_OBJ_NEW_QSTR(MP_QSTR_property), (mp_obj_t)&mp_type_property },
@@ -88,6 +91,9 @@ STATIC const mp_map_elem_t mp_builtin_object_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_any), (mp_obj_t)&mp_builtin_any_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_bin), (mp_obj_t)&mp_builtin_bin_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_callable), (mp_obj_t)&mp_builtin_callable_obj },
+#if MICROPY_PY_BUILTINS_COMPILE
+    { MP_OBJ_NEW_QSTR(MP_QSTR_compile), (mp_obj_t)&mp_builtin_compile_obj },
+#endif
     { MP_OBJ_NEW_QSTR(MP_QSTR_chr), (mp_obj_t)&mp_builtin_chr_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_dir), (mp_obj_t)&mp_builtin_dir_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_divmod), (mp_obj_t)&mp_builtin_divmod_obj },
@@ -112,6 +118,7 @@ STATIC const mp_map_elem_t mp_builtin_object_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_pow), (mp_obj_t)&mp_builtin_pow_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_print), (mp_obj_t)&mp_builtin_print_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_repr), (mp_obj_t)&mp_builtin_repr_obj },
+    { MP_OBJ_NEW_QSTR(MP_QSTR_round), (mp_obj_t)&mp_builtin_round_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_sorted), (mp_obj_t)&mp_builtin_sorted_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_sum), (mp_obj_t)&mp_builtin_sum_obj },
 
@@ -136,7 +143,6 @@ STATIC const mp_map_elem_t mp_builtin_object_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_RuntimeError), (mp_obj_t)&mp_type_RuntimeError },
     { MP_OBJ_NEW_QSTR(MP_QSTR_StopIteration), (mp_obj_t)&mp_type_StopIteration },
     { MP_OBJ_NEW_QSTR(MP_QSTR_SyntaxError), (mp_obj_t)&mp_type_SyntaxError },
-    { MP_OBJ_NEW_QSTR(MP_QSTR_SystemError), (mp_obj_t)&mp_type_SystemError },
     { MP_OBJ_NEW_QSTR(MP_QSTR_SystemExit), (mp_obj_t)&mp_type_SystemExit },
     { MP_OBJ_NEW_QSTR(MP_QSTR_TypeError), (mp_obj_t)&mp_type_TypeError },
     { MP_OBJ_NEW_QSTR(MP_QSTR_ValueError), (mp_obj_t)&mp_type_ValueError },
@@ -211,6 +217,9 @@ STATIC const mp_map_elem_t mp_builtin_module_table[] = {
 #endif
 #if MICROPY_PY_URE
     { MP_OBJ_NEW_QSTR(MP_QSTR_ure), (mp_obj_t)&mp_module_ure },
+#endif
+#if MICROPY_PY_UHEAPQ
+    { MP_OBJ_NEW_QSTR(MP_QSTR_uheapq), (mp_obj_t)&mp_module_uheapq },
 #endif
 
     // extra builtin modules as defined by a port

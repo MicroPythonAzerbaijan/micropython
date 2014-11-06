@@ -22,6 +22,7 @@ Pyboard-ı bu micro-USB kabel vasitəsilə, öz kompüterinizə qoşursunuz və 
    usb_mouse.rst
    timer.rst
    assembler.rst
+   power_ctrl.rst
 
 Aşağıdakı dərslər, bəzi əlavə komponentlər tələb edir.
 ------------------------------------
@@ -31,5 +32,16 @@ Aşağıdakı dərslər, bəzi əlavə komponentlər tələb edir.
    :numbered:
 
    servo.rst
+   fading_led.rst
    lcd_skin.rst
    amp_skin.rst
+
+Tips, tricks and useful things to know
+--------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+   :numbered:
+
+   debounce.rst
+   pass_through.rst

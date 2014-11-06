@@ -218,6 +218,13 @@ STATIC void emit_write_bytecode_byte_uint(emit_t* emit, byte b, mp_uint_t val) {
     emit_write_uint(emit, emit_get_cur_to_write_bytecode, val);
 }
 
+STATIC void emit_write_bytecode_prealigned_ptr(emit_t* emit, void *ptr) {
+    mp_uint_t *c = (mp_uint_t*)emit_get_cur_to_write_bytecode(emit, sizeof(mp_uint_t));
+    // Verify thar c is already uint-aligned
+    assert(c == MP_ALIGN(c, sizeof(mp_uint_t)));
+    *c = (mp_uint_t)ptr;
+}
+
 // aligns the pointer so it is friendly to GC
 STATIC void emit_write_bytecode_byte_ptr(emit_t* emit, byte b, void *ptr) {
     emit_write_bytecode_byte(emit, b);
@@ -294,7 +301,16 @@ STATIC void emit_bc_start_pass(emit_t *emit, pass_kind_t pass, scope_t *scope) {
     emit_write_code_info_qstr(emit, scope->simple_name);
     emit_write_code_info_qstr(emit, scope->source_file);
 
-    // bytecode prelude: local state size and exception stack size; 16 bit uints for now
+    // bytecode prelude: argument names (needed to resolve positional args passed as keywords)
+    // we store them as full word-sized objects for efficient access in mp_setup_code_state
+    // this is the start of the prelude and is guaranteed to be aligned on a word boundary
+    {
+        for (int i = 0; i < scope->num_pos_args + scope->num_kwonly_args; i++) {
+            emit_write_bytecode_prealigned_ptr(emit, MP_OBJ_NEW_QSTR(scope->id_info[i].qst));
+        }
+    }
+
+    // bytecode prelude: local state size and exception stack size
     {
         mp_uint_t n_state = scope->num_locals + scope->stack_size;
         if (n_state == 0) {
@@ -358,13 +374,9 @@ STATIC void emit_bc_end_pass(emit_t *emit) {
         emit->code_base = m_new0(byte, emit->code_info_size + emit->bytecode_size);
 
     } else if (emit->pass == MP_PASS_EMIT) {
-        qstr *arg_names = m_new(qstr, emit->scope->num_pos_args + emit->scope->num_kwonly_args);
-        for (int i = 0; i < emit->scope->num_pos_args + emit->scope->num_kwonly_args; i++) {
-            arg_names[i] = emit->scope->id_info[i].qst;
-        }
         mp_emit_glue_assign_bytecode(emit->scope->raw_code, emit->code_base,
             emit->code_info_size + emit->bytecode_size,
-            emit->scope->num_pos_args, emit->scope->num_kwonly_args, arg_names,
+            emit->scope->num_pos_args, emit->scope->num_kwonly_args,
             emit->scope->scope_flags);
     }
 }
@@ -457,7 +469,11 @@ STATIC void emit_bc_load_const_tok(emit_t *emit, mp_token_kind_t tok) {
 
 STATIC void emit_bc_load_const_small_int(emit_t *emit, mp_int_t arg) {
     emit_bc_pre(emit, 1);
-    emit_write_bytecode_byte_int(emit, MP_BC_LOAD_CONST_SMALL_INT, arg);
+    if (-16 <= arg && arg <= 47) {
+        emit_write_bytecode_byte(emit, MP_BC_LOAD_CONST_SMALL_INT_MULTI + 16 + arg);
+    } else {
+        emit_write_bytecode_byte_int(emit, MP_BC_LOAD_CONST_SMALL_INT, arg);
+    }
 }
 
 STATIC void emit_bc_load_const_int(emit_t *emit, qstr qst) {
@@ -487,11 +503,10 @@ STATIC void emit_bc_load_null(emit_t *emit) {
 STATIC void emit_bc_load_fast(emit_t *emit, qstr qst, mp_uint_t id_flags, mp_uint_t local_num) {
     assert(local_num >= 0);
     emit_bc_pre(emit, 1);
-    switch (local_num) {
-        case 0: emit_write_bytecode_byte(emit, MP_BC_LOAD_FAST_0); break;
-        case 1: emit_write_bytecode_byte(emit, MP_BC_LOAD_FAST_1); break;
-        case 2: emit_write_bytecode_byte(emit, MP_BC_LOAD_FAST_2); break;
-        default: emit_write_bytecode_byte_uint(emit, MP_BC_LOAD_FAST_N, local_num); break;
+    if (local_num <= 15) {
+        emit_write_bytecode_byte(emit, MP_BC_LOAD_FAST_MULTI + local_num);
+    } else {
+        emit_write_bytecode_byte_uint(emit, MP_BC_LOAD_FAST_N, local_num);
     }
 }
 
@@ -533,11 +548,10 @@ STATIC void emit_bc_load_subscr(emit_t *emit) {
 STATIC void emit_bc_store_fast(emit_t *emit, qstr qst, mp_uint_t local_num) {
     assert(local_num >= 0);
     emit_bc_pre(emit, -1);
-    switch (local_num) {
-        case 0: emit_write_bytecode_byte(emit, MP_BC_STORE_FAST_0); break;
-        case 1: emit_write_bytecode_byte(emit, MP_BC_STORE_FAST_1); break;
-        case 2: emit_write_bytecode_byte(emit, MP_BC_STORE_FAST_2); break;
-        default: emit_write_bytecode_byte_uint(emit, MP_BC_STORE_FAST_N, local_num); break;
+    if (local_num <= 15) {
+        emit_write_bytecode_byte(emit, MP_BC_STORE_FAST_MULTI + local_num);
+    } else {
+        emit_write_bytecode_byte_uint(emit, MP_BC_STORE_FAST_N, local_num);
     }
 }
 
@@ -712,12 +726,12 @@ STATIC void emit_bc_pop_except(emit_t *emit) {
 STATIC void emit_bc_unary_op(emit_t *emit, mp_unary_op_t op) {
     if (op == MP_UNARY_OP_NOT) {
         emit_bc_pre(emit, 0);
-        emit_write_bytecode_byte_byte(emit, MP_BC_UNARY_OP, MP_UNARY_OP_BOOL);
+        emit_write_bytecode_byte(emit, MP_BC_UNARY_OP_MULTI + MP_UNARY_OP_BOOL);
         emit_bc_pre(emit, 0);
         emit_write_bytecode_byte(emit, MP_BC_NOT);
     } else {
         emit_bc_pre(emit, 0);
-        emit_write_bytecode_byte_byte(emit, MP_BC_UNARY_OP, op);
+        emit_write_bytecode_byte(emit, MP_BC_UNARY_OP_MULTI + op);
     }
 }
 
@@ -731,7 +745,7 @@ STATIC void emit_bc_binary_op(emit_t *emit, mp_binary_op_t op) {
         op = MP_BINARY_OP_IS;
     }
     emit_bc_pre(emit, -1);
-    emit_write_bytecode_byte_byte(emit, MP_BC_BINARY_OP, op);
+    emit_write_bytecode_byte(emit, MP_BC_BINARY_OP_MULTI + op);
     if (invert) {
         emit_bc_pre(emit, 0);
         emit_write_bytecode_byte(emit, MP_BC_NOT);

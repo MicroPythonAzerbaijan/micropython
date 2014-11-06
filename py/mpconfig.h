@@ -25,10 +25,23 @@
  */
 
 // This file contains default configuration settings for MicroPython.
-// You can override any of these options using mpconfigport.h file located
-// in a directory of your port.
+// You can override any of the options below using mpconfigport.h file
+// located in a directory of your port.
 
+// mpconfigport.h is a file containing configuration settings for a
+// particular port. mpconfigport.h is actually a default name for
+// such config, and it can be overriden using MP_CONFIGFILE preprocessor
+// define (you can do that by passing CFLAGS_EXTRA='-DMP_CONFIGFILE="<file.h>"'
+// argument to make when using standard MicroPython makefiles).
+// This is useful to have more than one config per port, for example,
+// release vs debug configs, etc. Note that if you switch from one config
+// to another, you must rebuild from scratch using "-B" switch to make.
+
+#ifdef MP_CONFIGFILE
+#include MP_CONFIGFILE
+#else
 #include <mpconfigport.h>
+#endif
 
 // Any options not explicitly set in mpconfigport.h will get default
 // values below.
@@ -85,6 +98,11 @@
 // So we can allocate a buffer on the stack for path manipulation in import
 #ifndef MICROPY_ALLOC_PATH_MAX
 #define MICROPY_ALLOC_PATH_MAX (512)
+#endif
+
+// Initial size of module dict
+#ifndef MICROPY_MODULE_DICT_SIZE
+#define MICROPY_MODULE_DICT_SIZE (1)
 #endif
 
 /*****************************************************************************/
@@ -166,8 +184,8 @@
 #endif
 
 // Whether to enable finalisers in the garbage collector (ie call __del__)
-#ifndef MICROPY_ENABLE_GC_FINALISER
-#define MICROPY_ENABLE_GC_FINALISER (0)
+#ifndef MICROPY_ENABLE_FINALISER
+#define MICROPY_ENABLE_FINALISER (0)
 #endif
 
 // Whether to check C stack usage. C stack used for calling Python functions,
@@ -287,6 +305,11 @@ typedef double mp_float_t;
 #define MICROPY_PY_BUILTINS_BYTEARRAY (1)
 #endif
 
+// Whether to support memoryview object
+#ifndef MICROPY_PY_BUILTINS_MEMORYVIEW
+#define MICROPY_PY_BUILTINS_MEMORYVIEW (0)
+#endif
+
 // Whether to support set object
 #ifndef MICROPY_PY_BUILTINS_SET
 #define MICROPY_PY_BUILTINS_SET (1)
@@ -305,6 +328,11 @@ typedef double mp_float_t;
 // Whether to support property object
 #ifndef MICROPY_PY_BUILTINS_PROPERTY
 #define MICROPY_PY_BUILTINS_PROPERTY (1)
+#endif
+
+// Whether to support compile function
+#ifndef MICROPY_PY_BUILTINS_COMPILE
+#define MICROPY_PY_BUILTINS_COMPILE (0)
 #endif
 
 // Whether to set __file__ for imported modules
@@ -401,6 +429,10 @@ typedef double mp_float_t;
 
 #ifndef MICROPY_PY_URE
 #define MICROPY_PY_URE (0)
+#endif
+
+#ifndef MICROPY_PY_UHEAPQ
+#define MICROPY_PY_UHEAPQ (0)
 #endif
 
 /*****************************************************************************/

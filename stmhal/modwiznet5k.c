@@ -48,21 +48,7 @@
 #include "ethernet/socket.h"
 #include "internet/dns/dns.h"
 
-/// \module wiznet5k - control WIZnet5x00 Ethernet adaptors
-///
-/// This module allows you to control WIZnet5x00 Ethernet adaptors based on
-/// the W5200 and W5500 chipsets (only W5200 tested).
-///
-/// Example usage:
-///
-///     import wiznet5k
-///     w = wiznet5k.WIZnet5k()
-///     print(w.ipaddr())
-///     w.gethostbyname('micropython.org')
-///     s = w.socket()
-///     s.connect(('192.168.0.2', 8080))
-///     s.send('hello')
-///     print(s.recv(10))
+/// \moduleref network
 
 #define IPADDR_BUF_SIZE (4)
 
@@ -164,6 +150,20 @@ STATIC int wiznet5k_gethostbyname(mp_obj_t nic, const char *name, mp_uint_t len,
 // Micro Python bindings
 
 /// \class WIZnet5k - driver for WIZnet5x00 Ethernet modules
+///
+/// This class allows you to control WIZnet5x00 Ethernet adaptors based on
+/// the W5200 and W5500 chipsets (only W5200 tested).
+///
+/// Example usage:
+///
+///     import wiznet5k
+///     w = wiznet5k.WIZnet5k()
+///     print(w.ipaddr())
+///     w.gethostbyname('micropython.org')
+///     s = w.socket()
+///     s.connect(('192.168.0.2', 8080))
+///     s.send('hello')
+///     print(s.recv(10))
 
 STATIC void wiznet5k_print(void (*print)(void *env, const char *fmt, ...), void *env, mp_obj_t self_in, mp_print_kind_t kind) {
     print(env, "WIZnet5k()");
@@ -415,12 +415,11 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_2(wiznet5k_socket_send_obj, wiznet5k_socket_send)
 STATIC mp_obj_t wiznet5k_socket_recv(mp_obj_t self_in, mp_obj_t len_in) {
     wiznet5k_socket_obj_t *self = self_in;
     mp_int_t len = mp_obj_get_int(len_in);
-    uint8_t *buf = m_new(uint8_t, len);
+    byte *buf;
+    mp_obj_t ret_obj = mp_obj_str_builder_start(&mp_type_bytes, len, &buf);
     mp_int_t ret = WIZCHIP_EXPORT(recv)(self->sn, buf, len);
     check_sock_return_value(ret);
-    mp_obj_t ret_buf = mp_obj_new_bytes(buf, ret);
-    m_del(uint8_t, buf, len);
-    return ret_buf;
+    return mp_obj_str_builder_end_with_len(ret_obj, len);
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_2(wiznet5k_socket_recv_obj, wiznet5k_socket_recv);
 

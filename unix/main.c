@@ -47,6 +47,7 @@
 #include "compile.h"
 #include "runtime0.h"
 #include "runtime.h"
+#include "builtin.h"
 #include "repl.h"
 #include "gc.h"
 #include "genhdr/py-version.h"
@@ -64,9 +65,47 @@ mp_uint_t mp_verbose_flag = 0;
 long heap_size = 128*1024 * (sizeof(mp_uint_t) / 4);
 #endif
 
+#ifndef _WIN32
+#include <signal.h>
+
+STATIC mp_obj_t keyboard_interrupt_obj;
+
+STATIC void sighandler(int signum) {
+    if (signum == SIGINT) {
+        mp_obj_exception_clear_traceback(keyboard_interrupt_obj);
+        mp_pending_exception = keyboard_interrupt_obj;
+        // disable our handler so next we really die
+        struct sigaction sa;
+        sa.sa_handler = SIG_DFL;
+        sigemptyset(&sa.sa_mask);
+        sigaction(SIGINT, &sa, NULL);
+    }
+}
+#endif
+
 #define FORCED_EXIT (0x100)
-// returns standard error codes: 0 for success, 1 for all other errors
-// if FORCED_EXIT bit is set then script raised SystemExit and the
+// If exc is SystemExit, return value where FORCED_EXIT bit set,
+// and lower 8 bits are SystemExit value. For all other exceptions,
+// return 1.
+STATIC int handle_uncaught_exception(mp_obj_t exc) {
+    // check for SystemExit
+    if (mp_obj_is_subclass_fast(mp_obj_get_type(exc), &mp_type_SystemExit)) {
+        // None is an exit value of 0; an int is its value; anything else is 1
+        mp_obj_t exit_val = mp_obj_exception_get_value(exc);
+        mp_int_t val = 0;
+        if (exit_val != mp_const_none && !mp_obj_get_int_maybe(exit_val, &val)) {
+            val = 1;
+        }
+        return FORCED_EXIT | (val & 255);
+    }
+
+    // Report all other exceptions
+    mp_obj_print_exception(exc);
+    return 1;
+}
+
+// Returns standard error codes: 0 for success, 1 for all other errors,
+// except if FORCED_EXIT bit is set then script raised SystemExit and the
 // value of the exit is in the lower 8 bits of the return value
 STATIC int execute_from_lexer(mp_lexer_t *lex, mp_parse_input_kind_t input_kind, bool is_repl) {
     if (lex == NULL) {
@@ -119,27 +158,30 @@ STATIC int execute_from_lexer(mp_lexer_t *lex, mp_parse_input_kind_t input_kind,
         return 0;
     }
 
+    #ifndef _WIN32
+    // enable signal handler
+    struct sigaction sa;
+    sa.sa_handler = sighandler;
+    sigemptyset(&sa.sa_mask);
+    sigaction(SIGINT, &sa, NULL);
+    sa.sa_handler = SIG_DFL;
+    #endif
+
     // execute it
     nlr_buf_t nlr;
     if (nlr_push(&nlr) == 0) {
         mp_call_function_0(module_fun);
+        #ifndef _WIN32
+        sigaction(SIGINT, &sa, NULL);
+        #endif
         nlr_pop();
         return 0;
     } else {
         // uncaught exception
-        // check for SystemExit
-        mp_obj_t exc = (mp_obj_t)nlr.ret_val;
-        if (mp_obj_is_subclass_fast(mp_obj_get_type(exc), &mp_type_SystemExit)) {
-            // None is an exit value of 0; an int is its value; anything else is 1
-            mp_obj_t exit_val = mp_obj_exception_get_value(exc);
-            mp_int_t val = 0;
-            if (exit_val != mp_const_none && !mp_obj_get_int_maybe(exit_val, &val)) {
-                val = 1;
-            }
-            return FORCED_EXIT | (val & 255);
-        }
-        mp_obj_print_exception((mp_obj_t)nlr.ret_val);
-        return 1;
+        #ifndef _WIN32
+        sigaction(SIGINT, &sa, NULL);
+        #endif
+        return handle_uncaught_exception((mp_obj_t)nlr.ret_val);
     }
 }
 
@@ -226,16 +268,20 @@ int usage(char **argv) {
 }
 
 #if MICROPY_MEM_STATS
-STATIC mp_obj_t mem_info(void) {
+STATIC mp_obj_t mem_info(mp_uint_t n_args, const mp_obj_t *args) {
     printf("mem: total=" UINT_FMT ", current=" UINT_FMT ", peak=" UINT_FMT "\n",
         m_get_total_bytes_allocated(), m_get_current_bytes_allocated(), m_get_peak_bytes_allocated());
     printf("stack: " UINT_FMT "\n", mp_stack_usage());
 #if MICROPY_ENABLE_GC
     gc_dump_info();
+    if (n_args == 1) {
+        // arg given means dump gc allocation table
+        gc_dump_alloc_table();
+    }
 #endif
     return mp_const_none;
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_0(mem_info_obj, mem_info);
+STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(mem_info_obj, 0, 1, mem_info);
 #endif
 
 STATIC mp_obj_t qstr_info(void) {
@@ -265,7 +311,27 @@ void pre_process_options(int argc, char **argv) {
                     emit_opt = MP_EMIT_OPT_VIPER;
 #if MICROPY_ENABLE_GC
                 } else if (strncmp(argv[a + 1], "heapsize=", sizeof("heapsize=") - 1) == 0) {
-                    heap_size = strtol(argv[a + 1] + sizeof("heapsize=") - 1, NULL, 0);
+                    char *end;
+                    heap_size = strtol(argv[a + 1] + sizeof("heapsize=") - 1, &end, 0);
+                    // Don't bring unneeded libc dependencies like tolower()
+                    // If there's 'w' immediately after number, adjust it for
+                    // target word size. Note that it should be *before* size
+                    // suffix like K or M, to avoid confusion with kilowords,
+                    // etc. the size is still in bytes, just can be adjusted
+                    // for word size (taking 32bit as baseline).
+                    bool word_adjust = false;
+                    if ((*end | 0x20) == 'w') {
+                        word_adjust = true;
+                        end++;
+                    }
+                    if ((*end | 0x20) == 'k') {
+                        heap_size *= 1024;
+                    } else if ((*end | 0x20) == 'm') {
+                        heap_size *= 1024 * 1024;
+                    }
+                    if (word_adjust) {
+                        heap_size = heap_size * BYTES_PER_WORD / 4;
+                    }
 #endif
                 } else {
                     exit(usage(argv));
@@ -273,6 +339,12 @@ void pre_process_options(int argc, char **argv) {
                 a++;
             }
         }
+    }
+}
+
+void set_sys_argv(char *argv[], int argc, int start_arg) {
+    for (int i = start_arg; i < argc; i++) {
+        mp_obj_list_append(mp_sys_argv, MP_OBJ_NEW_QSTR(qstr_from_str(argv[i])));
     }
 }
 
@@ -293,6 +365,11 @@ int main(int argc, char **argv) {
 #endif
 
     mp_init();
+
+    #ifndef _WIN32
+    // create keyboard interrupt object
+    keyboard_interrupt_obj = mp_obj_new_exception(&mp_type_KeyboardInterrupt);
+    #endif
 
     char *home = getenv("HOME");
     char *path = getenv("MICROPYPATH");
@@ -368,6 +445,40 @@ int main(int argc, char **argv) {
                     break;
                 }
                 a += 1;
+            } else if (strcmp(argv[a], "-m") == 0) {
+                if (a + 1 >= argc) {
+                    return usage(argv);
+                }
+                mp_obj_t import_args[4];
+                import_args[0] = mp_obj_new_str(argv[a + 1], strlen(argv[a + 1]), false);
+                import_args[1] = import_args[2] = mp_const_none;
+                // Ask __import__ to handle imported module specially - set its __name__
+                // to __main__, and also return this leaf module, not top-level package
+                // containing it.
+                import_args[3] = mp_const_false;
+                // TODO: https://docs.python.org/3/using/cmdline.html#cmdoption-m :
+                // "the first element of sys.argv will be the full path to
+                // the module file (while the module file is being located,
+                // the first element will be set to "-m")."
+                set_sys_argv(argv, argc, a + 1);
+
+                mp_obj_t mod;
+                nlr_buf_t nlr;
+                if (nlr_push(&nlr) == 0) {
+                    mod = mp_builtin___import__(MP_ARRAY_SIZE(import_args), import_args);
+                    nlr_pop();
+                } else {
+                    // uncaught exception
+                    return handle_uncaught_exception((mp_obj_t)nlr.ret_val);
+                }
+
+                if (mp_obj_is_package(mod)) {
+                    // TODO
+                    fprintf(stderr, "%s: -m for packages not yet implemented\n", argv[0]);
+                    exit(1);
+                }
+                ret = 0;
+                break;
             } else if (strcmp(argv[a], "-X") == 0) {
                 a += 1;
             } else if (strcmp(argv[a], "-v") == 0) {
@@ -398,9 +509,7 @@ int main(int argc, char **argv) {
             path_items[0] = MP_OBJ_NEW_QSTR(qstr_from_strn(basedir, p - basedir));
             free(pathbuf);
 
-            for (int i = a; i < argc; i++) {
-                mp_obj_list_append(mp_sys_argv, MP_OBJ_NEW_QSTR(qstr_from_str(argv[i])));
-            }
+            set_sys_argv(argv, argc, a);
             ret = do_file(argv[a]);
             break;
         }
@@ -408,6 +517,10 @@ int main(int argc, char **argv) {
 
     if (ret == NOTHING_EXECUTED) {
         ret = do_repl();
+    }
+
+    if (mp_verbose_flag) {
+        mem_info(0, NULL);
     }
 
     mp_deinit();

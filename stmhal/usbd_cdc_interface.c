@@ -364,18 +364,14 @@ static int8_t CDC_Itf_Receive(uint8_t* Buf, uint32_t *Len) {
         for (; src < buf_top; src++) {
             if (*src == user_interrupt_char) {
                 char_found = true;
+                // raise exception when interrupts are finished
+                pendsv_nlr_jump(user_interrupt_data);
             } else {
                 if (char_found) {
                     *dest = *src;
                 }
                 dest++;
             }
-        }
-
-        if (char_found) {
-            // raise exception when interrupts are finished
-            user_interrupt_char = VCP_CHAR_NONE;
-            pendsv_nlr_jump(user_interrupt_data);
         }
 
         // length of remaining characters
@@ -404,6 +400,14 @@ int USBD_CDC_IsConnected(void) {
 void USBD_CDC_SetInterrupt(int chr, void *data) {
     user_interrupt_char = chr;
     user_interrupt_data = data;
+}
+
+int USBD_CDC_TxHalfEmpty(void) {
+    int32_t tx_waiting = (int32_t)UserTxBufPtrIn - (int32_t)UserTxBufPtrOut;
+    if (tx_waiting < 0) {
+        tx_waiting += APP_TX_DATA_SIZE;
+    }
+    return tx_waiting <= APP_TX_DATA_SIZE / 2;
 }
 
 // timout in milliseconds.
