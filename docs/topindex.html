@@ -1,91 +1,91 @@
 {% extends "defindex.html" %}
 {% block body %}
 
-  <h1>Micro Python documentation</h1>
+  <h1>Micro Python dokumentasiyası</h1>
 
   <p>
-    {{ _('Welcome! This is the documentation for Micro Python') }}
-    v{{ release|e }}{% if last_updated %}, {{ _('last updated') }} {{ last_updated|e }}{% endif %}.
+    {{ _('Xoş gəldiniz! Bu Micro Python dokumentasiyasıdır.') }}
+    v{{ release|e }}{% if last_updated %}, {{ _('son yenilənmə') }} {{ last_updated|e }}{% endif %}.
   </p>
 
-  <p><strong>Documentation for Micro Python and the pyboard:</strong></p>
+  <p><strong>Micro Python və pyboard üçün dokumentasiya:</strong></p>
 
   <table class="contentstable"><tr>
     <td width="40%" style="padding-left:2em;">
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("quickref") }}">Quick reference for the pyboard</a><br/>
-        <span class="linkdescr">pinout for the pyboard and snippets of useful code</span>
+        <a class="biglink" href="{{ pathto("quickref") }}">Pyboard üçün qısa təlimat</a><br/>
+        <span class="linkdescr">pyboard-un başlıqıarının sxemi və lazımlı kod hissələri</span>
       </p>
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("general") }}">General information about the pyboard</a><br/>
-        <span class="linkdescr">read this first for a quick overview</span>
+        <a class="biglink" href="{{ pathto("general") }}">Pyboard haqqında ümumi məlumat</a><br/>
+        <span class="linkdescr">Qısa arayış üçün ilk öncə bunu oxuyun</span>
       </p>
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("tutorial/index") }}">Tutorials and code examples</a><br/>
-        <span class="linkdescr">start here</span>
+        <a class="biglink" href="{{ pathto("tutorial/index") }}">Dərslər və kod nümunələri</a><br/>
+        <span class="linkdescr">buradan başlayın</span>
       </p>
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("library/index") }}">Library Reference</a><br/>
-        <span class="linkdescr">Micro Python libraries, including the <a href="{{ pathto("library/pyb") }}">pyb module</a></span>
+        <a class="biglink" href="{{ pathto("library/index") }}">Kitabxana soraqçası</a><br/>
+        <span class="linkdescr"><a href="{{ pathto("library/pyb") }}">pyb modulu</a> daxil Micro Python kitabxanaları</span>
       </p>
     </td>
     <td width="40%" style="padding-left:2em;">
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("hardware/index") }}">The pyboard hardware</a><br/>
-        <span class="linkdescr">schematics, dimensions and component datasheets</span>
+        <a class="biglink" href="{{ pathto("hardware/index") }}">Pyboard qurğusu</a><br/>
+        <span class="linkdescr">sxemlər, ölçülər və komponent cədvəlləri</span>
       </p>
       <p class="biglink">
-        <a class="biglink" href="http://micropython.org/resources/Micro-Python-Windows-setup.pdf">Guide for pyboard on Windows (PDF)</a><br/>
-        <span class="linkdescr">including DFU programming</span>
+        <a class="biglink" href="http://micropython.org/resources/Micro-Python-Windows-setup.pdf">Windows-da pyboar üçün bələdçi (PDF)</a><br/>
+        <span class="linkdescr">DFU proqramlaşdırma daxil</span>
       </p>
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("license") }}">License</a><br/>
-        <span class="linkdescr">Micro Python license information</span>
+        <a class="biglink" href="{{ pathto("license") }}">Lisenziya</a><br/>
+        <span class="linkdescr">Micro Python lisenziya məlumatı</span>
       </p>
     </td>
   </tr></table>
 
-  <p><strong>Indices and tables:</strong></p>
+  <p><strong>Cədvəllər və indekslər:</strong></p>
   <table class="contentstable"><tr>
     <td width="40%" style="padding-left:2em;">
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("py-modindex") }}">Module index</a><br/>
-        <span class="linkdescr">quick access to all modules</span>
+        <a class="biglink" href="{{ pathto("py-modindex") }}">Modul indeksi</a><br/>
+        <span class="linkdescr">bütün modullara cəld keçid</span>
       </p>
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("genindex") }}">Full index</a><br/>
-        <span class="linkdescr">all functions, classes, constants</span>
+        <a class="biglink" href="{{ pathto("genindex") }}">Tam indeks</a><br/>
+        <span class="linkdescr">bütün funksiyalar, siniflər və sabitlər</span>
       </p>
     </td>
     <td width="40%" style="padding-left:2em;">
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("contents") }}">Table of contents</a><br/>
-        <span class="linkdescr">a list of all sections and subsections</span>
+        <a class="biglink" href="{{ pathto("contents") }}">Mündəricat</a><br/>
+        <span class="linkdescr">bütün bölmələr və altbölmələrin siyahısı</span>
       </p>
       <p class="biglink">
-        <a class="biglink" href="{{ pathto("search") }}">Search page</a><br/>
-        <span class="linkdescr">search this documentation</span>
+        <a class="biglink" href="{{ pathto("search") }}">Axtarış səhifəsi</a><br/>
+        <span class="linkdescr">dokumentasiyada axtarın</span>
       </p>
     </td></tr>
   </table>
 
-  <p><strong>External links:</strong></p>
+  <p><strong>Xarici keçidlər:</strong></p>
 
   <table class="contentstable"><tr>
     <td width="40%" style="padding-left:2em;">
       <p class="biglink">
-      <a class="biglink" href="http://micropython.org">Micro Python homepage</a><br/>
-        <span class="linkdescr">the official Micro Python site</span>
+      <a class="biglink" href="http://micropython.org">Micro Python əsas səhifəsi</a><br/>
+        <span class="linkdescr">Micro Python rəsmi saytı</span>
       </p>
       <p class="biglink">
-        <a class="biglink" href="http://forum.micropython.org">Micro Python forum</a><br/>
-        <span class="linkdescr">community discussion for all things related to Micro Python</span>
+        <a class="biglink" href="http://forum.micropython.org">Micro Python forumu</a><br/>
+        <span class="linkdescr">Micro Python aid bütün mövzularda icma müzakirəsi</span>
       </p>
     </td>
     <td width="40%" style="padding-left:2em;">
       <p class="biglink">
-        <a class="biglink" href="https://github.com/micropython">Micro Python on GitHub</a><br/>
-        <span class="linkdescr">contribute to the source code on GitHub</span>
+        <a class="biglink" href="https://github.com/micropython">Micro Python GitHub-da</a><br/>
+        <span class="linkdescr">GitHub-da mənbə kodlarına töhvə ver</span>
       </p>
     </td>
   </tr></table>
