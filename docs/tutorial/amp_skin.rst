@@ -50,21 +50,9 @@ Məsələn::
     dac = DAC(1)
     dac.write_timed(buf, 400 * len(buf), mode=DAC.CIRCULAR)
 
-<<<<<<< HEAD
 Siz həmçinin Python-un ``wave`` modulunun köməyi ilə WAV faylları da oxuda bilərsiniz.
-wave modulunu [buradan](/static/doc/examples/wave.py) əldə edə bilərsiniz, həmçinin
-[buradan](/static/doc/examples/chunk.py) əldə edə biləcəyiniz chunk moduluna ehiyacınız
-olacaqdır. Bunları pyboard-da (ya da fləş və ya SD kartda ən yüksək qovluğa) yerləşdirin.
-Oxutmaq üçün [belə](/static/doc/examples/test.wav) bir 8-bitlik WAV faylına ehtiyacınız
-olacaqdır. Sonra aşağıdakılar edə bilərsiniz.
-=======
-You can also play WAV files using the Python ``wave`` module.  You can get
-the wave module `here <http://micropython.org/resources/examples/wave.py>`_ and you will also need
-the chunk module available `here <http://micropython.org/resources/examples/chunk.py>`_.  Put these
-on your pyboard (either on the flash or the SD card in the top-level
-directory).  You will need an 8-bit WAV file to play, such as
-`this one <http://micropython.org/resources/examples/test.wav>`_.  Then you can do::
->>>>>>> bfb18a714ba03571575e2d715cbc409afeb94e54
+wave modulunu `buradan <http://micropython.org/resources/examples/wave.py>`_ əldə edə bilərsiniz, həmçinin `buradan <http://micropython.org/resources/examples/chunk.py>`_ əldə edə biləcəyiniz chunk moduluna ehtiyacınız olacaqdır. Bunları pyboard-da (fləş və ya SD kartda baş qovluğa) yerləşdirin.
+Oxutmaq üçün `belə <http://micropython.org/resources/examples/test.wav>`_ bir 8-bitlik WAV faylına ehtiyacınız olacaqdır. Sonra aşağıdakılar edə bilərsiniz.
 
     >>> import wave
     >>> from pyb import DAC
