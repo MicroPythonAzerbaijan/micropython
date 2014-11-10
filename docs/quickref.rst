@@ -1,13 +1,13 @@
 .. _quickref:
 
-Quick reference for the pyboard
+Pyboard-a qısa giriş (rus. Краткий справочник)
 ===============================
 
 .. image:: http://micropython.org/resources/pybv10-pinout.jpg
     :alt: PYBv1.0 pinout
     :width: 700px
 
-General board control
+Ümumi board idarəetməsi
 ---------------------
 
 See :mod:`pyb`. ::
@@ -22,7 +22,7 @@ See :mod:`pyb`. ::
     pyb.freq(60000000) # set CPU freq to 60MHz
     pyb.stop() # stop CPU, waiting for external interrupt
 
-LEDs
+LED-lər
 ----
 
 See :ref:`pyb.LED <pyb.LED>`. ::
@@ -34,7 +34,7 @@ See :ref:`pyb.LED <pyb.LED>`. ::
     led.on()
     led.off()
 
-Pins and GPIO
+Pin-lər və GPIO
 -------------
 
 See :ref:`pyb.Pin <pyb.Pin>`. ::
@@ -82,7 +82,7 @@ See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.Timer <pyb.Timer>`. ::
     ch = tim.channel(1, Timer.PWM, pin=p)
     ch.pulse_width_percent(50)
 
-ADC (analog to digital conversion)
+ADC (analoq siqnalları digital siqnala çevirən) 
 ----------------------------------
 
 See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.ADC <pyb.ADC>`. ::
@@ -92,7 +92,7 @@ See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.ADC <pyb.ADC>`. ::
     adc = ADC(Pin('X19'))
     adc.read() # read value, 0-4095
 
-DAC (digital to analog conversion)
+DAC (digital siqnalı analoq siqnala çevirən)
 ----------------------------------
 
 See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.DAC <pyb.DAC>`. ::
@@ -102,7 +102,7 @@ See :ref:`pyb.Pin <pyb.Pin>` and :ref:`pyb.DAC <pyb.DAC>`. ::
     dac = DAC(Pin('X5'))
     dac.write(120) # output between 0 and 255
 
-UART (serial bus)
+UART (serial şini(bus))
 -----------------
 
 See :ref:`pyb.UART <pyb.UART>`. ::
@@ -113,7 +113,7 @@ See :ref:`pyb.UART <pyb.UART>`. ::
     uart.write('hello')
     uart.read(5) # read up to 5 bytes
 
-SPI bus
+SPI şini(bus)
 -------
 
 See :ref:`pyb.SPI <pyb.SPI>`. ::
@@ -125,7 +125,7 @@ See :ref:`pyb.SPI <pyb.SPI>`. ::
     spi.recv(5) # receive 5 bytes on the bus
     spi.send_recv('hello') # send a receive 5 bytes
 
-I2C bus
+I2C şini(bus)
 -------
 
 See :ref:`pyb.I2C <pyb.I2C>`. ::
