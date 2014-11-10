@@ -1,38 +1,39 @@
-class Accel -- accelerometer control
+﻿Accel sinifi -- akselerometr idarəsi
 ====================================
 
-Accel is an object that controls the accelerometer.  Example usage::
+Accel akselerometri idarə edən obyektdir.  Nümunə usage::
 
     accel = pyb.Accel()
     for i in range(10):
         print(accel.x(), accel.y(), accel.z())
 
-Raw values are between -32 and 31.
+Raw(xam) qiymətlər -32 and 31 arasındadır.
 
 
-Constructors
+Qurucular(konstruktorlar)
 ------------
 
 .. class:: pyb.Accel()
 
-   Create and return an accelerometer object.
+   Akselerometr obyektini yaradın və qaytarın.
    
-   Note: if you read accelerometer values immediately after creating this object
-   you will get 0.  It takes around 20ms for the first sample to be ready, so,
-   unless you have some other code between creating this object and reading its
-   values, you should put a ``pyb.delay(20)`` after creating it.  For example::
+   Qeyd: Əgər obyekti yaratdıqdan sonra akselerometr dəyərlərini oxusanız
+   0 qiymətini alacaqsınız. İlk nümunənin hazır olması 20ms vaxt tələb
+   edir, bu səbəbdən də bu obyektin yaradılması və dəyərlərinin oxunması
+   arasında digər başqa kod olana qədər yaradıldıqdan sonra ``pyb.delay(20)`` 
+   qoyulmalıdır. Nümunə::
    
        accel = pyb.Accel()
        pyb.delay(20)
        print(accel.x())
 
 
-Methods
+Metodlar
 -------
 
 .. method:: accel.filtered_xyz()
 
-   Get a 3-tuple of filtered x, y and z values.
+   x, y və z qiymətlərindən ibarət 3-lü yığım əldə et.
 
 .. method:: accel.tilt()
 
@@ -40,12 +41,12 @@ Methods
 
 .. method:: accel.x()
 
-   Get the x-axis value.
+   x oxunun qiymətini əldə et.
 
 .. method:: accel.y()
 
-   Get the y-axis value.
+   y oxunun qiymətini əldə et.
 
 .. method:: accel.z()
 
-   Get the z-axis value.
+   z oxunun qiymətini əldə et.

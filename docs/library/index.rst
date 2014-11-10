@@ -1,13 +1,13 @@
-Micro Python libraries
+﻿Micro Python kitabxanaları
 ======================
 
-Python standard libraries
+Python standard kitabxanaları
 -------------------------
 
-The following standard Python libraries are built in to Micro Python.
+Aşağıdakı standart Python kitabxanaları Micro Python üçün qurulub.
 
-For additional libraries, please download them from the `micropython-lib repository
-<https://github.com/micropython/micropython-lib>`_.
+Əlavə kitabxanaları, `micropython-lib repository-dən
+<https://github.com/micropython/micropython-lib>`_ yükləyə bilərsiniz.
 
 .. toctree::
    :maxdepth: 1
@@ -21,19 +21,18 @@ For additional libraries, please download them from the `micropython-lib reposit
    sys.rst
    time.rst
 
-Python micro-libraries
+Python micro-kitabxanaları
 ----------------------
 
-The following standard Python libraries have been "micro-ified" to fit in with
-the philosophy of Micro Python.  They provide the core functionality of that
-module and are intended to be a drop-in replacement for the standard Python
-library.
+Aşağıdakı standart Python kitabxanaları Micro Python fəlsəfəsinə uyğun olaraq "micro-laşdırılıb".
+Onlar bu modulun əsas(core) funksionallığını təmin edir və standart Python kitabxanaları
+üçün əvəzetmə olması üçün nəzərdə tutulmuşdur.
 
-The modules are available by their u-name, and also by their non-u-name.  The
-non-u-name can be overridden by a file of that name in your package path.
-For example, ``import json`` will first search for a file ``json.py`` or
-directory ``json`` and load that package if it is found.  If nothing is found,
-it will fallback to loading the built-in ``ujson`` module.
+Modullar öz u-name-ləri, həmçinin non-u-name-ləri ilə də mövcuddur.
+non-u-name package yolunuzda olan eyni adlı fayl ilə əvəz oluna bilər. 
+Məsələn, ``import json`` ilk öncə ``json.py``
+faylını ya da ``json`` direktivini axtarır və əgər package tapılsa onu yükləyir.
+Əgər heç bir şey tapılmasa, ``ujson`` modulunun yüklənməsini dayandırır.
 
 .. toctree::
    :maxdepth: 1
@@ -42,10 +41,10 @@ it will fallback to loading the built-in ``ujson`` module.
    uheapq.rst
    ujson.rst
 
-Libraries specific to the pyboard
+pyboard-a spesifik kitabxanalar
 ---------------------------------
 
-The following libraries are specific to the pyboard.
+Aşağıdakı kitabxanalar pyboard-a spesifikdir.
 
 .. toctree::
    :maxdepth: 2

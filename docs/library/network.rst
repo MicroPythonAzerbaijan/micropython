@@ -1,37 +1,37 @@
-****************************************
-:mod:`network` --- network configuration
+﻿****************************************
+:mod:`network` --- şəbəkə konfiqurasiyası
 ****************************************
 
 .. module:: network
    :synopsis: network configuration
 
-This module provides network drivers and routing configuration.
+Bu modul şəbəkə drayverlərini və marşrutlaşdırma konfiqurasiyasını təmin edir.
 
 
-class CC3k
+CC3k sinifi
 ==========
 
-Constructors
+Konstruktorlar
 ------------
 
 .. class:: CC3k(spi, pin_cs, pin_en, pin_irq)
 
-   Initialise the CC3000 using the given SPI bus and pins and return a CC3k object.
+   Verilmiş SPİ şin və pinlərlə CC3000-u başladın(rus. инициализировать) və CC3k obyektini qaytarın.
 
 
-Methods
+Metodlar
 -------
 
 .. method:: cc3k.connect(ssid, key=None, \*, security=WPA2, bssid=None)
 
 
-class WIZnet5k
+WIZnet5k sinifi
 ==============
 
-This class allows you to control WIZnet5x00 Ethernet adaptors based on
-the W5200 and W5500 chipsets (only W5200 tested).
+Bu sinif sizə W5200 və W5500 çipsetlərinə əsaslanan WIZnet5x00 Ethernet adapterlərini
+idarə etməyə icazə verir (təkcə W5200 test edilib).
 
-Example usage::
+Nümunə::
 
     import wiznet5k
     w = wiznet5k.WIZnet5k()
@@ -43,21 +43,21 @@ Example usage::
     print(s.recv(10))
 
 
-Constructors
+Qurucular(konstruktorlar)
 ------------
 
 .. class:: WIZnet5k(spi, pin_cs, pin_rst)
 
-   Create and return a WIZnet5k object.
+   WIZnet5k obyektini yaradın və qaytarın.
 
 
-Methods
+Metodlar
 -------
 
 .. method:: wiznet5k.ipaddr([(ip, subnet, gateway, dns)])
 
-   Get/set IP address, subnet mask, gateway and DNS.
+   IP adresi, subnet mask(alt ağ maskesi), gateway(шлюз) və DNS əldə et/quraşdır.
 
 .. method:: wiznet5k.regs()
 
-   Dump WIZnet5k registers.
+   WIZnet5k registerlərini dump(свалка, zibillik) et.
