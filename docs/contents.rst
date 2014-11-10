@@ -1,4 +1,4 @@
-Micro Python documentation contents
+Micro Python dokumentasiya mündəricatı
 ===================================
 
 .. toctree::
