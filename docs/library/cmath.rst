@@ -1,58 +1,58 @@
-:mod:`cmath` -- mathematical functions for complex numbers
+﻿:mod:`cmath` -- kompleks ədədlər üçün riyazi funksiyalar
 ==========================================================
 
 .. module:: cmath
-   :synopsis: mathematical functions for complex numbers
+   :synopsis: kompleks ədədlər üçün riyazi funksiyalar
 
-The ``cmath`` module provides some basic mathematical funtions for
-working with complex numbers.
+``cmath`` modulu kompleks ədədlər ilə işləmək üçün əsas sadə riyazi
+funksiyaları təmin edir.
 
-Functions
+Funksiyalar
 ---------
 
 .. function:: cos(z)
 
-   Return the cosine of ``z``.
+   ``z``-in kosinusunu qaytarır.
 
 .. function:: exp(z)
 
-   Return the exponential of ``z``.
+   ``z``-in eksponensialını qaytarır.
 
 .. function:: log(z)
 
-   Return the natural logarithm of ``z``.  The branch cut is along the negative real axis.
+   ``z``-in natural loqarifma qiymətini qaytarır.  Kəsim, mənfi həqiqi ədədlər oxu boyuncadır.
 
 .. function:: log10(z)
 
-   Return the base-10 logarithm of ``z``.  The branch cut is along the negative real axis.
+   ``z``-in onluq loqarifma qiymətini qaytarır.  Kəsim, mənfi həqiqi ədədlər oxu boyuncadır.
 
 .. function:: phase(z)
 
-   Returns the phase of the number ``z``, in the range (-pi, +pi].
+   (-pi, +pi] aralığında ``z``-in faza qiymətini qaytarır.
 
 .. function:: polar(z)
 
-   Returns, as a tuple, the polar form of ``z``.
+   ``z``-in polyar forma qiymətini yığım kimi qaytarır.
 
 .. function:: rect(r, phi)
 
-   Returns the complex number with modulus ``r`` and phase ``phi``.
+   Kompleks ədədi ``r`` modulu və ``phi`` fazası ilə qaytarır.
 
 .. function:: sin(z)
 
-   Return the sine of ``z``.
+   ``z``-in sinusunu qaytarır.
 
 .. function:: sqrt(z)
 
-   Return the square-root of ``z``.
+   ``z``-in kvadratının qiymətini qaytarır.
 
-Constants
+Sabitlər
 ---------
 
 .. data:: e
 
-   base of the natural logarithm
+   natural loqarifmanın əsası
 
 .. data:: pi
 
-   the ratio of a circle's circumference to its diameter
+   çevrənin uzunluğunun onun diametrinə olan nisbəti
