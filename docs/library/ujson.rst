@@ -1,20 +1,21 @@
-:mod:`ujson` -- JSON encoding and decoding
+﻿:mod:`ujson` -- JSON şifrələnməsi və deşifrələnməsi
 ==========================================
 
 .. module:: ujson
    :synopsis: JSON encoding and decoding
 
-This modules allows to convert between Python objects and the JSON
-data format.
+Bu modul Python obyektləri ilə JSON məlumat formatlarını bir-biriləri
+arasında çevirməyə icazə verir.
 
-Functions
+Funksiyalar
 ---------
 
 .. function:: dumps(obj)
 
-   Return ``obj`` represented as a JSON string.
+   JSON string-i kimi təmsil edilən ``obj`` obyektini qaytarır.
 
 .. function:: loads(str)
 
-   Parse the JSON ``str`` and return an object.  Raises ValueError if the
-   string is not correctly formed.
+   
+   JSON ``str`` təhlil edin və obyekt qaytarın.  Əgər string düzgün formalaşdırılmayıbsa
+   ValueError artırılır.

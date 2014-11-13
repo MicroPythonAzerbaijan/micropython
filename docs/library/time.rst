@@ -1,41 +1,42 @@
-:mod:`time` -- time related functions
+﻿:mod:`time` -- zaman ilə bağlı funksiyalar
 =====================================
 
 .. module:: time
    :synopsis: time related functions
 
-The ``time`` module provides functions for getting the current time and date,
-and for sleeping.
+``time`` modulu cari vaxt və tarixi əldə etmək və gözləmə(pauza) üçün funksiyaları
+təmin edir.
 
-Functions
+Funksiyalar
 ---------
 
 .. function:: localtime([secs])
 
-   Convert a time expressed in seconds since Jan 1, 2000 into an 8-tuple which
-   contains: (year, month, mday, hour, minute, second, weekday, yearday)
-   If secs is not provided or None, then the current time from the RTC is used.
-   year includes the century (for example 2014).
+   Zaman ifadəsini 1 Yanvar 2000-dən bu yana 8-li yığımlar şəklində saniyələrdə
+   çevirir, hansı ki, (il, ay, gün, saat, dəqiqə, saniyə, həftə günü, il günü)
+   təşkil edir. Əgər saniyələr təmin olunmayıbsa və ya yoxdursa, onda cari vaxt
+   istifadə olunmuş RTC-dən. il əsrləri təşkil edir (məsələn 2014).
 
-   * month   is 1-12
-   * mday    is 1-31
-   * hour    is 0-23
-   * minute  is 0-59
-   * second  is 0-59
-   * weekday is 0-6 for Mon-Sun
-   * yearday is 1-366
+   * ay 1-12
+   * ay günü 1-31
+   * saat 0-23
+   * dəqiqə 0-59
+   * saniyə 0-59
+   * həftə günü 0-6 (Bazar ertəsi - Bazar)
+   * il günü 1-366
 
 .. function:: mktime()
 
-   This is inverse function of localtime. It's argument is a full 8-tuple
-   which expresses a time as per localtime. It returns an integer which is
-   the number of seconds since Jan 1, 2000.
+   Bu localtime funksiyasının tərsidir. Onun arqumenti tam dolu 8-li yığımdır
+   hansı ki, zamanı hər bir yerli vaxt kimi ifadə edir. O, tam ədəd kimi
+   1 Yanvar 2000-dən bu yana saniyələrin sayını qaytarır.
 
 .. function:: sleep(seconds)
 
-   Sleep for the given number of seconds.  Seconds can be a floating-point number to
-   sleep for a fractional number of seconds.
+   Gözləmə üçün verilən saniyələrin sayı.  Saniyə kəsr şəklində də verilə bilər.
+   Bu zaman kəsr ədədinin kəsr hissəsində göstərilmiş qədər saniyə gözləmə 
+   təmin olunacaq.
 
 .. function:: time()
 
-   Returns the number of seconds, as an integer, since 1/1/2000.
+   1/1/2000 tarixindən bu yana tam ədəd kimi saniyələrin sayını qaytarır.

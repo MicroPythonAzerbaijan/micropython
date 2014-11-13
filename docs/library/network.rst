@@ -16,7 +16,7 @@ Konstruktorlar
 
 .. class:: CC3k(spi, pin_cs, pin_en, pin_irq)
 
-   Verilmiş SPİ şin və pinlərlə CC3000-u başladın(rus. инициализировать) və CC3k obyektini qaytarın.
+   Verilmiş SPİ şin və pinlərlə CC3000-u başladın(rus. инициализировать) və CC3k obyektini qaytarır.
 
 
 Metodlar
@@ -48,7 +48,7 @@ Qurucular(konstruktorlar)
 
 .. class:: WIZnet5k(spi, pin_cs, pin_rst)
 
-   WIZnet5k obyektini yaradın və qaytarın.
+   WIZnet5k obyektini yaradın və qaytarır.
 
 
 Metodlar
