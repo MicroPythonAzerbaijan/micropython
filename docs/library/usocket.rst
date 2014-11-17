@@ -1,17 +1,17 @@
-:mod:`usocket` -- socket module
-===============================
+:mod:`usocket` -- soket modulu
+==============================
 
 .. module:: usocket
-   :synopsis: socket module
+   :synopsis: soket modulu
 
-Socket functionality.
+Soket funksionallığı.
 
-Functions
----------
+Funksiyalar
+-----------
 
 .. function:: getaddrinfo(host, port)
 
 
 .. function:: socket(family=AF_INET, type=SOCK_STREAM, fileno=-1)
 
-   Create a socket.
+   Soket yaradın.

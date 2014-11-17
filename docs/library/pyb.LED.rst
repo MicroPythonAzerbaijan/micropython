@@ -1,38 +1,38 @@
 .. _pyb.LED:
 
-class LED -- LED object
-=======================
+class LED -- LED obyekti
+========================
 
-The LED object controls an individual LED (Light Emitting Diode).
+LED obyekti individual LED-i (Light Emitting Diode) idarə edir.
 
 
-Constructors
-------------
+Konstruktorlar
+--------------
 
 .. class:: pyb.LED(id)
 
-   Create an LED object associated with the given LED:
+   Verilmiş LED-lə əlaqəli olan LED obyekti yaradın:
    
-     - ``id`` is the LED number, 1-4.
+     - ``id`` LED nömrəsidir, 1-4.
 
 
-Methods
--------
+Metodlar
+--------
 
 .. method:: led.intensity([value])
 
-   Get or set the LED intensity.  Intensity ranges between 0 (off) and 255 (full on).
-   If no argument is given, return the LED intensity.
-   If an argument is given, set the LED intensity and return ``None``.
+   LED intensivliyini əldə edin və yaxud təyin edin.  İntensivlik intervalı 0-la (sönmüş) 255 (tam qoşulu) arasındadır.
+   Arqument verilmədiyi halda LED intensivliyinin qiymətini qaytarın.
+   Əgər arqument verilsə, LED intensivliyini təyin edin və ``None`` qaytarın.
 
 .. method:: led.off()
 
-   Turn the LED off.
+   LED-i söndürün.
 
 .. method:: led.on()
 
-   Turn the LED on.
+   LED-i yandırın.
 
 .. method:: led.toggle()
 
-   Toggle the LED between on and off.
+   LED-i "sönmüş" və "qoşulu" halları arasında dəyişin.

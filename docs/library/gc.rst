@@ -1,29 +1,29 @@
-:mod:`gc` -- control the garbage collector
-==========================================
+:mod:`gc` -- tullantı kollektorunu idarə edin
+=============================================
 
 .. module:: gc
-   :synopsis: control the garbage collector
+   :synopsis: tullantı kollektorunu idarə edin
 
-Functions
+Funksiyalar
 ---------
 
 .. function:: enable()
 
-   Enable automatic garbage collection.
+   Avtomatik tullantı kollektorunu işə salın.
 
 .. function:: disable()
 
-   Disable automatic garbage collection.  Heap memory can still be allocated,
-   and garbage collection can still be initiated manually using :meth:`gc.collect`.
+   Avtomatik tullantı kollectorunu söndürün.  Yaddaş kütləsi hələ də istifadə oluna bilər,
+   tullantı kollektoru :meth:`gc.collect` vasitəsilə istifadəçi tərəfindən qoşula bilər.
 
 .. function:: collect()
 
-   Run a garbage collection.
+   Tullantı toplusunu işə salın.
 
 .. function:: mem_alloc()
 
-   Return the number of bytes of heap RAM that are allocated.
+   Ayrılmış RAM kütləsinin baytlarla sayını qaytarın.
 
 .. function:: mem_free()
 
-   Return the number of bytes of available heap RAM.
+   İstifadə olunmamış RAM kütləsinin baytlarla sayını qaytarın.
