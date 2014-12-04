@@ -1,82 +1,86 @@
-class CAN -- controller area network communication bus
+class CAN -- controller area network(beynəlxalq standart olduğu üçün tərcümə olunmur) communication bus.
+Ətraflı baxın: http://en.wikipedia.org/wiki/CAN_bus
 ======================================================
 
-CAN implements the standard CAN communications protocol.  At
-the physical level it consists of 2 lines: RX and TX.  Note that
-to connect the pyboard to a CAN bus you must use a CAN transceiver
-to convert the CAN logic signals from the pyboard to the correct
-voltage levels on the bus.
+Standart CAN communication protokolu dəstəkləyir.
+CAN implements the standard CAN communications protocol.
+Fiziki səviyyədə, bu, 2 pillədən ibarətdir: RX və TX.
+Qeyd edək ki, pyboard-ı CAN bus-a (şinə) qoşmaq üçün CAN transceiver-dən istifadə etməlisiniz.
+CAN transceiver - pyboard-dan gələn CAN məntiqi ilə işləyən siqnalları, şinə uyğun voltaj-a çevirir.
 
+# Tərcümə edilməyə ehtiyac olan hissə
 Note that this driver does not yet support filter configuration
 (it defaults to a single filter that lets through all messages),
 or bus timing configuration (except for setting the prescaler).
+#
 
-Example usage (works without anything connected)::
+İstifadə nümunəsi(heç bir şey qoşulmamış da işləyir)::
 
     from pyb import CAN
     can = pyb.CAN(1, pyb.CAN.LOOPBACK)
-    can.send('message!', 123)   # send message to id 123
-    can.recv(0)                 # receive message on FIFO 0
+    can.send('message!', 123)   # 123 id-yə mesaj göndər.
+    can.recv(0)                 # FIFO 0-da mesaj qəbul etmək.
 
 
-Constructors
+Konstruktorlar
 ------------
 
 .. class:: pyb.CAN(bus, ...)
 
-   Construct a CAN object on the given bus.  ``bus`` can be 1-2, or 'YA' or 'YB'.
-   With no additional parameters, the CAN object is created but not
-   initialised (it has the settings from the last initialisation of
-   the bus, if any).  If extra arguments are given, the bus is initialised.
-   See ``init`` for parameters of initialisation.
+   Verilmiş bus-da CAN obyektini konstruk et. ``bus`` 1-2 ola bilər və yaxud, 'YA' və yax 'YB'.
+   Əlavə parameter göstərilmədən, CAN obyekti yaradılır lakin inisializasiya olunmur
+   (it has the settings from the last initialisation of the bus, if any).
+   Əgər əlavə arqumentlər verilərsə, bus inisializasiya olunur.
+   initialisation parametrləri üçün ``init``-ə baxın. 
    
-   The physical pins of the CAN busses are:
+   CAN şinlərinin fiziki pinləri aşağıdakılardır:
    
-     - ``CAN(1)`` is on ``YA``: ``(RX, TX) = (Y3, Y4) = (PB8, PB9)``
-     - ``CAN(2)`` is on ``YB``: ``(RX, TX) = (Y5, Y6) = (PB12, PB13)``
+     - ``CAN(1)`` = ``YA``: ``(RX, TX) = (Y3, Y4) = (PB8, PB9)``
+     - ``CAN(2)`` = ``YB``: ``(RX, TX) = (Y5, Y6) = (PB12, PB13)``
 
 
-Methods
+Metodlar
 -------
 
 .. method:: can.init(mode, extframe=False, prescaler=100, \*, sjw=1, bs1=6, bs2=8)
 
-   Initialise the CAN bus with the given parameters:
+   CAN şinini (bus) verilmiş parametrlərlə inisializasiya edir:
    
-     - ``mode`` is one of:  NORMAL, LOOPBACK, SILENT, SILENT_LOOPBACK
+     - ``mode`` bunlardan biridir:  NORMAL, LOOPBACK, SILENT, SILENT_LOOPBACK
 
-   If ``extframe`` is True then the bus uses extended identifiers in the frames (29 bits).
-   Otherwise it uses standard 11 bit identifiers.
+   Əgər ``extframe`` True-dursa o zaman şin freymlərdə artırılmış(extended) identifikatorlardan istifadə edir (29 bits).
+   Əks halda, standart 11 bitlik identifikatorlardan istifadə edir.
 
 .. method:: can.deinit()
 
-   Turn off the CAN bus.
+   CAN şinini söndürür.
 
 .. method:: can.any(fifo)
-
-   Return ``True`` if any message waiting on the FIFO, else ``False``.
+   
+   FİFO-da mesaj gözləyirsə, ``True`` qaytarır, əks halda ``False``.
+   
 
 .. method:: can.recv(fifo, \*, timeout=5000)
 
-   Receive data on the bus:
+   Bus-da olan məlumatı almaq:
    
-     - ``fifo`` is an integer, which is the FIFO to receive on
+     - ``fifo``    is an integer, which is the FIFO to receive on.
      - ``timeout`` is the timeout in milliseconds to wait for the receive.
    
-   Return value: buffer of data bytes.
+   Geri dönən məlumat: buffer of data bytes.
 
 .. method:: can.send(send, addr, \*, timeout=5000)
 
-   Send a message on the bus:
+   BUS-a (şinə) məlumat göndərmək:
    
-     - ``send`` is the data to send (an integer to send, or a buffer object).
-     - ``addr`` is the address to send to
-     - ``timeout`` is the timeout in milliseconds to wait for the send.
+     - ``send`` Göndəriləcək data(integer və yaxud buffer obyekti).
+     - ``addr`` Hansı addresə göndəriləcək.
+     - ``timeout``  Göndərmək üçün, timeout qiyməti. Qiymət milli saniyədə göstərilir.
    
-   Return value: ``None``.
+   Geri dönən məlumat: ``None``.
 
 
-Constants
+Konstantlar
 ---------
 
 .. data:: CAN.NORMAL
@@ -84,4 +88,4 @@ Constants
 .. data:: CAN.SILENT
 .. data:: CAN.SILENT_LOOPBACK
 
-   the mode of the CAN bus
+   CAN şininin mode-nu təyin edən konstantlar.
