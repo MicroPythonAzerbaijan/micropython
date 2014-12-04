@@ -1,52 +1,54 @@
 .. _pyb.ADC:
 
-class ADC -- analog to digital conversion: read analog values on a pin
+class ADC -- analogdan rəqəmsala çevirici: Pindəki analog dəyərləri oxuyur
 ======================================================================
 
-Usage::
+İstifadə qaydası::
 
     import pyb
 
-    adc = pyb.ADC(pin)              # create an analog object from a pin
-    val = adc.read()                # read an analog value
+    adc = pyb.ADC(pin)              # pindən analoq obyeklər yarat
+    val = adc.read()                # analoq dəyəri oxu
 
-    adc = pyb.ADCAll(resolution)    # creale an ADCAll object
-    val = adc.read_channel(channel) # read the given channel
-    val = adc.read_core_temp()      # read MCU temperature
-    val = adc.read_core_vbat()      # read MCU VBAT
-    val = adc.read_core_vref()      # read MCU VREF
+    adc = pyb.ADCAll(resolution)    # ADCAll obyekt yarat
+    val = adc.read_channel(channel) # verilən kanalı oxuyur
+    val = adc.read_core_temp()      # MCU temperaturu oxuyur
+    val = adc.read_core_vbat()      # MCU VBAT-ı oxuyur
+    val = adc.read_core_vref()      # MCU VREF-i oxuyur
 
 
-Constructors
+Konstruktorlar
 ------------
 
 .. class:: pyb.ADC(pin)
 
-   Create an ADC object associated with the given pin.
-   This allows you to then read analog values on that pin.
+   Verilən pinlə bağlı ADC obyekt yaradır.
+   Bu sizə daha sonra həmən pindən analog dəyərləri oxumağa
+   icazə verir.
 
 
-Methods
+Metodlar
 -------
 
 .. method:: adc.read()
 
-   Read the value on the analog pin and return it.  The returned value
-   will be between 0 and 4095.
+   Bu metod Analoq pindəki dəyərləri oxuyur və geri qaytarır.
+   Geri qaytarılan dəyərlər 0 və 4095 aralığında olur.
 
 .. method:: adc.read_timed(buf, freq)
 
-   Read analog values into the given buffer at the given frequency. Buffer
-   can be bytearray or array.array for example. If a buffer with 8-bit elements
-   is used, sample resolution will be reduced to 8 bits.
+   Bu metod verilən bufferdən analoq dəyərləri verilən tezlikdə oxuyur.
+   Məsələn bufer bytearray və ya array.array ola bilər. Əgər bufer 8-bit elementlərlə
+   istifadə olunubsa örnək nəticə 8 bit-ə düşürüləcək
    
-   Example::
    
-       adc = pyb.ADC(pyb.Pin.board.X19)    # create an ADC on pin X19
-       buf = bytearray(100)                # create a buffer of 100 bytes
-       adc.read_timed(buf, 10)             # read analog values into buf at 10Hz
-                                           #   this will take 10 seconds to finish
-       for val in buf:                     # loop over all values
-           print(val)                      # print the value out
+   Nümunə::
    
-   This function does not allocate any memory.
+       adc = pyb.ADC(pyb.Pin.board.X19)    # X19-cu pində ADC yaradır
+       buf = bytearray(100)                # 100 baytlıq buffer yaradır
+       adc.read_timed(buf, 10)             # bufferdən 10Hz tezlikdə analoq dəyərləri oxuyur
+                                           #  əməliyyat 10 saniyəyə bitəcək
+       for val in buf:                     # bütün dəyərləri dövr edir
+           print(val)                      # dəyəri print(ekrana yazdırır) edir
+   
+   Bu funksiya yaddaşdan (RAM) istifadə etmir.
