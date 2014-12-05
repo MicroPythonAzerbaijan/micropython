@@ -1,153 +1,152 @@
 .. _pyb.I2C:
 
-class I2C -- a two-wire serial protocol
+class I2C -- iki kabelli serial protokol.
 =======================================
 
-I2C is a two-wire protocol for communicating between devices.  At the physical
-level it consists of 2 wires: SCL and SDA, the clock and data lines respectively.
+I2C cihazlar arasında əlaqə üçün iki-kabelli(two-wire) protokoldur. Fiziki cəhətdən bu I2C,
+iki kabeldən ibarətdir: Saat və tarixə müvafiq olaraq SCL və SDA.
 
-I2C objects are created attached to a specific bus.  They can be initialised
-when created, or initialised later on::
+I2C obyektlər yaradılmış iki şinə(bus)təhkim olunur. Onlar yaradıldığı
+zaman və ya daha sonra başladıla bilər::
 
     from pyb import I2C
 
-    i2c = I2C(1)                         # create on bus 1
-    i2c = I2C(1, I2C.MASTER)             # create and init as a master
-    i2c.init(I2C.MASTER, baudrate=20000) # init as a master
-    i2c.init(I2C.SLAVE, addr=0x42)       # init as a slave with given address
-    i2c.deinit()                         # turn off the peripheral
+    i2c = I2C(1)                         # şin(bus) 1-də yarat
+    i2c = I2C(1, I2C.MASTER)             # master kimi yarat və başla
+    i2c.init(I2C.MASTER, baudrate=20000) # master kimi başla
+    i2c.init(I2C.SLAVE, addr=0x42)       # verilən ünvanda(address)də slave(qul) kimi başlat
+    i2c.deinit()                         # müvafiq(periferik) olaraq söndür
 
-Printing the i2c object gives you information about its configuration.
+i2c obektləri print etmək sizə onun confiqurasiyaları haqda məlumat verir.
 
-Basic methods for slave are send and recv::
+slave üçün göndərmək və qəbul etmənin sadə metodları:: 
 
-    i2c.send('abc')      # send 3 bytes
-    i2c.send(0x42)       # send a single byte, given by the number
-    data = i2c.recv(3)   # receive 3 bytes
+    i2c.send('abc')      # 3 byte göndər
+    i2c.send(0x42)       # rəqəm tərəfindən verilən tək bayt(byte) göndər
+    data = i2c.recv(3)   # 3 bayt qəbul et receive 3 bytes
 
-To receive inplace, first create a bytearray::
+yerindəcə qəbul etmək üçün ilk olaraq bytearray(массив байтов, bayt dizisi) yaradılır::
 
-    data = bytearray(3)  # create a buffer
-    i2c.recv(data)       # receive 3 bytes, writing them into data
+    data = bytearray(3)  # bufer yarat
+    i2c.recv(data)       # 3 bayt qəbul et, onları məlumata(data) yaz
 
-You can specify a timeout (in ms)::
+siz timeout(zaman aşımı) təyin edə bilərsiniz (millisaniyə şəklində)::
 
-    i2c.send(b'123', timeout=2000)   # timout after 2 seconds
+    i2c.send(b'123', timeout=2000)   # 2 saniyədən sonra timeout(zaman aşımı)
 
-A master must specify the recipient's address::
+master qəbuledicinin ünvanını(address)ini müəyyən etməlidir::
 
     i2c.init(I2C.MASTER)
-    i2c.send('123', 0x42)        # send 3 bytes to slave with address 0x42
-    i2c.send(b'456', addr=0x42)  # keyword for address
+    i2c.send('123', 0x42)        # slave-a 0x42 ünvanı(address)i ilə 3 bayt gondər
+    i2c.send(b'456', addr=0x42)  # ünvan(address) üçün açar söz(keyword)
 
-Master also has other methods::
-
-    i2c.is_ready(0x42)           # check if slave 0x42 is ready
-    i2c.scan()                   # scan for slaves on the bus, returning
-                                 #   a list of valid addresses
-    i2c.mem_read(3, 0x42, 2)     # read 3 bytes from memory of slave 0x42,
-                                 #   starting at address 2 in the slave
-    i2c.mem_write('abc', 0x42, 2, timeout=1000)
+Master həmçinin digər metodlara da sahibdir::
 
 
-Constructors
+    i2c.is_ready(0x42)           # slave 0x42-nin hazır olduğunu yoxla
+    i2c.scan()                   # şini(bus) slave-lər üçün scan et. düzgün addreslər siyahısı ilə geri qayıdır
+    i2c.mem_read(3, 0x42, 2)     # slave 0x42-nin yaddaşından 3 bayt oxu, slave-dəki 2 ünvandan(address)dən başlayır 
+    i2c.mem_write('abc', 0x42, 2, timeout=1000)  # slave 0x42-nin yaddaşına 3 bayt yaz, slave-dəki 2 ünvandan(address)dən başlayır. taymaout 1 san
+
+
+Konstruktorlar
 ------------
 
 .. class:: pyb.I2C(bus, ...)
 
-   Construct an I2C object on the given bus.  ``bus`` can be 1 or 2.
-   With no additional parameters, the I2C object is created but not
-   initialised (it has the settings from the last initialisation of
-   the bus, if any).  If extra arguments are given, the bus is initialised.
-   See ``init`` for parameters of initialisation.
+   verilən şində(bus) I2C obyekti quraşdırır.  ``bus`` 1 və ya 2 ola bilər.
+   Əlavə parametrlər verilməzsə I2C obyekti yaradılır lakin işə salınmır.
+   (Əgər varsa bu şinin(bus) son başladılma parametrləri ola bilər).
+   Əgər əlavə argumentlər verilərsə şin(bus) işə salınacaq.
+   işəsalma parametrləri üçün ``init`` -ə baxın.
    
-   The physical pins of the I2C busses are:
+   I2C şinlərinin fiziki pin-ləri:
    
-     - ``I2C(1)`` is on the X position: ``(SCL, SDA) = (X9, X10) = (PB6, PB7)``
-     - ``I2C(2)`` is on the Y position: ``(SCL, SDA) = (Y9, Y10) = (PB10, PB11)``
+     - ``I2C(1)`` X nöqtəsindədir: ``(SCL, SDA) = (X9, X10) = (PB6, PB7)``
+     - ``I2C(2)`` Y nöqtəsindədir: ``(SCL, SDA) = (Y9, Y10) = (PB10, PB11)``
 
 
-Methods
+Metodlar
 -------
 
 .. method:: i2c.deinit()
 
-   Turn off the I2C bus.
+   Bu metod I2C şinini(bus) söndürür.
 
 .. method:: i2c.init(mode, \*, addr=0x12, baudrate=400000, gencall=False)
 
-   Initialise the I2C bus with the given parameters:
+   Bu metod I2C şinini(bus) verilən parametrlərdə işə salır:
    
-     - ``mode`` must be either ``I2C.MASTER`` or ``I2C.SLAVE``
-     - ``addr`` is the 7-bit address (only sensible for a slave)
-     - ``baudrate`` is the SCL clock rate (only sensible for a master)
-     - ``gencall`` is whether to support general call mode
+     - ``mode`` həmçinin ``I2C.MASTER`` və ya ``I2C.SLAVE`` olmalıdır
+     - ``addr`` 7 bitlik ünvandır(address)dir (yalnız slave üçün işləkdir)
+     - ``baudrate`` is the SCL clock rate (yalnız master üçün işləkdir)
+     - ``gencall`` ümumi sorğu modunu (general call mode)dəstəkləmək üçündür
 
 .. method:: i2c.is_ready(addr)
 
-   Check if an I2C device responds to the given address.  Only valid when in master mode.
+   Bu metod I2C cihazını verilən ünvanın(address)in cavab verib vermədyini yoxlayır. Yalnız master modda etibarlıdır.
 
 .. method:: i2c.mem_read(data, addr, memaddr, timeout=5000, addr_size=8)
 
-   Read from the memory of an I2C device:
+   Bu metod I2C cihazının yaddaşından oxuyur:
    
-     - ``data`` can be an integer or a buffer to read into
-     - ``addr`` is the I2C device address
-     - ``memaddr`` is the memory location within the I2C device
-     - ``timeout`` is the timeout in milliseconds to wait for the read
-     - ``addr_size`` selects width of memaddr: 8 or 16 bits
+     - ``data`` oxunacaq rəqəm və ya buffer ola bilər
+     - ``addr`` I2C cihazın addresidır
+     - ``memaddr`` I2C cihazındakı yaddaşın yeridir.(ünvanı)
+     - ``timeout`` oxumaq üçün verilən fasilə(timeout)(millisaniyələrlə)
+     - ``addr_size`` memaddr-ın genişiyidir: 8 və ya 16 bit
    
-   Returns the read data.
-   This is only valid in master mode.
+   Oxunan məlumatları qaytarır.
+   Bu yalnız master modda etibarlıdır.
 
 .. method:: i2c.mem_write(data, addr, memaddr, timeout=5000, addr_size=8)
 
-   Write to the memory of an I2C device:
+   Bu metod I2C cihazının yaddaşına yazmaq üçün istifadə olunur:
    
-     - ``data`` can be an integer or a buffer to write from
-     - ``addr`` is the I2C device address
-     - ``memaddr`` is the memory location within the I2C device
-     - ``timeout`` is the timeout in milliseconds to wait for the write
-     - ``addr_size`` selects width of memaddr: 8 or 16 bits
+     - ``data`` yazılacaq rəqəm və ya buffer ola bilər
+     - ``addr`` I2C cihazın addresidır
+     - ``memaddr`` I2C cihazındakı yaddaşın yeridir.(ünvanı)
+     - ``timeout`` yazmaq üçün gözlənilən vaxt(timeout)(millisaniyələrlə)
+     - ``addr_size`` memaddr-ın genişiyidir: 8 və ya 16 bit
    
-   Returns ``None``.
-   This is only valid in master mode.
+    ``None`` geri qayıdır.
+   Bu yalnız master modda etibarlıdır.
 
 .. method:: i2c.recv(recv, addr=0x00, timeout=5000)
 
-   Receive data on the bus:
+   Bu metod şində(bus) məlumatı qəbul etmək üçündür:
    
-     - ``recv`` can be an integer, which is the number of bytes to receive,
-       or a mutable buffer, which will be filled with received bytes
-     - ``addr`` is the address to receive from (only required in master mode)
-     - ``timeout`` is the timeout in milliseconds to wait for the receive
+     - ``recv`` rəqəm ola bilər,hansıki qəbul ediləcək baytların rəqəmləri ola bilər,
+       və ya buffer ola bilər, hansı ki qəbul ediləcək baytlarnan doldurulacaq
+     - ``addr`` qəbul ediləcək datanın ünvanı(address) (yalnız master modda tələb olunur)
+     - ``timeout`` qəbul olunma üçün gözlənilən vaxt(timeout)(millisaniyələrlə)
    
-   Return value: if ``recv`` is an integer then a new buffer of the bytes received,
-   otherwise the same buffer that was passed in to ``recv``.
+   qayıdış dəyəri(return value): əgər ``recv`` rəqəmdirsə onda qəbul olunan baytların yeni bufferi olacaq,
+   digər halda ``recv``  -də verilən bufferlə eyni buffer olacaq.
 
 .. method:: i2c.scan()
 
-   Scan all I2C addresses from 0x01 to 0x7f and return a list of those that respond.
-   Only valid when in master mode.
+   Bu metod 0x01 ünvanından(address)indən 0x7f addresinə qədər olan bütün I2C ünvanları(address)ləri scan edir və siyahı(list) şəklində geri qaytarır.
+   Yalnız master modda etibarlıdır.
 
 .. method:: i2c.send(send, addr=0x00, timeout=5000)
 
-   Send data on the bus:
+   Bu metod məlumatı(data) şinə(bus) göndərir:
    
-     - ``send`` is the data to send (an integer to send, or a buffer object)
-     - ``addr`` is the address to send to (only required in master mode)
-     - ``timeout`` is the timeout in milliseconds to wait for the send
+     - ``send`` göndəriləcək məlumat (rəqəm və ya buffer obyekti ola bilər)
+     - ``addr`` göndəriləcək ünvan(address) (yalnız master modda tələb olunur)
+     - ``timeout`` göndərmək üçün millisaniyələrlə verilən timeout
    
-   Return value: ``None``.
+   Qayıdış dəyəri(return value): ``None``.
 
 
-Constants
+Sabit vahidlər(Constants)
 ---------
 
 .. data:: I2C.MASTER
 
-   for initialising the bus to master mode
+   şinin(bus) master modda başladılması üçün istifadə olunur
 
 .. data:: I2C.SLAVE
 
-   for initialising the bus to slave mode
+   şinin(bus) slave modda başladıması üçün istifadə olunur
