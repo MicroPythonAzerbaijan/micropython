@@ -1,94 +1,92 @@
-class LCD -- LCD control for the LCD touch-sensor pyskin
+class LCD -- LCD pyskin touch-sensoru üçün LCD-nin idarə edilməsi
 ========================================================
 
-The LCD class is used to control the LCD on the LCD touch-sensor pyskin,
-LCD32MKv1.0.  The LCD is a 128x32 pixel monochrome screen, part NHD-C12832A1Z.
+LCD sinfi, LCD32MKv1.0 modelli LCD touch-sensor pyskin-i də LCD-ni idarə etmək üçündür.
+Bu LCD -NHD-C12832A1Z- 128x32 pikselli, monoxrom(təkrəngli) ekrandır.
 
-The pyskin must be connected in either the X or Y positions, and then
-an LCD object is made using::
+pyskin ya X ya da Y koordinatlarına bağlı olmalıdır. LCD obyekt yaratmaq üçün::
 
-    lcd = pyb.LCD('X')      # if pyskin is in the X position
-    lcd = pyb.LCD('Y')      # if pyskin is in the Y position
+    lcd = pyb.LCD('X')      # Əgər pyskin X nöqtəsindədirsə
+    lcd = pyb.LCD('Y')      # Əgər pyskin X nöqtəsindədirsə
 
-Then you can use::
+Daha sonra istifadə edə bilərsiniz::
 
-    lcd.light(True)                 # turn the backlight on
-    lcd.write('Hello world!\n')     # print text to the screen
+    lcd.light(True)                 # arxa işığı(backlight) yandırır
+    lcd.write('Hello world!\n')     # Mətni ekrana yazdır(print)
 
-This driver implements a double buffer for setting/getting pixels.
-For example, to make a bouncing dot, try::
+Bu sürücü(driver) setting/getting üçün iki dəfə buffer əməliyyatını yerinə yetirir.
+Məsələn əgər siz sıçrayan(tullanan) nöqtə yaratmaq istəyirsinizsə, belə edə bilərsiniz::
 
     x = y = 0
     dx = dy = 1
     while True:
-        # update the dot's position
+        # nöqtənin yerini təzələyir(update)
         x += dx
         y += dy
 
-        # make the dot bounce of the edges of the screen
+        # ekranın qırağında sıçrayan nöqtə yaradır
         if x <= 0 or x >= 127: dx = -dx
         if y <= 0 or y >= 31: dy = -dy
 
-        lcd.fill(0)                 # clear the buffer
-        lcd.pixel(x, y, 1)          # draw the dot
-        lcd.show()                  # show the buffer
-        pyb.delay(50)               # pause for 50ms
+        lcd.fill(0)                 # bufferi təmizləyir
+        lcd.pixel(x, y, 1)          # nöqtə çəkir
+        lcd.show()                  # bufferi göstərir
+        pyb.delay(50)               # 50 ms-lik(millisaniyə) fasilə verir
 
 
-Constructors
+Konstruktorlar
 ------------
 
 .. class:: pyb.LCD(skin_position)
 
-   Construct an LCD object in the given skin position.  ``skin_position`` can be 'X' or 'Y', and
-   should match the position where the LCD pyskin is plugged in.
+   Bu sinif verilən kordinatlarda LCD obyekt yaradır.  ``skin_position`` 'X' və ya 'Y' ola bilər, və
+   LCD pyskin kordinatları ilə uyğun olmalıdır.
 
 
-Methods
+Metodlar
 -------
 
 .. method:: lcd.command(instr_data, buf)
 
-   Send an arbitrary command to the LCD.  Pass 0 for ``instr_data`` to send an
-   instruction, otherwise pass 1 to send data.  ``buf`` is a buffer with the
-   instructions/data to send.
+   Bu metod ixtiyari bir əmri LCD-yə göndərir.göstərişlər üçün  ``instr_data`` -nı 0-a keçirin, məlumatları ötürmək üçün isə 1-ə keçirin.
+   ``buf`` göstəriş və ya dataların ötürülməsi üçün bufferdir.
 
 .. method:: lcd.contrast(value)
 
-   Set the contrast of the LCD.  Valid values are between 0 and 47.
+   Bu metod LCD-nin kontrastını təyin etmək üçündür.  Düzgün dəyərlər 0 və 47 aralığıdır.
 
 .. method:: lcd.fill(colour)
 
-   Fill the screen with the given colour (0 or 1 for white or black).
+   Ekranı verilən rəngdə etmək üçündür.(qara və ağ üçün 1 və 0 ).
    
-   This method writes to the hidden buffer.  Use ``show()`` to show the buffer.
+   Bu metod gizli bufferə yazır.  Bufferi göstərmək üçün ``show()`` əmrindən istifadə edin.
 
 .. method:: lcd.get(x, y)
 
-   Get the pixel at the position ``(x, y)``.  Returns 0 or 1.
+    Bu metodla ``(x, y)`` kordinatlarında pikseli əldə edirsiniz.  cavab olaraq 1 və ya 0 qayıdır.
    
-   This method reads from the visible buffer.
+    Bu metod görünən bufferdən oxuyur.
 
 .. method:: lcd.light(value)
 
-   Turn the backlight on/off.  True or 1 turns it on, False or 0 turns it off.
+   backlight-ı(arxaişıq) söndürüb yandırmaq üçündür.  True və ya 1 yandırır, False və ya 0 söndürür.
 
 .. method:: lcd.pixel(x, y, colour)
 
-   Set the pixel at ``(x, y)`` to the given colour (0 or 1).
+    ``(x, y)`` kordinatlarında pikseli verilən rəngə çevirir (0 və ya 1).
    
-   This method writes to the hidden buffer.  Use ``show()`` to show the buffer.
+   Bu metod gizli bufferə yazır.  Bufferi göstərmək üçün ``show()`` əmrindən istifadə edin.
 
 .. method:: lcd.show()
 
-   Show the hidden buffer on the screen.
+   Gizli bufferi ekranda göstərir.
 
 .. method:: lcd.text(str, x, y, colour)
 
-   Draw the given text to the position ``(x, y)`` using the given colour (0 or 1).
+   ``(x, y)`` koordinatlarına verilən mətni verilən rəngdə yazır (0 və ya 1).
    
-   This method writes to the hidden buffer.  Use ``show()`` to show the buffer.
+   Bu metod gizli bufferə yazır.  Bufferi göstərmək üçün ``show()`` əmrindən istifadə edin.
 
 .. method:: lcd.write(str)
 
-   Write the string ``str`` to the screen.  It will appear immediately.
+    ``str`` verilən sətiri(string,dizi) ekrana yazır.  Bu əmr verilənləri dərhal ekrana yazır.
