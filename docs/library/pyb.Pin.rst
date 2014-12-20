@@ -1,40 +1,39 @@
 .. _pyb.Pin:
 
-class Pin -- control I/O pins
+class Pin -- I/O pinləri idarə etmək üçündür.
 =============================
 
-A pin is the basic object to control I/O pins.  It has methods to set
-the mode of the pin (input, output, etc) and methods to get and set the
-digital logic level.  For analog control of a pin, see the ADC class.
+pin, I/O pinləri idarə etmək üçün əsas obyektdir.  Pinin rejimlərini(giriş, çıxış, və.s) təyin etmək üçün
+öz metodları var. Həmçinin rəqəmsal məntiqi səviyyədə get/set metodlara malikdir.
+Analog idarəetmə üçün ADC sinfinə(ADC class) baxın.
 
-Usage Model:
+İstifadə modeli:
 
-All Board Pins are predefined as pyb.Pin.board.Name ::
+Bütün lövhə(board) pinlər əvvəldən pyb.Pin.board.Name kimi təyin olunmuşdur ::
 
     x1_pin = pyb.Pin.board.X1
 
     g = pyb.Pin(pyb.Pin.board.X1, pyb.Pin.IN)
 
-CPU pins which correspond to the board pins are available
-as ``pyb.cpu.Name``. For the CPU pins, the names are the port letter
-followed by the pin number. On the PYBv1.0, ``pyb.Pin.board.X1`` and
-``pyb.Pin.cpu.B6`` are the same pin.
+board pinlərə uyğun CPU pinlər ``pyb.cpu.Name`` kimi mövcuddur .
+PYBv1.0 -də, ``pyb.Pin.board.X1`` və
+``pyb.Pin.cpu.B6`` eyni pinlərdir.
 
-You can also use strings::
+siz həmçinin string-lərdən də istifadə edə biləriniz::
 
     g = pyb.Pin('X1', pyb.Pin.OUT_PP)
 
-Users can add their own names::
+İstifadəçilər həmçinin öz adlarını da əlavə edə bilərlər(pinləri adlandıra bilərlər)::
 
     MyMapperDict = { 'LeftMotorDir' : pyb.Pin.cpu.C12 }
     pyb.Pin.dict(MyMapperDict)
     g = pyb.Pin("LeftMotorDir", pyb.Pin.OUT_OD)
 
-and can query mappings ::
+və lüğətdən istədikləri veriləni çağıra bilərlər::
 
     pin = pyb.Pin("LeftMotorDir")
 
-Users can also add their own mapping function::
+İstifadəçilər həmçinin öz mapping funksiyalarını əlavə edə bilərlər::
 
     def MyMapper(pin_name):
        if pin_name == "LeftMotorDir":
@@ -42,225 +41,217 @@ Users can also add their own mapping function::
 
     pyb.Pin.mapper(MyMapper)
 
-So, if you were to call: ``pyb.Pin("LeftMotorDir", pyb.Pin.OUT_PP)``
-then ``"LeftMotorDir"`` is passed directly to the mapper function.
+Belə ki, əgər siz: ``pyb.Pin("LeftMotorDir", pyb.Pin.OUT_PP)`` adlandırsanız
+onda ``"LeftMotorDir"`` birbaşa mapper funksiyaya keçəcək.
 
-To summarise, the following order determines how things get mapped into
-an ordinal pin number:
+Ümumilikdə, aşağıdakı qaydalar bir sıra pin nömrələrə qoşulmanı təyin edir:
 
-1. Directly specify a pin object
-2. User supplied mapping function
-3. User supplied mapping (object must be usable as a dictionary key)
-4. Supply a string which matches a board pin
-5. Supply a string which matches a CPU port/pin
+1. Birbaşa pin obyekti təyin etmək.
+2. İstifadəçi tərəfindən verilən mapping funksiyası.
+3. İstifadəçi tərəfindən təyin olunan mapping funksiyası(obyekt dictionary key(lüğət açarı) kimi istifadə oluna bilməlidir).
+4. lövhə pin(board pin) ilə uyğun olan string təyin etmək.
+5. CPU port/pin ilə uyğun olan string təyin etmək.
 
-You can set ``pyb.Pin.debug(True)`` to get some debug information about
-how a particular object gets mapped to a pin.
+Xüsusi obyektlərin pinə necə qoşulduğu haqda bəzi debug informasiyalar almaq üçün siz ``pyb.Pin.debug(True)`` edə bilərsiniz.
 
-When a pin has the ``Pin.PULL_UP`` or ``Pin.PULL_DOWN`` pull-mode enabled,
-that pin has an effective 40k Ohm resistor pulling it to 3V3 or GND
-respectively (except pin Y5 which has 11k Ohm resistors).
+Pin ``Pin.PULL_UP`` və ya ``Pin.PULL_DOWN`` pull-mode aktiv olanda,
+o pin effektiv olaraq 40k Ohm müqavimətə malik olur və onu 3V3 -a və ya GND-yə müvafiq olaraq qaldırır.
 
-Constructors
+Konsruktorlar
 ------------
 
 .. class:: pyb.Pin(id, ...)
 
-   Create a new Pin object associated with the id.  If additional arguments are given,
-   they are used to initialise the pin.  See :meth:`pin.init`.
+   id ilə bağlı yeni pin obyekt yaradır.  Əgər əlavə arqumentlər verilərsə onlar pini başlatmaqda istifadə olunur.
+   Bax: :meth:`pin.init`
 
 
-Class methods
+sinfi(class) metodlar
 -------------
 
 .. method:: Pin.af_list()
 
-   Returns an array of alternate functions available for this pin.
+   bu pin üçün mövcud olan alternative funksiyalar sırasına qayıdır.
 
 .. method:: Pin.debug([state])
 
-   Get or set the debugging state (``True`` or ``False`` for on or off).
+   Debugging vəziyyətini təyin edir (``True`` və ya ``False`` aktiv və ya deaktiv etmək üçün).
 
 .. method:: Pin.dict([dict])
 
-   Get or set the pin mapper dictionary.
+   pin mapper lüğətini təyin və ya əldə et.
 
 .. method:: Pin.mapper([fun])
 
-   Get or set the pin mapper function.
+   pin mapper funksiyasını təyin və ya əldə et.
 
 
-Methods
+Metodlar
 -------
 
 .. method:: pin.init(mode, pull=Pin.PULL_NONE, af=-1)
 
-   Initialise the pin:
+   Pinin başladılması:
    
-     - ``mode`` can be one of:
-       - ``Pin.IN`` - configure the pin for input;
-       - ``Pin.OUT_PP`` - configure the pin for output, with push-pull control;
-       - ``Pin.OUT_OD`` - configure the pin for output, with open-drain control;
-       - ``Pin.AF_PP`` - configure the pin for alternate function, pull-pull;
-       - ``Pin.AF_OD`` - configure the pin for alternate function, open-drain;
-       - ``Pin.ANALOG`` - configure the pin for analog.
-     - ``pull`` can be one of:
-       - ``Pin.PULL_NONE`` - no pull up or down resistors;
-       - ``Pin.PULL_UP`` - enable the pull-up resistor;
-       - ``Pin.PULL_DOWN`` - enable the pull-down resistor.
-     - when mode is Pin.AF_PP or Pin.AF_OD, then af can be the index or name
-       of one of the alternate functions associated with a pin.
+     - ``mode`` aşağıdakılardan biri ola bilər:
+       - ``Pin.IN`` - pini giriş(input) üçün tənzimləyir;
+       - ``Pin.OUT_PP`` - pini çıxış(output) üçün tənzimləyir, push-pull control ilə;
+       - ``Pin.OUT_OD`` - pini çıxış üçün tənzimləyir, with open-drain control metodu ilə;
+       - ``Pin.AF_PP`` - pini alternativ funksiya üçün tənzimləyir, pull-pull;
+       - ``Pin.AF_OD`` - pini alternativ funksiya üçün tənzimləyir, open-drain;
+       - ``Pin.ANALOG`` - pini analog üçün tənzimləyir.
+     - ``pull`` aşağıdakılardan biri ola bilər:
+       - ``Pin.PULL_NONE`` - qalxan və ya enən müqavimət aktiv deyil.
+       - ``Pin.PULL_UP`` - müqavimətin qalxmasını aktiv etmək.
+       - ``Pin.PULL_DOWN`` - müqavimətin enməsini aktiv etmək.
+     - Rejim Pin.AF_PP or Pin.AF_OD, olarsa onda af index və ya pin ilə bağlı olan alternativ funksiyanın adı ola bilər.
    
-   Returns: ``None``.
+   Göstərir(Returns): ``None``.
 
 .. method:: pin.high()
 
-   Set the pin to a high logic level.
+   Pini yüksək məntiq səviyyəsinə təyin etmək.
 
 .. method:: pin.low()
 
-   Set the pin to a low logic level.
+   Pini aşağı məntiq səviyyəsinə təyin etmək.
 
 .. method:: pin.value([value])
 
-   Get or set the digital logic level of the pin:
+   Pinin rəqəmsal məntiq səviyyəsini təyin etmək və ya əldə etmək:
 
-     - With no argument, return 0 or 1 depending on the logic level of the pin.
-     - With ``value`` given, set the logic level of the pin.  ``value`` can be
-       anything that converts to a boolean.  If it converts to ``True``, the pin
-       is set high, otherwise it is set low.
+     - heç bir arqument verilmədikdə məntiq səviyyəsindən asılı olaraq 0 və ya 1 göstərir.
+     - ``value`` pinin məntiq səviyyəsini təyin etmək verilən dəyərdir.
+      ``value`` booleana çevrilən hər şey ola bilər
+       Əgər ``True`` -ya çevrilirsə onda pin yüksək məntiqə tənzimlənir,
+       digər hallarda aşağı məntiqə tənzimlənir.
 
 .. method:: pin.__str__()
 
-   Return a string describing the pin object.
+  Pin obyekti izah edən string göstərir.
 
 .. method:: pin.af()
 
-   Returns the currently configured alternate-function of the pin. The
-   integer returned will match one of the allowed constants for the af
-   argument to the init function.
+   Pinin hazırki tənzimlənmiş alternativ funksiyanı göstərir.
+   Göstərilən rəqəm init funksiyasında af arqument üçün icazə verilən vahidlərdən birinə uyğun olmalıdır.
 
 .. method:: pin.gpio()
 
-   Returns the base address of the GPIO block associated with this pin.
+   GPIO blokunun pinlə bağlı olan əsas ünvanını göstərir.
 
 .. method:: pin.mode()
 
-   Returns the currently configured mode of the pin. The integer returned
-   will match one of the allowed constants for the mode argument to the init
-   function.
+   Pinin hazırki tənzimlənmiş rejimini göstərir.
+   Göstərilən rəqəm init funksiyasında mode arqument üçün icazə verilən vahidlərdən birinə uyğun olmalıdır.
 
 .. method:: pin.name()
 
-   Get the pin name.
+   Pinin adını əldə et
 
 .. method:: pin.names()
 
-   Returns the cpu and board names for this pin.
+   Pin üçün cpu və board-ın adını göstərir.
 
 .. method:: pin.pin()
 
-   Get the pin number.
+   Pinin nömrəsini əldə et.
 
 .. method:: pin.port()
 
-   Get the pin port.
+   Pinin portunu əldə et
 
 .. method:: pin.pull()
 
-   Returns the currently configured pull of the pin. The integer returned
-   will match one of the allowed constants for the pull argument to the init
-   function.
+   Pinin hazırki tənzimlənmiş pull dəyərini göstərir.
+   Göstərilən rəqəm init funksiyasında pull arqument üçün icazə verilən vahidlərdən birinə uyğun olmalıdır.
 
 
-Constants
+Sabitlər(Constants)
 ---------
 
 .. data:: Pin.AF_OD
 
-   initialise the pin to alternate-function mode with an open-drain drive
+   pini alternativ funksiya ilə open-drain drive rejimində başladır
 
 .. data:: Pin.AF_PP
 
-   initialise the pin to alternate-function mode with a push-pull drive
+   Pini alternativ funksiya ilə open-drain drive rejimində başladır
 
 .. data:: Pin.ANALOG
 
-   initialise the pin to analog mode
+   pini analoq rejimə tənzimləyir
 
 .. data:: Pin.IN
 
-   initialise the pin to input mode
+   pini giriş(input) rejiminə tənzimləyir
 
 .. data:: Pin.OUT_OD
 
-   initialise the pin to output mode with an open-drain drive
+   pini open-drain drive ilə çıxış(output)rejiminə tənzimləyir.
 
 .. data:: Pin.OUT_PP
 
-   initialise the pin to output mode with a push-pull drive
+   Pini push-pull drive ilə çıxış(output) rejiminə tənzimləyir
 
 .. data:: Pin.PULL_DOWN
 
-   enable the pull-down resistor on the pin
+   Pində müqavimətin aşağı düşməsini aktiv edir
 
 .. data:: Pin.PULL_NONE
 
-   don't enable any pull up or down resistors on the pin
+   Pində müqavimətin qalxmasını və ya enməsini deaktiv edir
 
 .. data:: Pin.PULL_UP
 
-   enable the pull-up resistor on the pin
+   Pində müqavimətin qalxmasını aktiv edir
 
 
-class PinAF -- Pin Alternate Functions
+class PinAF -- Alternativ Pin Funksiyaları
 ======================================
 
-A Pin represents a physical pin on the microcprocessor. Each pin
-can have a variety of functions (GPIO, I2C SDA, etc). Each PinAF
-object represents a particular function for a pin.
+Pin mikroprosessorda fiziki pini təmsil edir. Hər pinin öz funksiyalarında müxtəliflik ola bilər(GPIO, I2C SDA, və.s).
+Hər PinAF obyekt pin üçün xüsusi funksiyaları təmsil edir.
 
-Usage Model::
+Istifadə örnəyi::
 
     x3 = pyb.Pin.board.X3
     x3_af = x3.af_list()
 
-x3_af will now contain an array of PinAF objects which are availble on
-pin X3.
+x3_af burada PinAF obyektlər üçün sıraya(array) malikdir hansı ki onlar pin X3-də mövcuddurlar.
 
-For the pyboard, x3_af would contain:
+Pyboard üçün x3_af özündə aşağıdakıları əks etdirəcək:
     [Pin.AF1_TIM2, Pin.AF2_TIM5, Pin.AF3_TIM9, Pin.AF7_USART2]
 
-Normally, each peripheral would configure the af automatically, but sometimes
-the same function is available on multiple pins, and having more control
-is desired.
+Normalda, hər periferik(peripheral, çevresel) af-ni avtomatik tənzimləyəcək ama bəzən eyni funksiya bir
+çox pində mövcud olur və daha dəqiq idarəetmə arzuolunandır.
 
-To configure X3 to expose TIM2_CH3, you could use::
+
+TIM2_CH3-ü göstərmək(görünən etmək,expose) üçün siz aşağıdakı kodlardan istifadə edə bilərsiniz::
 
    pin = pyb.Pin(pyb.Pin.board.X3, mode=pyb.Pin.AF_PP, af=pyb.Pin.AF1_TIM2)
 
-or::
+və ya::
 
    pin = pyb.Pin(pyb.Pin.board.X3, mode=pyb.Pin.AF_PP, af=1)
 
 
-Methods
+Metodlar
 -------
 
 .. method:: pinaf.__str__()
 
-   Return a string describing the alternate function.
+   Alternativ funksiayanın sırasını(string,dizi) göstərir.
 
 .. method:: pinaf.index()
 
-   Return the alternate function index.
+   alternativ funksiyanın indexini göstərir.
 
 .. method:: pinaf.name()
 
-   Return the name of the alternate function.
+   Alternativ funksiyanın adını göstərir.
 
 .. method:: pinaf.reg()
 
-   Return the base register associated with the peripheral assigned to this
-   alternate function. For example, if the alternate function were TIM2_CH3
-   this would return stm.TIM2
+   alternativ funksiyaya təyin olunmuş periferik reestri göstərir.
+   Məsələn əgər alternative funksiya TIM2_CH3 olarsa onda bu funksiya bizə
+   stm.TIM2 göstərəcək(return)
